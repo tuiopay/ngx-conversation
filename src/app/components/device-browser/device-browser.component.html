@@ -1,1 +1,8 @@
-ddd
+<div class="browser">
+  <img
+    *ngIf="type"
+    class="icon"
+    src="/assets/@firestitch/2fa/browsers/browser_{{ type }}.svg"
+    >
+  <div *ngIf="name" class="name">{{ name }}</div>
+</div>

@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Input, Component } from '@angular/core';
+
+import { Fs2FaBrowser } from '../../enums/browser.enum';
 
 
 @Component({
@@ -8,6 +10,15 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsDeviceBrowserComponent {
+
+  @Input()
+  public type: Fs2FaBrowser = null;
+
+  @Input()
+  public version: string = null;
+
+  @Input()
+  public name: string = null;
 
   constructor() { }
 

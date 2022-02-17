@@ -5,3 +5,5 @@
 export { Fs2FaModule } from './app/fs-2fa.module';
 
 export { FsDeviceBrowserComponent } from './app/components/device-browser/device-browser.component';
+
+export { Fs2FaBrowser } from './app/enums/browser.enum';

@@ -1,0 +1,9 @@
+.browser {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .icon {
+    width: 24px;
+    margin-right: 10px;
+  }
+}

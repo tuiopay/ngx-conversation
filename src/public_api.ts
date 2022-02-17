@@ -4,4 +4,4 @@
 
 export { Fs2FaModule } from './app/fs-2fa.module';
 
-export { FsComponentComponent } from './app/components/component/component.component';
+export { FsDeviceBrowserComponent } from './app/components/device-browser/device-browser.component';

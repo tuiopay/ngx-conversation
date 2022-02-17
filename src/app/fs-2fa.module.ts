@@ -1,17 +1,17 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FsComponentComponent } from './components/component/component.component';
+import { FsDeviceBrowserComponent } from './components/device-browser/device-browser.component';
 
 @NgModule({
   imports: [
     CommonModule,
   ],
   exports: [
-    FsComponentComponent,
+    FsDeviceBrowserComponent,
   ],
   declarations: [
-    FsComponentComponent,
+    FsDeviceBrowserComponent,
   ],
   providers: [
     // FsComponentService,

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Input, Component } from '@angular/core';
 
-import { Fs2FaBrowser } from '../../enums/browser.enum';
+import { DeviceBrowser } from '../../enums/device-browser.enum';
 
 
 @Component({
@@ -12,7 +12,7 @@ import { Fs2FaBrowser } from '../../enums/browser.enum';
 export class FsDeviceBrowserComponent {
 
   @Input()
-  public type: Fs2FaBrowser = null;
+  public type: DeviceBrowser = null;
 
   @Input()
   public version: string = null;

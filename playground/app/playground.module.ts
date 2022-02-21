@@ -20,6 +20,7 @@ import {
 } from './components';
 import { AppComponent } from './app.component';
 import { DeviceBrowserComponent } from './components/device-browser';
+import { DeviceOsComponent } from './components/device-os';
 
 const routes: Routes = [
   { path: '', component: ExamplesComponent },
@@ -46,6 +47,7 @@ const routes: Routes = [
     ExamplesComponent,
     // KitchenSinkComponent,
     DeviceBrowserComponent,
+    DeviceOsComponent,
   ],
 })
 export class PlaygroundModule {

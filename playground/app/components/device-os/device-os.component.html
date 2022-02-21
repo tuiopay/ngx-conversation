@@ -1,0 +1,77 @@
+<div fxLayout="row" fxLayoutGap="30px">
+  <div fxLayout="column" fxLayoutGap="5px">
+    <fs-device-os
+      [type]="DeviceType.Desktop"
+      [os]="DeviceOs.Android"
+      name="Android"
+    ></fs-device-os>
+    <fs-device-os
+      [type]="DeviceType.Desktop"
+      [os]="DeviceOs.Ios"
+      name="IOS"
+    ></fs-device-os>
+    <fs-device-os
+      [type]="DeviceType.Desktop"
+      [os]="DeviceOs.Linux"
+      name="Linux"
+    ></fs-device-os>
+    <fs-device-os
+      [type]="DeviceType.Desktop"
+      [os]="DeviceOs.Windows"
+      name="Windows"
+    ></fs-device-os>
+  </div>
+
+  <div fxLayout="column" fxLayoutGap="5px">
+      <fs-device-os
+        [type]="DeviceType.Phone"
+        [os]="DeviceOs.Android"
+        name="Android"
+      ></fs-device-os>
+      <fs-device-os
+        [type]="DeviceType.Phone"
+        [os]="DeviceOs.Ios"
+        name="IOS"
+      ></fs-device-os>
+      <fs-device-os
+        [type]="DeviceType.Phone"
+        [os]="DeviceOs.Linux"
+        name="Linux"
+      ></fs-device-os>
+      <fs-device-os
+        [type]="DeviceType.Phone"
+        [os]="DeviceOs.Windows"
+        name="Windows"
+      ></fs-device-os>
+    </div>
+
+    <div fxLayout="column" fxLayoutGap="5px">
+      <fs-device-os
+        [type]="DeviceType.Tablet"
+        [os]="DeviceOs.Android"
+        name="Android"
+      ></fs-device-os>
+      <fs-device-os
+        [type]="DeviceType.Tablet"
+        [os]="DeviceOs.Ios"
+        name="IOS"
+      ></fs-device-os>
+      <fs-device-os
+        [type]="DeviceType.Tablet"
+        [os]="DeviceOs.Linux"
+        name="Linux"
+      ></fs-device-os>
+      <fs-device-os
+        [type]="DeviceType.Tablet"
+        [os]="DeviceOs.Windows"
+        name="Windows"
+      ></fs-device-os>
+    </div>
+
+    <div fxLayout="column" fxLayoutGap="5px">
+      <fs-device-os
+        [type]="DeviceType.Unknown"
+        name="Unknown"
+      ></fs-device-os>
+    </div>
+</div>

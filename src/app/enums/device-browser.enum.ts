@@ -1,4 +1,4 @@
-export enum Fs2FaBrowser {
+export enum DeviceBrowser {
   Android = 'android',
   Chrome = 'chrome',
   Edge = 'edge',

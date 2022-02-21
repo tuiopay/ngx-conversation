@@ -1,0 +1,11 @@
+<div class="device-os">
+  <div class="icon size-32">
+    <mat-icon class="type-icon">{{ DeviceTypeIcons[type] }}</mat-icon>
+    <mat-icon
+      *ngIf="type !== DeviceType.Unknown && DeviceOsIcons[os]"
+      class="os-icon"
+      [svgIcon]="DeviceOsIcons[os]"
+    ></mat-icon>
+  </div>
+  <div *ngIf="name" class="name">{{ name }}</div>
+</div>

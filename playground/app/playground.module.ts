@@ -21,6 +21,7 @@ import {
 import { AppComponent } from './app.component';
 import { DeviceBrowserComponent } from './components/device-browser';
 import { DeviceOsComponent } from './components/device-os';
+import { TrustedDevicesComponent } from './components/trusted-devices';
 
 const routes: Routes = [
   { path: '', component: ExamplesComponent },
@@ -48,6 +49,7 @@ const routes: Routes = [
     // KitchenSinkComponent,
     DeviceBrowserComponent,
     DeviceOsComponent,
+    TrustedDevicesComponent,
   ],
 })
 export class PlaygroundModule {

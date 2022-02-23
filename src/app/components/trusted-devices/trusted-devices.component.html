@@ -1,0 +1,47 @@
+<fs-list [config]="listConfig">
+  <fs-list-column title="Name">
+    <ng-template fs-list-cell let-row="row">
+      <div *ngIf="row.account" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+        <fs-badge shape="circle" image="{{ row.account.avatarUrl }}"></fs-badge>
+        <div fxLayout="column">
+          <a (click)="accountClicked(row.account)">{{ row.account.name }}</a>
+          <small *ngIf="row.account.email">{{ row.account.email }}</small>
+        </div>
+      </div>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column title="OS">
+    <ng-template fs-list-cell let-row="row">
+      <fs-device-os
+        *ngIf="row.device"
+        [type]="row.device.type"
+        [os]="row.device.osType"
+        [name]="row.device.osName"
+      ></fs-device-os>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column title="Browser">
+    <ng-template fs-list-cell let-row="row">
+      <fs-device-browser
+        *ngIf="row.device"
+        [type]="row.device.browserType"
+        [name]="row.device.browserName"
+      ></fs-device-browser>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column title="Added">
+    <ng-template fs-list-cell let-row="row">
+      {{ row.createDate | fsDateAgo }}
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column title="Location">
+    <ng-template fs-list-cell let-row="row">
+      <fs-country [code]="row.location.isoCode"></fs-country>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column title="Last signed in">
+    <ng-template fs-list-cell let-row="row">
+      {{ row.activityDate | fsDateAgo }}
+    </ng-template>
+  </fs-list-column>
+</fs-list>

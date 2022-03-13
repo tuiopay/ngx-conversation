@@ -16,6 +16,7 @@
         *ngIf="row.device"
         [type]="row.device.type"
         [os]="row.device.osType"
+        [version]="row.device.osVersion"
         [name]="row.device.osName"
       ></fs-device-os>
     </ng-template>
@@ -25,7 +26,8 @@
       <fs-device-browser
         *ngIf="row.device"
         [type]="row.device.browserType"
-        [name]="row.device.browserName"
+        [version]="row.device.browserVersion"
+        [showName]="true"
       ></fs-device-browser>
     </ng-template>
   </fs-list-column>
@@ -36,7 +38,8 @@
   </fs-list-column>
   <fs-list-column title="Location">
     <ng-template fs-list-cell let-row="row">
-      <fs-country [code]="row.location.isoCode"></fs-country>
+      <fs-country [code]="row.ip.country"></fs-country>
+      <div><small>{{row.ip.ip}}</small></div>
     </ng-template>
   </fs-list-column>
   <fs-list-column title="Last signed in">

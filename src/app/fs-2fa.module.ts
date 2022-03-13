@@ -7,9 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { FsListModule } from '@firestitch/list';
 import { FsDateModule } from '@firestitch/date';
 import { FsCountryModule } from '@firestitch/country';
+import { FsDeviceModule } from '@firestitch/device';
 
-import { FsDeviceBrowserComponent } from './components/device-browser/device-browser.component';
-import { FsDeviceOsComponent } from './components/device-os/device-os.component';
 import { FsTrustedDevicesComponent } from './components/trusted-devices/trusted-devices.component';
 
 import { Fs2FaIconsFactory } from './helpers/icons.factory';
@@ -25,19 +24,15 @@ import { Fs2FaIconsFactory } from './helpers/icons.factory';
     FsListModule,
     FsDateModule,
     FsCountryModule,
+    FsDeviceModule,
   ],
   exports: [
-    FsDeviceBrowserComponent,
-    FsDeviceOsComponent,
     FsTrustedDevicesComponent,
   ],
   declarations: [
-    FsDeviceBrowserComponent,
-    FsDeviceOsComponent,
     FsTrustedDevicesComponent,
   ],
   providers: [
-    // FsComponentService,
     {
       provide: APP_INITIALIZER,
       useFactory: function (iconFactory: Fs2FaIconsFactory) {

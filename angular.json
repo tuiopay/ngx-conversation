@@ -32,7 +32,8 @@
                 "glob": "**/*",
                 "input": "node_modules/country-flag-icons/3x2",
                 "output": "assets/country-flags/"
-              }
+              },
+              { "glob": "**/*", "input": "./node_modules/@firestitch/device/assets", "output": "./assets/@firestitch/device" }
             ],
             "styles": [
               "playground/styles.scss"

@@ -7,7 +7,7 @@ export interface ITrustedDevice {
   readonly id: number;
   account: ITrustedDeviceAccount;
   device: ITrustedDeviceDevice;
-  location: ITrustedDeviceIp;
+  ip: ITrustedDeviceIp;
   activityDate: Date;
   createDate: Date;
   guid: string;

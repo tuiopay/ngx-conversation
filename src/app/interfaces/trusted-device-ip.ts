@@ -1,4 +1,5 @@
 export interface ITrustedDeviceIp {
-  readonly id: number;
-  isoCode: string;
+  id?: number;
+  country?: string;
+  ip?: string;
 }

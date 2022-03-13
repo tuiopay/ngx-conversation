@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ITrustedDevice, ITrustedDeviceAccount, DeviceType, DeviceBrowser, DeviceOs } from '@firestitch/2fa';
+import { ITrustedDevice, ITrustedDeviceAccount } from '@firestitch/2fa';
+import { DeviceType, DeviceBrowser, DeviceOs } from '@firestitch/device';
 import { guid } from '@firestitch/common';
 
 import { of } from 'rxjs';
@@ -31,15 +32,15 @@ export class TrustedDevicesComponent implements OnInit {
           id: Math.random(),
           type: DeviceType.Desktop,
           osType: DeviceOs.Windows,
-          osName: 'Windows',
+          osVersion: '10.0',
           browserType: DeviceBrowser.Chrome,
           browserVersion: '1.0.0',
-          browserName: 'Chrome',
           userAgent: 'Mozilla/5.0',
         },
-        location: {
+        ip: {
           id: Math.random(),
-          isoCode: 'CA',
+          country: 'CA',
+          ip: '124.22.52.112'
         },
         activityDate: new Date(),
         createDate: new Date(),
@@ -56,17 +57,17 @@ export class TrustedDevicesComponent implements OnInit {
         },
         device: {
           id: Math.random(),
-          type: DeviceType.Phone,
+          type: DeviceType.Mobile,
           osType: DeviceOs.Android,
-          osName: 'Android',
+          osVersion: '10.0',
           browserType: DeviceBrowser.Android,
-          browserName: 'Android',
           browserVersion: '1.0.0',
           userAgent: 'Mozilla/5.0',
         },
-        location: {
+        ip: {
           id: Math.random(),
-          isoCode: 'CA',
+          country: 'CA',
+          ip: '124.22.52.112'
         },
         activityDate: new Date(),
         createDate: new Date(),

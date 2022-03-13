@@ -74,6 +74,7 @@
     "@firestitch/selectbutton": "^8.1.1",
     "@firestitch/badge": "^10.0.0",
     "@firestitch/country": "^10.0.9",
+    "@firestitch/device": "^12.0.4",
     "tsmodels": "^0.4.7",
     "fileapi": "^2.2.0",
     "imask": "^6.4.2",

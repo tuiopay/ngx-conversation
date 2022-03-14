@@ -1,4 +1,4 @@
-export interface ITrustedDeviceAccount {
+export interface ISigninAccount {
   readonly id: number;
   name: string;
   email: string;

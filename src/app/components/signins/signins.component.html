@@ -1,0 +1,52 @@
+<fs-list [config]="listConfig">
+  <fs-list-column title="Name">
+    <ng-template fs-list-cell let-row="row" class="col-name">
+      <div *ngIf="row.email">{{ row.email }}</div>
+      <div *ngIf="row.apiKey">{{ row.apiKey }}</div>  
+      <div class="small" *ngIf="row.account">
+        {{ row.account.name }}
+      </div>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column title="Status">
+    <ng-template fs-list-cell let-row="row">
+      {{SigninStates[row.state]}}
+      <div class="small">{{row.message}}</div>
+    </ng-template>
+  </fs-list-column>  
+  <fs-list-column title="Device">
+    <ng-template fs-list-cell let-row="row">
+      <fs-device-os
+        *ngIf="row.device"
+        [type]="row.device.type"
+        [os]="row.device.osType"
+        [version]="row.device.osVersion"
+        [name]="row.device.osName">
+      </fs-device-os>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column title="Browser">
+    <ng-template fs-list-cell let-row="row">
+      <fs-device-browser
+        *ngIf="row.device"
+        [type]="row.device.browserType"
+        [version]="row.device.browserVersion"
+        [showName]="true">
+      </fs-device-browser>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column title="Location">
+    <ng-template fs-list-cell let-row="row">
+      <fs-ip
+        [country]="row.ip.country"
+        [region]="row.ip.region"
+        [ip]="row.ip.ip">
+      </fs-ip>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column title="Date">
+    <ng-template fs-list-cell let-row="row">
+      {{row.createDate | fsDateFormat: 'full-date-time'}}
+    </ng-template>
+  </fs-list-column>
+</fs-list>

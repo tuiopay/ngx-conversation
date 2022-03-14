@@ -2,7 +2,7 @@
   "extends": "./tools/config/tsconfig.cli.json",
   "compilerOptions": {
     "paths": {
-      "@firestitch/2fa": [
+      "@firestitch/signin": [
         "src/public_api.ts"
       ],
       "@env": [

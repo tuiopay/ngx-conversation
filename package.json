@@ -1,11 +1,11 @@
 {
-  "name": "@firestitch/2fa",
-  "title": "2FA",
-  "description": "@firestitch/2fa",
+  "name": "@firestitch/signin",
+  "title": "Signin",
+  "description": "@firestitch/signin",
   "version": "12.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Firestitch/ngx-2fa"
+    "url": "https://github.com/Firestitch/ngx-signin"
   },
   "author": {
     "name": "Firestitch",
@@ -45,7 +45,7 @@
     "@cypress/schematic": "^1.6.0",
     "@firestitch/autocomplete": "^10.0.24",
     "@firestitch/clear": "^8.1.0",
-    "@firestitch/common": "^8.0.12",
+    "@firestitch/common": "^8.0.13",
     "@firestitch/core": "^9.1.2",
     "@firestitch/date": "^8.0.26",
     "@firestitch/datepicker": "^9.2.3",
@@ -73,7 +73,8 @@
     "@firestitch/exif-js": "^2.3.0",
     "@firestitch/selectbutton": "^8.1.1",
     "@firestitch/badge": "^10.0.0",
-    "@firestitch/country": "^10.0.9",
+    "@firestitch/country": "^10.0.13",
+    "@firestitch/ip": "^12.0.0",
     "@firestitch/device": "^12.0.4",
     "tsmodels": "^0.4.7",
     "fileapi": "^2.2.0",

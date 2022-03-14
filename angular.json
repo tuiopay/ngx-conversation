@@ -22,12 +22,11 @@
             "assets": [
               "playground/favicon.ico",
               "playground/assets",
-              { "glob": "**/*", "input": "./src/app/assets", "output": "./assets/@firestitch/2fa" },
               {
                 "glob": "**/*",
                 "input": "node_modules/@firestitch/country/assets",
                 "output": "assets/"
-              },
+              },            
               {
                 "glob": "**/*",
                 "input": "node_modules/country-flag-icons/3x2",

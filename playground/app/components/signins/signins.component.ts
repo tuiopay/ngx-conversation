@@ -1,25 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ITrustedDevice, ITrustedDeviceAccount } from '@firestitch/2fa';
+import { ISignin, SigninState } from '@firestitch/signin';
 import { DeviceType, DeviceBrowser, DeviceOs } from '@firestitch/device';
-import { guid } from '@firestitch/common';
 
 import { of } from 'rxjs';
 
 
 @Component({
-  selector: 'trusted-devices',
-  templateUrl: './trusted-devices.component.html',
-  styleUrls: ['./trusted-devices.component.scss']
+  selector: 'app-signins',
+  templateUrl: './signins.component.html',
+  styleUrls: ['./signins.component.scss']
 })
-export class TrustedDevicesComponent implements OnInit {
+export class SigninsComponent implements OnInit {
 
-  public trustedDevices: ITrustedDevice[] = null;
+  public signins: ISignin[] = null;
 
   constructor() { }
 
   public ngOnInit(): void {
-    this.trustedDevices = [
+    this.signins = [
       {
         id: Math.random(),
         account: {
@@ -40,12 +39,13 @@ export class TrustedDevicesComponent implements OnInit {
         ip: {
           id: Math.random(),
           country: 'CA',
-          ip: '124.22.52.112'
+          ip: '124.22.52.112',
+          region: 'Ontario'
         },
-        activityDate: new Date(),
         createDate: new Date(),
-        guid: guid(),
-        state: 'active',
+        state: SigninState.Failure,
+        email: 'admin@admin.com',
+        message: 'The password does not match the account\'s password.'
       },
       {
         id: Math.random(),
@@ -67,34 +67,20 @@ export class TrustedDevicesComponent implements OnInit {
         ip: {
           id: Math.random(),
           country: 'CA',
-          ip: '124.22.52.112'
+          ip: '124.22.52.112',
+          region: 'Ontario'
         },
-        activityDate: new Date(),
+        email: 'admin@admin.com',
         createDate: new Date(),
-        guid: guid(),
-        state: 'active',
+        state: SigninState.Success,
       },
     ];
   }
 
-  public fetchTrustedDevices = (query) => {
+  public fetchSignins = (query) => {
     return of({
-      data: this.trustedDevices,
+      data: this.signins,
     });
-  }
-
-  public removeTrustedDevice = (data) => {
-    console.log('Removed', data);
-    return of(data);
-  }
-
-  public signOutTrustedDevice = (data) => {
-    console.log('Sign Out', data);
-    return of(data);
-  }
-
-  public accountClick(account: ITrustedDeviceAccount): void {
-    console.log(account);
   }
 
 }

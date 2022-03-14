@@ -1,8 +1,12 @@
-export { Fs2FaModule } from './app/fs-2fa.module';
+export { FsSigninModule } from './app/fs-signin.module';
 
-export { FsTrustedDevicesComponent } from './app/components/trusted-devices/trusted-devices.component';
+export { FsSigninsComponent } from './app/components/signins/signins.component';
 
-export { ITrustedDevice } from './app/interfaces/trusted-device';
-export { ITrustedDeviceAccount } from './app/interfaces/trusted-device-account';
-export { ITrustedDeviceDevice } from './app/interfaces/trusted-device-device';
-export { ITrustedDeviceIp } from './app/interfaces/trusted-device-ip';
+export { ISignin } from './app/interfaces/signin';
+export { ISigninAccount } from './app/interfaces/signin-account';
+export { ISigninDevice } from './app/interfaces/signin-device';
+export { ISigninIp } from './app/interfaces/signin-ip';
+
+export { SigninState } from './app/enums/signin-state.enum';
+
+export { SigninStates } from './app/consts/signin-states.const';

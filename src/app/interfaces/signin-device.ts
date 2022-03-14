@@ -1,7 +1,7 @@
 import { DeviceType, DeviceOs, DeviceBrowser } from '@firestitch/device';
 
 
-export interface ITrustedDeviceDevice {
+export interface ISigninDevice {
   readonly id: number;
   type: DeviceType;
   osType: DeviceOs;

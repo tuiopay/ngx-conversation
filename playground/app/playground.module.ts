@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { FsExampleModule } from '@firestitch/example';
 import { FsMessageModule } from '@firestitch/message';
-import { Fs2FaModule } from '@firestitch/2fa';
+import { FsSigninModule } from '@firestitch/signin';
 import { FsLabelModule } from '@firestitch/label';
 import { FsStoreModule } from '@firestitch/store';
 
@@ -17,7 +17,7 @@ import {
   ExamplesComponent
 } from './components';
 import { AppComponent } from './app.component';
-import { TrustedDevicesComponent } from './components/trusted-devices';
+import { SigninsComponent } from './components/signins';
 
 const routes: Routes = [
   { path: '', component: ExamplesComponent },
@@ -27,12 +27,11 @@ const routes: Routes = [
   bootstrap: [ AppComponent ],
   imports: [
     BrowserModule,
-    Fs2FaModule,
+    FsSigninModule,
     BrowserAnimationsModule,
     AppMaterialModule,
     FormsModule,
     FsLabelModule,
-    // FsFormModule,
     FsStoreModule,
     FsExampleModule.forRoot(),
     FsMessageModule.forRoot(),
@@ -42,7 +41,7 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     ExamplesComponent,
-    TrustedDevicesComponent,
+    SigninsComponent,
   ],
 })
 export class PlaygroundModule {

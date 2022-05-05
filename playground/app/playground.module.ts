@@ -6,9 +6,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { FsExampleModule } from '@firestitch/example';
 import { FsMessageModule } from '@firestitch/message';
-import { FsSigninModule } from '@firestitch/signin';
+import { FsContentWidgetsModule, FsContentWidgetModule } from '@firestitch/content-widget';
 import { FsLabelModule } from '@firestitch/label';
 import { FsStoreModule } from '@firestitch/store';
+import { FsHtmlEditorModule } from '@firestitch/html-editor';
 
 import { ToastrModule } from 'ngx-toastr';
 
@@ -17,7 +18,11 @@ import {
   ExamplesComponent
 } from './components';
 import { AppComponent } from './app.component';
-import { SigninsComponent } from './components/signins';
+import { ContentWidgetsComponent } from './components/content-widgets';
+import { FS_CONTENT_WIDGET_CONFIG } from 'src/app/content-widget/injectors';
+import { contentWidgetConfigFactory } from './helpers/content-widget-config-factory';
+import { ContentWidgetComponent } from './components/content-widget';
+
 
 const routes: Routes = [
   { path: '', component: ExamplesComponent },
@@ -27,21 +32,30 @@ const routes: Routes = [
   bootstrap: [ AppComponent ],
   imports: [
     BrowserModule,
-    FsSigninModule,
+    FsContentWidgetsModule,
+    FsContentWidgetModule,
     BrowserAnimationsModule,
     AppMaterialModule,
     FormsModule,
     FsLabelModule,
     FsStoreModule,
     FsExampleModule.forRoot(),
+    FsHtmlEditorModule.forRoot(),
     FsMessageModule.forRoot(),
     ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot(routes),
   ],
+  providers: [
+    { provide: FS_CONTENT_WIDGET_CONFIG, 
+      useFactory: contentWidgetConfigFactory, 
+      deps: [ ] 
+    },
+  ],
   declarations: [
     AppComponent,
     ExamplesComponent,
-    SigninsComponent,
+    ContentWidgetsComponent,
+    ContentWidgetComponent,
   ],
 })
 export class PlaygroundModule {

@@ -4,3 +4,7 @@
 @import '../src/app/styles.scss';
 
 @include fs-drawer($mat-blue);
+
+small {
+  font-size: 10px;
+}

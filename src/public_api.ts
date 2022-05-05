@@ -1,12 +1,8 @@
-export { FsSigninModule } from './app/fs-signin.module';
+export { FsContentWidgetsModule } from './app/content-widgets/fs-content-widgets.module';
+export { FsContentWidgetModule } from './app/content-widget/fs-content-widget.module';
+export { FsContentWidgetConfig } from './app/content-widget/interfaces/content-widget-config';
 
-export { FsSigninsComponent } from './app/components/signins/signins.component';
+export { FsContentWidgetsComponent } from './app/content-widgets/components/content-widgets/content-widgets.component';
+export { FsContentWidgetComponent } from './app/content-widget/components/content-widget/content-widget.component';
 
-export { ISignin } from './app/interfaces/signin';
-export { ISigninAccount } from './app/interfaces/signin-account';
-export { ISigninDevice } from './app/interfaces/signin-device';
-export { ISigninIp } from './app/interfaces/signin-ip';
-
-export { SigninState } from './app/enums/signin-state.enum';
-
-export { SigninStates } from './app/consts/signin-states.const';
+export { FS_CONTENT_WIDGET_CONFIG } from './app/content-widget/injectors/content-wiget.injector';

@@ -8,7 +8,6 @@ import { Component } from '@angular/core';
 })
 export class ClipboardButtonComponent {
 
-  
   public content = (): string => {
     return 'Content from Function!';
   }

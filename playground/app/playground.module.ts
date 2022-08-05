@@ -8,7 +8,6 @@ import { FsExampleModule } from '@firestitch/example';
 import { FsMessageModule } from '@firestitch/message';
 import { FsLabelModule } from '@firestitch/label';
 import { FsStoreModule } from '@firestitch/store';
-import { FsHtmlEditorModule } from '@firestitch/html-editor';
 
 import { ToastrModule } from 'ngx-toastr';
 
@@ -38,7 +37,6 @@ const routes: Routes = [
     FsStoreModule,
     FsExampleModule.forRoot(),
     FsClipboardModule,
-    FsHtmlEditorModule.forRoot(),
     FsMessageModule.forRoot(),
     ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot(routes),

@@ -13,7 +13,7 @@ export class FsClipboardButtonDirective {
     this.copy();
   }
 
-  @Input() public content: 'string' | (() => string) | HTMLElement;
+  @Input() public content: string | (() => string) | HTMLElement;
 
   public constructor(
     private _clipboard: FsClipboard,

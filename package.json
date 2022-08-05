@@ -1,11 +1,11 @@
 {
-  "name": "@firestitch/content-widget",
-  "title": "Content Widget",
-  "description": "@firestitch/content-widget",
-  "version": "12.0.2",
+  "name": "@firestitch/clipboard",
+  "title": "Clipboard",
+  "description": "@firestitch/clipboard",
+  "version": "12.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Firestitch/ngx-content-widget"
+    "url": "https://github.com/Firestitch/ngx-clipboard"
   },
   "author": {
     "name": "Firestitch",
@@ -103,7 +103,8 @@
     "start-server-and-test": "^1.14.0",
     "tslint": "~6.1.0",
     "typescript": "4.3.5",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",  
+    "ngx-clipboard": "^14.0.2"
   },
   "engines": {
     "node": ">=6.0.0"

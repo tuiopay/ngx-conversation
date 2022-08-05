@@ -6,7 +6,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { FsExampleModule } from '@firestitch/example';
 import { FsMessageModule } from '@firestitch/message';
-import { FsContentWidgetsModule, FsContentWidgetModule } from '@firestitch/content-widget';
 import { FsLabelModule } from '@firestitch/label';
 import { FsStoreModule } from '@firestitch/store';
 import { FsHtmlEditorModule } from '@firestitch/html-editor';
@@ -18,10 +17,10 @@ import {
   ExamplesComponent
 } from './components';
 import { AppComponent } from './app.component';
-import { ContentWidgetsComponent } from './components/content-widgets';
-import { FS_CONTENT_WIDGET_CONFIG } from 'src/app/content-widget/injectors';
-import { contentWidgetConfigFactory } from './helpers/content-widget-config-factory';
-import { ContentWidgetComponent } from './components/content-widget';
+import { CopyComponent } from './components/copy';
+import { FsClipboardModule } from 'src/app/fs-clipboard.module';
+import { ClipboardButtonComponent } from './components/clipboard-button';
+import { ClipboardComponent } from './components/clipboard';
 
 
 const routes: Routes = [
@@ -32,30 +31,24 @@ const routes: Routes = [
   bootstrap: [ AppComponent ],
   imports: [
     BrowserModule,
-    FsContentWidgetsModule,
-    FsContentWidgetModule,
     BrowserAnimationsModule,
     AppMaterialModule,
     FormsModule,
     FsLabelModule,
     FsStoreModule,
     FsExampleModule.forRoot(),
+    FsClipboardModule,
     FsHtmlEditorModule.forRoot(),
     FsMessageModule.forRoot(),
     ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot(routes),
   ],
-  providers: [
-    { provide: FS_CONTENT_WIDGET_CONFIG, 
-      useFactory: contentWidgetConfigFactory, 
-      deps: [ ] 
-    },
-  ],
   declarations: [
     AppComponent,
     ExamplesComponent,
-    ContentWidgetsComponent,
-    ContentWidgetComponent,
+    CopyComponent,
+    ClipboardButtonComponent,
+    ClipboardComponent,
   ],
 })
 export class PlaygroundModule {

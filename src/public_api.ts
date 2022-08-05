@@ -1,8 +1,5 @@
-export { FsContentWidgetsModule } from './app/content-widgets/fs-content-widgets.module';
-export { FsContentWidgetModule } from './app/content-widget/fs-content-widget.module';
-export { FsContentWidgetConfig } from './app/content-widget/interfaces/content-widget-config';
+export { FsClipboard } from './app/services/clipboard-service';
 
-export { FsContentWidgetsComponent } from './app/content-widgets/components/content-widgets/content-widgets.component';
-export { FsContentWidgetComponent } from './app/content-widget/components/content-widget/content-widget.component';
-
-export { FS_CONTENT_WIDGET_CONFIG } from './app/content-widget/injectors/content-wiget.injector';
+export { FsClipboardButtonComponent } from './app/components/clipboard-button/clipboard-button.component';
+export { FsClipboardComponent } from './app/components/clipboard/clipboard.component';
+export { FsClipboardButtonDirective } from './app/directives/clipboard/clipboard.directive';

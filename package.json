@@ -1,10 +1,10 @@
 {
-  "name": "@firestitch/clipboard",
+  "name": "@firestitch/conversation",
   "title": "Clipboard",
   "version": "12.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Firestitch/ngx-clipboard"
+    "url": "https://github.com/Firestitch/ngx-conversation"
   },
   "author": {
     "name": "Firestitch",
@@ -15,7 +15,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Firestitch/ngx-clipboard/issues"
+    "url": "https://github.com/Firestitch/ngx-conversation/issues"
   },
   "main": "package/index.js",
   "typings": "package/index.d.ts",
@@ -42,26 +42,33 @@
     "@angular/platform-browser-dynamic": "^12.2.15",
     "@angular/router": "^12.2.15",
     "@compodoc/compodoc": "^1.1.10",
-    "@firestitch/api": "^8.1.10",
+    "@firestitch/api": "^12.2.0",
     "@firestitch/autocomplete": "^12.0.0",
     "@firestitch/autocomplete-chips": "^12.0.0",
+    "@firestitch/badge": "^12.0.0",
     "@firestitch/clear": "^12.0.0",
+    "@firestitch/chip": "^12.0.0",
     "@firestitch/common": "^12.0.0",
     "@firestitch/date": "^12.0.0",
     "@firestitch/datepicker": "^12.0.1",
     "@firestitch/dialog": "^12.0.1",
     "@firestitch/drawer": "^12.0.0",
     "@firestitch/example": "^12.0.0",
+    "@firestitch/file": "^12.2.6",
     "@firestitch/exif-js": "^2.3.0",
     "@firestitch/form": "^12.0.1",
+    "@firestitch/gallery": "^12.1.2",
     "@firestitch/iframe": "^12.0.0",
     "@firestitch/label": "^12.0.0",
+    "@firestitch/list": "^12.3.3",
     "@firestitch/menu": "^12.0.1",
     "@firestitch/message": "^12.0.0",
     "@firestitch/prompt": "^12.0.1",
+    "@firestitch/selection": "^12.0.1",
+    "@firestitch/selectbutton": "^12.0.0",
+    "@firestitch/scroll-picker": "^12.0.0",
     "@firestitch/store": "^12.0.0",
     "@firestitch/style": "^12.0.0",
-    "@firestitch/scroll-picker": "^12.0.0",
     "@firestitch/upload": "^8.0.4",
     "codelyzer": "^6.0.0",
     "cpx": "^1.5.0",

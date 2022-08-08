@@ -1,0 +1,12 @@
+.row {
+  display: inline-flex;
+  align-items: center;
+
+  fs-badge {
+    display: flex;
+   
+    + .name {
+      margin-left: 5px;
+    }
+  }
+}

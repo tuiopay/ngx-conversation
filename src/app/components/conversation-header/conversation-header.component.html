@@ -1,0 +1,32 @@
+<div class="heading-container">
+  <div class="heading">
+    <a 
+        class="participants"
+        (click)="openParticipants()">
+      <app-conversation-participants
+        [conversationParticipants]="conversation.conversationParticipants"
+        [count]="conversation.conversationParticipantCount">
+      </app-conversation-participants>     
+    </a>     
+    <span>{{conversation.name}}</span>
+  </div>
+  <app-conversation-state 
+    [conversation]="conversation">
+  </app-conversation-state> 
+  <div class="actions">      
+    <button
+      type="button"
+      tabindex="-1"
+      (click)="participantAdd()"
+      mat-icon-button>
+    <mat-icon>person_add_alt_1</mat-icon>
+    </button> 
+    <button
+      type="button"
+      tabindex="-1"
+      (click)="settingsOpen()"
+      mat-icon-button>
+    <mat-icon>settings</mat-icon>
+    </button> 
+  </div>          
+</div>

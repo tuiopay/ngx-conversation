@@ -1,0 +1,18 @@
+.participants {
+  align-items: center;
+  display: flex;
+
+  app-conversation-participant {
+    display: flex;
+
+    + app-conversation-participant {
+      margin-left: -8px;
+    }
+  }
+
+  .more {
+    margin: 0 5px 0 3px;
+    color: rgb(72, 72, 72);
+    font-size: 80%;
+  }
+}

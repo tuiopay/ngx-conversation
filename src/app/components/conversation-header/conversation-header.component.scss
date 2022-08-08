@@ -1,0 +1,28 @@
+.heading-container {
+  display: flex;
+  align-items: center;
+
+  .heading {
+    display: flex;
+    align-items: center;
+    font-size: 120%;
+    
+    .participants {
+      margin-right: 5px;
+
+      app-conversation-participants {
+        display: flex;
+      }
+    }
+  }
+
+  app-conversation-state {
+    margin-left: 4px;
+  }
+
+  .actions {
+    flex-grow: 1;
+    justify-content: end;
+    display: flex;
+  }
+}

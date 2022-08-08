@@ -1,0 +1,80 @@
+<div class="container-pane">
+  <div class="sidenav-pane">
+    <div class="filters">
+      <div *ngFor="let filter of filters" class="filter" [ngClass]="{ selected: selectedFilter === filter }">
+        <div class="avatar">
+          <mat-icon *ngIf="filter.icon">{{filter.icon}}</mat-icon>
+          <fs-badge *ngIf="filter.image" [image]="filter.image" size="24"></fs-badge>
+        </div>
+        <a (click)="filterSelect(filter)">{{filter.name}}</a>
+        <div class="count">
+          <div
+            *ngIf="filter.unread"
+            class="unread"
+            matTooltip="{{ filter.unread }} Unread">
+          </div>
+          <span>{{ filter.count }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="conversation-pane">
+    <div class="filter-heading" *ngIf="selectedFilter">
+      <div class="filter">
+        <div class="avatar">
+          <mat-icon *ngIf="selectedFilter.icon">{{selectedFilter.icon}}</mat-icon>
+          <fs-badge *ngIf="selectedFilter.image" [image]="selectedFilter.image" size="32"></fs-badge>
+        </div>
+        <span>{{ selectedFilter.name }}</span>
+      </div>
+      <div class="actions">
+        <!-- <button
+            mat-raised-button
+            color="primary"
+            (click)="conversationCreate()"
+            type="button">
+          Create
+        </button> -->
+        <button
+            mat-raised-button
+            color="primary"
+            (click)="conversationStart()"
+            type="button">
+          Start
+        </button>
+      </div>
+    </div>
+    <fs-list [config]="listConfig" *ngIf="selectedFilter">
+      <fs-list-column>
+        <ng-template fs-list-cell let-row="row" class="col-converstaion">
+          <div class="converstaion">
+            <a>{{ row.name }}</a> 
+            <mat-icon
+                [matTooltip]="row.conversationParticipantCount === 1 ? '1 Participant' : row.conversationParticipantCount + ' Participants'"
+                class="count">
+              people
+            </mat-icon>
+          </div>
+          <div class="last-conversation-item" *ngIf="row.lastConversationItem && row.lastConversationItem.payload.message">
+            <app-conversation-participant
+              [showBadge]="true"
+              [conversationParticipant]="row.lastConversationItem.conversationParticipant">
+            </app-conversation-participant>
+
+            <div class="message">
+              {{row.lastConversationItem.payload.message}}
+              <div class="small">
+                <fs-date-ago [date]="row.lastConversationItem.createDate"></fs-date-ago>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </fs-list-column>
+      <fs-list-column>
+        <ng-template fs-list-cell let-row="row" class="col-unread">
+          <div class="unread" matTooltip="Unread" *ngIf="row.unread"></div>
+        </ng-template>
+      </fs-list-column>
+    </fs-list>
+  </div>
+</div>

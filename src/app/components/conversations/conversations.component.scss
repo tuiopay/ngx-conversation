@@ -1,0 +1,145 @@
+.container-pane {
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+}
+
+fs-list {
+  ::ng-deep {
+    .fs-list-table {
+      .fs-list-row {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.sidenav-pane {
+  width: 220px;
+  padding-right: 30px;
+
+  .filters {
+    .filter {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+
+      &.selected a {
+        font-weight: bold;
+      }
+      
+      a {
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+        overflow: hidden;  
+        margin-left: 5px;    
+      }
+
+      .count {
+        text-align: right;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        .unread {
+          margin-right: 5px;
+        }
+      }
+
+      .avatar {
+        mat-icon {
+          line-height: normal;
+          display: flex;
+          color: #656565;
+        }
+      }
+    }
+  }
+}
+
+.conversation-pane {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  overflow: auto;
+
+  .filter-heading {
+    display: flex;
+    margin-bottom: 10px;  
+  
+    .filter {
+      display: flex;
+      align-items: center;
+      font-size: 110%;
+    }
+
+    .avatar {
+      margin-right: 5px;
+
+      mat-icon {
+        line-height: normal;
+      }
+    }
+
+    .actions {
+      display: flex;
+      flex-grow: 1;
+      justify-content: flex-end
+    }
+  }
+}
+
+:host ::ng-deep {
+  .col-converstaion {
+    .converstaion {
+      display: flex;
+      align-items: center;
+
+      a {
+        font-weight: bold;
+      }
+
+      .count {
+        margin-left: 2px;
+        display: flex;
+        transform: scale(.7);
+      }
+    }
+
+    .last-conversation-item {
+      display: flex;
+      margin-top: 7px;
+
+      .message {        
+        margin-top: -3px;
+        margin-left: 6px;
+      }
+    }
+  }
+
+  .col-unread {
+    width: 1%;
+  }
+
+  .unread {
+    height: 12px;
+    width: 12px;
+    background-color: red;
+    border-radius: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  :host {
+    .container-pane {
+      flex-direction: column;
+    }
+  }
+}

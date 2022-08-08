@@ -73,9 +73,9 @@
  */
 import 'zone.js';  // Included with Angular CLI.
 
-
-
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
 import 'hammerjs/hammer';
+
+(window as any).global = window;

@@ -1,0 +1,34 @@
+<form fsForm [submit]="save" *fsSkeletonForm="conversation">
+  <fs-dialog>
+    <h1 mat-dialog-title>{{conversation.id ? 'Conversation' : 'Create Conversation'}}</h1>
+    <div mat-dialog-content>
+
+      <div fxLayout="column">
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Name"
+            required
+            [(ngModel)]="conversation.name"
+            name="name">
+        </mat-form-field>
+
+      </div>
+    </div>
+    <div mat-dialog-actions>
+      <button
+        mat-button
+        type="submit"
+        color="primary">
+        {{conversation.id ? 'Save' : 'Create'}}
+      </button>
+
+      <button
+        mat-button
+        type="button"
+        [mat-dialog-close]="undefined">
+        Cancel
+      </button>
+    </div>
+  </fs-dialog>
+</form>

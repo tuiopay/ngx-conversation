@@ -1,0 +1,54 @@
+
+
+<form fsForm [submit]="save">
+  <fs-dialog>
+    <div mat-dialog-title>
+      Settings
+    </div>
+    <mat-dialog-content *fsSkeletonForm="conversation">
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          required
+          placeholder="Name"
+          [(ngModel)]="conversation.name"
+          name="name">
+      </mat-form-field> 
+
+      <mat-form-field class="full-width">
+        <mat-select
+          [(ngModel)]="conversation.state"
+          placeholder="Status"
+          name="conversation.state">
+            <mat-option
+              *ngFor="let item of ConversationStates"
+              [value]="item.value">
+                {{ item.name }}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>  
+      
+      <!-- <fs-label-field>
+        <fs-label>Targeting Settings</fs-label>
+        <mat-checkbox
+            [(ngModel)]="conversation.addAllParents"
+            name="addAllParents">
+          Add all organization parents
+        </mat-checkbox>
+      </fs-label-field> -->
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button
+          mat-button
+          color="primary">
+        Save
+      </button>
+      <button
+          mat-button
+          type="button"
+          [mat-dialog-close]="undefined">
+        Cancel
+      </button>
+    </mat-dialog-actions>
+  </fs-dialog>
+</form>

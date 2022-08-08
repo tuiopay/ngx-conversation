@@ -1,0 +1,16 @@
+.content {
+  width: 70vw;
+}
+
+:host ::ng-deep {
+  .col-name {
+    .row {
+      display: flex;
+      align-items: center;
+
+      fs-badge {
+        margin-right: 10px;
+      }
+    }
+  }
+}

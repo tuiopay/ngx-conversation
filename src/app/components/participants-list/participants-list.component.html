@@ -1,0 +1,25 @@
+<fs-dialog>
+  <h1 mat-dialog-title>Participants</h1>
+  <div mat-dialog-content>
+    <div fxLayout="column" class="content">
+      <fs-list [config]="listConfig">
+        <fs-list-column title="Name" class="col-name">
+          <ng-template fs-list-cell let-row="row">
+            <div class="row">
+              <fs-badge shape="circle" image="{{ row.account.image.small }}"></fs-badge>
+              <span>{{ row.account.firstName }} {{ row.account.lastName }}</span>
+            </div>
+          </ng-template>
+        </fs-list-column>
+      </fs-list>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button
+        mat-button
+        type="button"
+        mat-dialog-close>
+      Close
+    </button>
+  </div>
+</fs-dialog>

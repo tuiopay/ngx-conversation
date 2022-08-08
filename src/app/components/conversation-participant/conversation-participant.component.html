@@ -1,0 +1,9 @@
+<div class="row" [matTooltip]="name" [matTooltipDisabled]="!showTooltip">
+  <fs-badge 
+    [size]="size"
+    *ngIf="showBadge"
+    color="#ccc"       
+    [image]="image">
+  </fs-badge>
+  <span class="name" *ngIf="showName">{{name}}</span>
+</div>

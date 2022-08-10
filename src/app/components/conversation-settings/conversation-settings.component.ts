@@ -4,15 +4,17 @@ import {
 } from '@angular/core';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { index } from '@firestitch/common';
 
+import { index } from '@firestitch/common';
 import { FsMessage } from '@firestitch/message';
 
 import { Observable, of, Subject } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
+
 import { ConversationParticipantType } from '../../enums';
 import { ConversationStates } from '../../consts';
-import { ConversationConfig, IConversation } from '../../interfaces';
+import { Conversation } from '../../types';
+import { ConversationService } from '../../services';
 
 
 @Component({
@@ -22,54 +24,39 @@ import { ConversationConfig, IConversation } from '../../interfaces';
 })
 export class ConversationSettingsComponent implements OnInit, OnDestroy {
 
-  public conversation: IConversation = null;
+  public conversation: Conversation = null;
   public ConversationStates = ConversationStates;
+  public tab;
   public conversationStates = index(ConversationStates, 'name', 'value');
 
-  private _conversationConfig: ConversationConfig;
+  private _conversationService: ConversationService;
   private _destroy$ = new Subject();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: {
-      conversationConfig: ConversationConfig,
-      conversation: IConversation,
+      conversationService: ConversationService,
+      conversation: Conversation,
+      tab: string,
     },
     private _dialogRef: MatDialogRef<ConversationSettingsComponent>,
     private _cdRef: ChangeDetectorRef,
     private _message: FsMessage,
   ) { }
 
+  public get conversationService(): ConversationService {
+    return this._conversationService;
+  }
+
   public ngOnInit(): void {
-    this._conversationConfig = this._data.conversationConfig;
+    this.tab = this._data.tab;
+    this._conversationService = this._data.conversationService;
     this.conversation = {
       ...this._data.conversation,
     };
-
-    // this._conversationData.get(this._data.conversation.id, {
-    //   conversationParticipants: true,
-    //   conversationParticipantAccounts: true,
-    // })
-    //   .pipe(
-    //     tap((conversation) => {
-    //       this.conversation = conversation;
-    //       this.activeConversationParticipant = this.getActiveConversationParticipant();
-
-    //       timer(0, 5000)
-    //         .pipe(
-    //           takeUntil(this._destroy$),
-    //         )
-    //         .subscribe(() => {
-    //           this.loadConversationItems();
-    //         });
-    //     }),
-    //   )
-    //   .subscribe(() => {
-    //     this._cdRef.markForCheck();
-    //   });
   }
 
   public conversationParticipantFetch = (keyword) => {
-    return this._conversationConfig.accountsGet({
+    return this.conversationService.conversationConfig.accountsGet({
       keyword,
       avatars: true,
     })
@@ -84,31 +71,11 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
       );
   };
 
-  public save = () => {
-    return this.saveConversation(this.conversation);
-  };
-
-  public saveConversation(conversation): Observable<any> {
+  public save = (): Observable<any> => {
     return of(true)
       .pipe(
-        // switchMap(() => {
-        //   return this._conversationConfig
-        //   .conversationParticipantBulk(this.conversation.id, {
-        //       accountId: this.conversation.conversationParticipants
-        //         .map((conversationParticipant) => (conversationParticipant.account.id)),
-        //       addAllParents: this.conversation.addAllParents,
-
-        //       // TODO ???
-        //     })
-        //     .pipe(
-        //       tap((conversationParticipants) => {
-        //         this.conversation.conversationParticipants = conversationParticipants;
-        //       }),
-        //     );
-        // }),
         switchMap(() => {
-          // TODO ???
-          return this._conversationConfig.conversationSave(conversation)
+          return this.conversationService.conversationConfig.conversationSave(this.conversation)
             .pipe(
               tap((response) => {
                 this.conversation = {
@@ -122,11 +89,11 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
       )
       .pipe(
         tap(() => {
-          this._dialogRef.close(this.conversation);
+          this._dialogRef.close();
           this._message.success('Saved Changes');
         }),
       );
-  }
+  };
 
   public ngOnDestroy(): void {
     this._destroy$.next();

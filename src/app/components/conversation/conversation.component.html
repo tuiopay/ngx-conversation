@@ -1,100 +1,32 @@
 <ng-container *ngIf="conversation">
   <app-conversation-header
     [conversationService]="conversationService"
-    [(conversation)]="conversation"
-    (participantsChanged)="loadConversation()">
+    [conversation]="conversation"
+    (conversationChange)="conversationChange()">
   </app-conversation-header>
 </ng-container>
 <mat-dialog-content *fsSkeletonForm="conversation">
   <div class="conversation-container overflow-shadow">
     <div class="conversation">
-      <div class="items" *fsSkeleton="conversationItems">
-        <div 
-            *ngFor="let conversationItem of conversationItems; let index = index; trackBy: trackByconversationItem"
-            [class]="'item item-type-' + conversationItem.type"
-            [ngClass]="{ 'active-account': conversationItem.conversationParticipant?.id === activeConversationParticipant?.id }">
-          <div scrollIntoView *ngIf="index === 0"></div>
-          <div class="participant" *ngIf="conversationItem.type !== 'start'">
-            <ng-container *ngIf="conversationItem.conversationParticipant?.id !== activeConversationParticipant?.id">
-              <app-conversation-participant
-                [size]="30"
-                [conversationParticipant]="conversationItem.conversationParticipant"
-                [showBadge]="true">
-              </app-conversation-participant>
-              <app-conversation-participant
-                class="name"
-                [conversationParticipant]="conversationItem.conversationParticipant"
-                [showName]="true">
-              </app-conversation-participant>
-            </ng-container>
-            <div class="small create-date">
-              <fs-date-ago [date]="conversationItem.createDate"></fs-date-ago>    
-            </div>  
-          </div>
-          <ng-container [ngSwitch]="conversationItem.type">
-            <ng-container *ngSwitchCase="'message'">
-              <div class="message-container">
-                <div class="content">
-                  <div class="content-container">
-                    <fs-gallery [config]="conversationItem.galleryConfig" *ngIf="conversationItem.conversationItemFiles.length">
-                      <ng-template fsGalleryThumbnail let-item="item">
-                        <button 
-                            [fsMenuTriggerFor]="menu" 
-                            mat-icon-button 
-                            class="file-menu"
-                            (click)="$event.stopPropagation()">
-                          <mat-icon>more_vert</mat-icon> 
-                        </button>
-                        <fs-menu #menu>
-                          <ng-template fs-menu-item (click)="fileDownload(conversationItem, item.data)">
-                            Download  
-                          </ng-template>
-                        </fs-menu>
-                      </ng-template>
-                    </fs-gallery>
-
-                    <div class="message" *ngIf="conversationItem.payload?.message">
-                      <span [innerHTML]="conversationItem.payload?.message"></span>                    
-                    </div>                      
-  
-                    <div class="object" *ngIf="conversationItem.object">
-                      {{conversationItem.object.name}}
-                    </div>
-
-                    <fs-menu *ngIf="isAdmin" class="item-menu">
-                      <ng-template fs-menu-item (click)="conversationItemDelete(conversationItem)">
-                        Delete
-                      </ng-template>
-                    </fs-menu>                       
-                  </div>
-                </div>                    
-              </div>
-              
-            </ng-container>            
-
-            <ng-container *ngSwitchCase="'start'">
-              <div class="info">
-                Conversation Started <fs-date-ago [date]="conversationItem.createDate"></fs-date-ago>
-              </div>
-            </ng-container> 
-          </ng-container>                 
-        </div>            
-      </div>
+      <app-conversation-items
+        [account]="account"
+        [conversationService]="conversationService"
+        [conversation]="conversation"
+        [sessionConversationParticipant]="sessionConversationParticipant">
+      </app-conversation-items>
     </div> 
   </div>
-
   <div class="message-send-container">
     <form fsForm [submit]="messageSend" #messageForm>
       <div class="message-actions">
         <mat-form-field floatLabel="never">
           <textarea
             matInput
+            (keydown)="messageKeydown($event)"
             cdkTextareaAutosize
             [(ngModel)]="message"
-            [disabled]="conversation.state === 'closed'"
+            [disabled]="conversation.state === ConversationState.Closed"
             name="message"
-            (keyup)="messageKeyup($event)"
-            (keydown)="messageKeydown($event)"
             placeholder="Type a message">
           </textarea>
         </mat-form-field>
@@ -102,19 +34,19 @@
           <button
               mat-icon-button
               type="submit"
-              [disabled]="!message || conversation.state === 'closed'"
+              [disabled]="!message || conversation.state === ConversationState.Closed"
               color="primary">
             <mat-icon>send</mat-icon>
           </button>  
           <fs-file
-              [disabled]="conversation.state === 'closed'"
+              [disabled]="conversation.state === ConversationState.Closed"
               (select)="fileSelect($event)"
               [multiple]="true"
               imageWidth="1200"
               imageQuality=".8">
             <button
                 mat-icon-button
-                [disabled]="conversation.state === 'closed'"
+                [disabled]="conversation.state === ConversationState.Closed"
                 type="button"
                 color="basic">
               <mat-icon>attach_file</mat-icon>
@@ -129,7 +61,10 @@
         </div>
       </div>
 
-      <fs-file-previews [files]="files">
+      <fs-file-previews 
+          [previewWidth]="100"
+          [previewHeight]="100"
+          [files]="files">
         <ng-template fs-file-preview-action placement="top-right" action="remove" tooltip="Remove">
           <mat-icon>close</mat-icon>
         </ng-template>

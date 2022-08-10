@@ -26,9 +26,9 @@ export class ConversationParticipantComponent implements OnInit {
   public image;
 
   public ngOnInit(): void {
-    if (this.conversationParticipant ?.type === ConversationParticipantType.Account) {
-      this.name = this.conversationParticipant ?.account ?.name;
-      this.image = this.conversationParticipant ?.account ?.image ?.tiny;
+    if (this.conversationParticipant?.type === ConversationParticipantType.Account) {
+      this.name = this.conversationParticipant.account?.name;
+      this.image = this.conversationParticipant.account?.image?.tiny;
     }
   }
 

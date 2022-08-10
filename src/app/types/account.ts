@@ -1,4 +1,4 @@
-export interface Account {
+export type Account = {
   readonly id?: number;
   gender?: string;
   phone?: string;

@@ -1,12 +1,10 @@
 <div class="heading-container">
   <div class="heading">
     <a 
+        *ngIf="hasAdminConversationRole; else conversationParticipants"
         class="participants"
-        (click)="openParticipants()">
-      <app-conversation-participants
-        [conversationParticipants]="conversation.conversationParticipants"
-        [count]="conversation.conversationParticipantCount">
-      </app-conversation-participants>     
+        (click)="settingsOpen('participants')">
+      <ng-container *ngTemplateOutlet="conversationParticipants"></ng-container>
     </a>     
     <span>{{conversation.name}}</span>
   </div>
@@ -15,6 +13,7 @@
   </app-conversation-state> 
   <div class="actions">      
     <button
+      *ngIf="hasAdminConversationRole"
       type="button"
       tabindex="-1"
       (click)="participantAdd()"
@@ -22,6 +21,7 @@
     <mat-icon>person_add_alt_1</mat-icon>
     </button> 
     <button
+      *ngIf="hasAdminConversationRole"
       type="button"
       tabindex="-1"
       (click)="settingsOpen()"
@@ -30,3 +30,10 @@
     </button> 
   </div>          
 </div>
+
+<ng-template #conversationParticipants>
+  <app-conversation-participants
+    [conversationParticipants]="conversation.conversationParticipants"
+    [count]="conversation.conversationParticipantCount">
+  </app-conversation-participants>     
+</ng-template>

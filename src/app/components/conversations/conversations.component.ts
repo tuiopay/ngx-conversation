@@ -1,6 +1,6 @@
 import {
   Component, OnInit, ViewChild,
-  ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, Input,
+  ChangeDetectionStrategy, OnDestroy, Input, ChangeDetectorRef, TemplateRef, ContentChild, AfterContentInit,
 } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -13,9 +13,10 @@ import { map, takeUntil, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 import { ConversationCreateComponent, ConversationComponent } from '../../components';
-import { Account, ConversationConfig, ConversationFilter, IConversation } from '../../interfaces';
-import { ConversationState } from '../../enums';
+import { Account, ConversationConfig, ConversationFilter, Conversation } from '../../types';
+import { ConversationRole, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
+import { ConversationSettingsDirective } from '../../directives';
 
 
 @Component({
@@ -25,12 +26,14 @@ import { ConversationService } from '../../services';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ConversationService],
 })
-export class ConversationsComponent implements OnInit, OnDestroy {
+export class ConversationsComponent implements OnInit, OnDestroy, AfterContentInit {
+
+  @ContentChild(ConversationSettingsDirective, { read: TemplateRef })
+  public conversationSettingTemplate: TemplateRef<any>;
 
   @ViewChild(FsListComponent)
   public listComponent: FsListComponent;
 
-  @Input() public isAdmin = true;
   @Input() public config: ConversationConfig;
   @Input() public account: Account;
 
@@ -45,6 +48,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     private _dialog: MatDialog,
     private _message: FsMessage,
     private _conversationService: ConversationService,
+    private _cdRef: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
@@ -55,13 +59,11 @@ export class ConversationsComponent implements OnInit, OnDestroy {
       { name: 'Closed', type: 'closed', icon: 'chat_bubble' },
     ];
 
-    if (this.isAdmin) {
-      this.filters.unshift(
-        { name: this.account.name, type: 'account', image: this.account.image.tiny },
-      );
-    }
+    this.filters.unshift(
+      { name: this.account.name, type: 'account', image: this.account.image.tiny },
+    );
 
-    this.filterLoad();
+    this.loadStats();
     this.filterSelect(this.filters[0]);
 
     this.listConfig = {
@@ -75,6 +77,40 @@ export class ConversationsComponent implements OnInit, OnDestroy {
       noResults: {
         message: 'No conversations found',
       },
+      rowActions: [
+        {
+          click: (conversation) => {
+            return this._conversationConfig.conversationSave({
+              id: conversation.id,
+              state: ConversationState.Closed,
+            })
+            .pipe(
+              tap(() => this.loadStats()),
+            );
+          },
+          show: (conversation) => {
+            return conversation.accountConversationRoles.indexOf(ConversationRole.Admin) !== -1 && conversation.state === ConversationState.Open;
+          },
+          remove: {
+            title: 'Confirm',
+            template: 'Are you sure you would like to close this conversation?',
+          },
+          label: 'Close',
+        },
+        {
+          click: (data) => {
+            return this._conversationConfig.conversationDelete(data);
+          },
+          show: (conversation) => {
+            return conversation.accountConversationRoles.indexOf(ConversationRole.Admin) !== -1;
+          },
+          remove: {
+            title: 'Confirm',
+            template: 'Are you sure you would like to delete this conversation?',
+          },
+          label: 'Delete',
+        },
+      ],
       fetch: (query) => {
         query = {
           ...query,   
@@ -82,8 +118,9 @@ export class ConversationsComponent implements OnInit, OnDestroy {
           lastConversationItemConversationParticipants: true,
           lastConversationItemConversationParticipantsAccounts: true,
           unreads: true,
+          accountConversationRoles: true,
           conversationParticipantCounts: true,
-          order: 'activityDate,desc',
+          order: 'unread,desc;activityDate,desc',
         };
 
         switch (this.selectedFilter.type) {
@@ -103,30 +140,25 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         return this._conversationConfig.conversationsGet(query)
           .pipe(
             tap(() => {
-              this.filterLoad();
+              this.loadStats();
             }),
             map((response) => {
-              return { data: response.conversations, paging: response.paging };
+              return { 
+                data: response.conversations
+                .map((conversation) => {
+                  return {
+                    ...conversation,
+                  };
+                }), paging: response.paging 
+              };
             }),
           );
       },
     };
+  }
 
-    if (this.isAdmin) {
-      this.listConfig.rowActions = [
-        {
-          click: (data) => {
-            return this._conversationConfig.conversationDelete(data);
-          },
-          remove: {
-            title: 'Confirm',
-            template: 'Are you sure you would like to delete this record?',
-          },
-          menu: true,
-          label: 'Delete',
-        },
-      ];
-    }
+  public ngAfterContentInit(): void {
+    this._conversationService.conversationSettingTemplate = this.conversationSettingTemplate;
   }
 
   public conversationParticipantsChange(): void {
@@ -140,36 +172,32 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public filterLoad(): void {
+  public loadStats(): void {
     const statsFilters: any = {
       account: true,
       open: true,
       closed: true,
     };
 
-    if (!this.isAdmin) {
-      statsFilters.accountId = this.account.id;
-    }
+    this._conversationConfig.conversationsStats(statsFilters)
+      .subscribe((data) => {
+        Object.keys(data)
+          .forEach((type) => {
+            const filter = this.filters
+              .find((filter_: ConversationFilter) => (filter_.type === type)) as ConversationFilter;
 
-    // this._conversationConfig.conversationsStats(statsFilters)
-    //   .subscribe((data) => {
-    //     Object.keys(data)
-    //       .forEach((type) => {
-    //         const filter = this.filters
-    //           .find((filter_: ConversationFilter) => (filter_.type === type)) as ConversationFilter;
+            if (filter) {
+              const item = data[type];
+              filter.unread = item.unread;
+              filter.count = item.count;
+            }
+          });
 
-    //         if (filter) {
-    //           const item = data[type];
-    //           filter.unread = item.unread;
-    //           filter.count = item.count;
-    //         }
-    //       });
-
-    //     this._cdRef.markForCheck();
-    //   });
+        this._cdRef.markForCheck();
+      });
   }
 
-  public conversationCreate(conversation: IConversation = { id: null }): void {
+  public conversationCreate(conversation: Conversation = { id: null }): void {
     const dialogRef = this._dialog.open(ConversationCreateComponent, {
       autoFocus: true,
       data: { conversation },
@@ -188,11 +216,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public conversationStart(conversation: IConversation = { id: null }): void {
+  public conversationStart(conversation: Conversation = { id: null }): void {
     conversation.name = format(new Date());
-    // if (!this.isAdmin) {
-    //   conversation.participantsEnvironmentId = this._sessionService.environmentId();
-    // }
 
     this._conversationConfig.conversationSave(conversation)
       .pipe(
@@ -205,7 +230,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public conversationOpen(conversation: IConversation): void {
+  public conversationOpen(conversation: Conversation): void {
     this._dialog.open(ConversationComponent, {
       autoFocus: true,
       data: { 

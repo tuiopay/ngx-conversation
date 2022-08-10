@@ -5,7 +5,7 @@ import { FsApi } from '@firestitch/api';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ConversationConfig, IConversation, IConversationItem, IConversationItemMessage, IConversationParticipant } from 'src/app/interfaces';
+import { ConversationConfig, Conversation, ConversationItem, ConversationItemMessage, ConversationParticipant, Account } from 'src/app/types';
 
 
 @Injectable({
@@ -27,7 +27,7 @@ export class ConversationsApiService {
     return this._api.delete(`${this._url}${url}/${data.id}`, {});
   }
 
-  public get(url, data) {
+  public get(url, data = {}) {
     return this._api.get(`${this._url}${url}`, data);
   }
 
@@ -40,50 +40,68 @@ export class ConversationsApiService {
       return this._api.get(`${this._url}conversations`, query);
     },
     conversationsStats: (query?: any) => {
-      return of({});
+      return this._api.get(`${this._url}conversations/stats`, query);;
     },
-    conversationSave: (conversation: IConversation) => {
+    conversationSave: (conversation: Conversation) => {
       return this.save('conversations', conversation)
         .pipe(
           map((response) => response.conversation),
         );
     },
-    conversationDelete: (conversation: IConversation) => {
+    conversationDelete: (conversation: Conversation) => {
       return this.delete('conversations', conversation);
+    },
+    conversationRead: (conversation: Conversation, conversationItemId: number) => {
+      return this.post(`conversations/${conversation.id}/read`, { conversationItemId });
     },
     conversationItemsGet: (conversationId: number, query?: any) => {
       return this.get(`conversations/${conversationId}/items`, query);
     },
-    conversationItemSave: (conversationItem: IConversationItem | IConversationItemMessage) => {
+    conversationItemSave: (conversationItem: ConversationItem | ConversationItemMessage) => {
       return this.save(`conversations/${conversationItem.conversationId}/items`, conversationItem)
         .pipe(
           map((response) => response.conversationItem),
         );
     }, 
-    conversationItemFilePost: (conversationItem: IConversationItem, file: Blob) => {
+    conversationItemDelete: (conversationItem: ConversationItem | ConversationItemMessage) => {
+      return this.delete(`conversations/${conversationItem.conversationId}/items`, conversationItem)
+        .pipe(
+          map((response) => response.conversationItem),
+        );
+    }, 
+    conversationItemFilePost: (conversationItem: ConversationItem, file: Blob) => {
       return this.post(`conversations/${conversationItem.conversationId}/items/${conversationItem.id}/files`, { file });
     },
-    conversationItemFileDownload: (conversationItem: IConversationItem, conversationItemFileId: number) => {
+    conversationItemFileDownload: (conversationItem: ConversationItem, conversationItemFileId: number) => {
       console.log(`conversations/${conversationItem.conversationId}/items/${conversationItem.id}/files/${conversationItemFileId}/download`);
     },
     conversationParticipantsGet: (conversationId: number, query?: any) => {
       return this.get(`conversations/${conversationId}/participants`, query);
     },
-    conversationParticipantSave: (conversationId: number, conversationParticipant: IConversationParticipant) => {
+    conversationParticipantAdd: (conversationId: number, data) => {
+      return this.post(`conversations/${conversationId}/participants`, data);
+    },
+    conversationParticipantSave: (conversationId: number, conversationParticipant: ConversationParticipant) => {
       return this.save(`conversations/${conversationId}/participants`, conversationParticipant)
         .pipe(
           map((response) => response.conversationParticipant),
         );
     },
-    conversationParticipantDelete: (conversationId: number, conversationParticipant: IConversationParticipant) => {
+    conversationParticipantSession: (conversationId: number) => {
+      return this.get(`conversations/${conversationId}/participants/session`)
+        .pipe(
+          map((response) => response.conversationParticipant),
+        );
+    },
+    conversationParticipantDelete: (conversationId: number, conversationParticipant: ConversationParticipant) => {
       return this.delete(`conversations/${conversationId}/participants`, conversationParticipant);
     },
     conversationParticipantBulk: (conversationId: number, data: any) => {
-      return of({});
+      return this.post(`conversations/${conversationId}/participants/bulk`, data);
     },
     accountsGet: (query?: any) => {
       return this.get('accounts', query);
-    }
+    },
   }
 
 }

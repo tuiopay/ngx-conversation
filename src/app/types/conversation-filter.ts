@@ -1,4 +1,4 @@
-export interface ConversationFilter {
+export type ConversationFilter = {
   name: string;
   icon?: string;
   image?: string;

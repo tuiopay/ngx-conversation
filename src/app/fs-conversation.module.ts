@@ -6,6 +6,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { FsFormModule } from '@firestitch/form';
 import { FsDialogModule } from '@firestitch/dialog';
@@ -18,18 +22,20 @@ import { FsGalleryModule } from '@firestitch/gallery';
 import { FsLabelModule } from '@firestitch/label';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsChipModule } from '@firestitch/chip';
+import { FsTabsModule } from '@firestitch/tabs';
+import { FsPopoverModule } from '@firestitch/popover';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 
 import { 
   ConversationComponent, ConversationCreateComponent, ConversationParticipantComponent, ConversationParticipantsComponent, 
   ConversationsComponent, ConversationSettingsComponent, ConversationStateComponent, ParticipantsListComponent, 
   ParticipantsAddComponent, 
-  ConversationHeaderComponent
+  ConversationHeaderComponent,
+  ConversationItemsComponent,
+  ConversationReadParticipantsPopoverComponent,
+  ConversationReadParticipantsDialogComponent
 } from './components';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { ScrollIntoViewDirective } from './directives';
+import { ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
 
 
 @NgModule({
@@ -43,6 +49,7 @@ import { ScrollIntoViewDirective } from './directives';
     MatTooltipModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTabsModule,
     MatSelectModule,
 
     FsFormModule,
@@ -56,6 +63,8 @@ import { ScrollIntoViewDirective } from './directives';
     FsLabelModule,
     FsSkeletonModule,
     FsBadgeModule,
+    FsTabsModule,
+    FsPopoverModule,
     FsAutocompleteChipsModule,
   ],
   declarations: [
@@ -71,10 +80,14 @@ import { ScrollIntoViewDirective } from './directives';
     ParticipantsAddComponent,
     ScrollIntoViewDirective,
     ConversationHeaderComponent,
+    ConversationItemsComponent,
+    ConversationSettingsDirective,
+    ConversationReadParticipantsPopoverComponent,
+    ConversationReadParticipantsDialogComponent,
   ],
   exports: [
     ConversationsComponent,
-    ConversationComponent,
+    ConversationSettingsDirective,
   ],
 })
 export class FsConversationModule {}

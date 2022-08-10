@@ -1,4 +1,14 @@
 <fs-conversations 
-  [account]="account"
-  [config]="conversationConfig">
+    [account]="account"
+    [config]="conversationConfig">
+  <ng-template fsConverstationSettings let-conversation="conversation">
+    <fs-label-field>
+      <fs-label>Targeting Settings</fs-label>
+      <mat-checkbox
+          [(ngModel)]="conversation.addAllParents"
+          name="addAllParents">
+        Add all organization parents
+      </mat-checkbox>
+    </fs-label-field>
+  </ng-template>
 </fs-conversations>

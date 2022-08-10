@@ -4,10 +4,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
 
-import { forkJoin, pipe, Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { ConversationService } from 'src/app/services';
-import { Account, ConversationConfig, IConversationParticipant } from '../../interfaces';
+
+import { ConversationService } from '../../services';
+import { Account, ConversationParticipant } from '../../types';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: {
-      conversationParticipants: IConversationParticipant[];
+      conversationParticipants: ConversationParticipant[];
       conversationId: number;
       conversationService: ConversationService,
     },
@@ -44,12 +45,10 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
   }
 
   public save = () => {
-    return forkJoin(this.accounts.map((account) => {
-      return this._conversationService.conversationConfig.conversationParticipantSave(this.conversationId, 
+    return this._conversationService.conversationConfig.conversationParticipantAdd(this.conversationId, 
         {
-          accountId: account.id,
+          accountIds: this.accounts.map((account) => account.id),
         })
-    }))
       .pipe(
         tap((response) => {
           this._message.success('Saved Changes');
@@ -62,7 +61,7 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
     return this._conversationService.conversationConfig.accountsGet({
       keyword,
       avatars: true,
-      notConversationParticipant: this.conversationId,
+      notConversationId: this.conversationId,
       limit: 30,
     })
       .pipe(

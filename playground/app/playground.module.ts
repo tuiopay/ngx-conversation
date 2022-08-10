@@ -13,6 +13,7 @@ import { FsGalleryModule } from '@firestitch/gallery';
 import { FsConversationModule } from '@firestitch/conversation';
 import { FsApiModule } from '@firestitch/api';
 import { FsFormModule } from '@firestitch/form';
+import { FsTabsModule } from '@firestitch/tabs';
 
 import { ToastrModule } from 'ngx-toastr';
 import { DragulaModule } from 'ng2-dragula';
@@ -23,6 +24,7 @@ import {
 } from './components';
 import { AppComponent } from './app.component';
 import { ConversationsComponent } from './components';
+import { FsPopoverModule } from '@firestitch/popover';
 
 
 const routes: Routes = [
@@ -43,6 +45,8 @@ const routes: Routes = [
     FsExampleModule.forRoot(),    
     FsFormModule.forRoot(),    
     FsApiModule.forRoot(),
+    FsTabsModule.forRoot(),
+    FsPopoverModule.forRoot(),
     FsFileModule.forRoot(),
     FsMessageModule.forRoot(),
     FsGalleryModule.forRoot(),

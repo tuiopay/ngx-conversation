@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
-import { ConversationState } from 'src/app/enums';
-import { ConversationConfig, IConversation, IConversationItem, IConversationItemMessage, IConversationParticipant } from 'src/app/interfaces';
+import { ConversationRole, ConversationState } from 'src/app/enums';
+import { ConversationConfig, Conversation, ConversationItem, ConversationItemMessage, ConversationParticipant } from 'src/app/types';
 import { conversationData, conversationParticipantData, conversationsData } from '../data';
 import { accountsData } from '../data/accounts-data';
 
@@ -18,10 +18,13 @@ export class ConversationsStaticService {
     conversationsStats: (query?: any) => {
       return of({});
     },
-    conversationSave: (conversation: IConversation) => {
+    conversationSave: (conversation: Conversation) => {
       return of(conversation);
     },
-    conversationDelete: (conversation: IConversation) => {
+    conversationRead: (conversation: Conversation, conversationItemId) => {
+      return of(conversation);
+    },
+    conversationDelete: (conversation: Conversation) => {
       return of({
         ...conversation,
         state: ConversationState.Deleted,
@@ -40,22 +43,31 @@ export class ConversationsStaticService {
 
       return of({ conversationItems });
     },
-    conversationItemSave: (conversationItem: IConversationItem | IConversationItemMessage) => {
+    conversationItemSave: (conversationItem: ConversationItem | ConversationItemMessage) => {
       return of(conversationItem);
     }, 
-    conversationItemFilePost: (conversationItem: IConversationItem, file: Blob) => {
+    conversationParticipantAdd: (conversationId: number, data) => {
+      return of(null)
+    },
+    conversationItemDelete: (conversationItem: ConversationItem | ConversationItemMessage) => {
+      return of(conversationItem);
+    }, 
+    conversationItemFilePost: (conversationItem: ConversationItem, file: Blob) => {
       return of(true);
     },
-    conversationItemFileDownload: (conversationItem: IConversationItem | IConversationItemMessage, fileId: number) =>  {
+    conversationItemFileDownload: (conversationItem: ConversationItem | ConversationItemMessage, fileId: number) =>  {
 
     },
     conversationParticipantsGet: (conversationId: number, query?: any) => {
       return of(conversationParticipantData);
     },
-    conversationParticipantSave: (conversationId: number, conversationParticipant: IConversationParticipant) => {
+    conversationParticipantSave: (conversationId: number, conversationParticipant: ConversationParticipant) => {
       return of(conversationParticipant);
     },
-    conversationParticipantDelete: (conversationId: number, conversationParticipant: IConversationParticipant) => {
+    conversationParticipantSession: (conversationId: number) => { 
+      return of({});
+    },
+    conversationParticipantDelete: (conversationId: number, conversationParticipant: ConversationParticipant) => {
       return of(conversationParticipant);
     },
     conversationParticipantBulk: (conversationId: number, data: any) => {
@@ -63,7 +75,7 @@ export class ConversationsStaticService {
     },
     accountsGet: (query?: any) => {
       return of(accountsData)
-    }
+    },
   }
 
 }

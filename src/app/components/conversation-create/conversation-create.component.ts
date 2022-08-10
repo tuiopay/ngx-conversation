@@ -6,7 +6,7 @@ import { FsMessage } from '@firestitch/message';
 
 import { Subject, of } from 'rxjs';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';
-import { ConversationConfig, IConversation } from '../../interfaces';
+import { ConversationConfig, Conversation } from '../../types';
 
 
 
@@ -17,7 +17,7 @@ import { ConversationConfig, IConversation } from '../../interfaces';
 })
 export class ConversationCreateComponent implements OnInit, OnDestroy {
 
-  public conversation: IConversation = null;
+  public conversation: Conversation = null;
   
   private _conversationConfig: ConversationConfig;
   private _destroy$ = new Subject<void>();

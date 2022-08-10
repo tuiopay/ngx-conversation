@@ -1,0 +1,13 @@
+.participants {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+
+  app-conversation-participant {
+    display: block;
+
+    + app-conversation-participant {
+      margin-top: 5px;
+    }
+  }
+}

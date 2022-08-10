@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   OnInit,
   OnDestroy,
+  Input,
 } from '@angular/core';
 
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -15,18 +16,22 @@ import { Subject, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import { ParticipantsAddComponent } from '../participants-add';
-import { IConversationParticipant } from '../../interfaces';
+import { Conversation, ConversationParticipant } from '../../types';
 import { ConversationService } from '../../services';
 
 
 @Component({
+  selector: 'app-participants-list',
   templateUrl: './participants-list.component.html',
   styleUrls: ['./participants-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ParticipantsListComponent implements OnInit, OnDestroy {
 
-  public conversationParticipants: IConversationParticipant[] = [];
+  @Input() public conversation: Conversation = null;
+  @Input() public conversationService: ConversationService;
+
+  public conversationParticipants: ConversationParticipant[] = [];
 
   public listConfig: FsListConfig = null;
 
@@ -34,14 +39,8 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
   private _list: FsListComponent = null;
 
   private _destroy$ = new Subject<void>();
-  private _conversationService: ConversationService;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private _data: {
-      conversationParticipants: IConversationParticipant[];
-      conversationId: number;
-      conversationService: ConversationService,
-    },
     private _dialog: MatDialog,
   ) { }
 
@@ -50,9 +49,6 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this._conversationService = this._data.conversationService;
-    this.conversationParticipants = this._data.conversationParticipants;
-
     this.listConfig = {
       paging: false,
       actions: [
@@ -61,8 +57,8 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
             this._dialog.open(ParticipantsAddComponent, {
               data: {
                 conversationParticipants: this.conversationParticipants,
-                conversationId: this._data.conversationId,
-                conversationService: this._conversationService,
+                conversationId: this.conversation.id,
+                conversationService: this.conversationService,
               },
             })
             .afterClosed()
@@ -79,8 +75,8 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
       rowActions: [
         {
           click: (conversationParticipant) => {
-            return this._conversationService.conversationConfig
-              .conversationParticipantDelete(this._data.conversationId, conversationParticipant);
+            return this.conversationService.conversationConfig
+              .conversationParticipantDelete(this.conversation.id, conversationParticipant);
           },
           remove: true,
           label: 'Remove',
@@ -92,7 +88,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
           accounts: true,
         };
 
-        return this._conversationService.conversationConfig.conversationParticipantsGet(this._data.conversationId, query)
+        return this.conversationService.conversationConfig.conversationParticipantsGet(this.conversation.id, query)
         .pipe(
           map((response) => ({ data: response.conversationParticipants, paging: response.paging })),
         );

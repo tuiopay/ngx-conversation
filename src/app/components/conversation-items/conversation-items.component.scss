@@ -1,0 +1,160 @@
+$messageContainerSideMargin: 34px;
+
+.items {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 0 6px;
+
+  .item {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+
+    &:first-last {
+      margin-top: 0;
+    }
+
+    fs-menu.item-menu {
+      visibility: hidden;
+    }
+
+    &:hover fs-menu.item-menu {
+      visibility: visible;
+    }
+
+    .create-date-read {
+      position: relative;
+      margin-left: 5px;
+      display: flex;
+      align-items: center;
+
+      a {
+        color: inherit;
+      }
+
+      .read {
+        display: flex;
+        align-items: center;
+
+        mat-icon {
+          transform: scale(0.6);
+        }
+      }
+    }
+
+    .info {
+      text-align: center;
+      width: 100%;
+      font-size: 90%;
+      color: rgb(90, 90, 90);
+    }
+
+    .participant {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 5px;
+      margin-bottom: 2px;
+
+      app-conversation-participant {
+        font-size: 95%;
+        font-weight: bold;
+        display: flex;
+
+        &.name {
+          margin: 0 4px;
+        }
+      }
+    }
+
+    &.item-type-message {
+      display: flex;
+
+      .message-container {
+        .content {
+          position: relative;
+          display: flex;
+          align-items: center;
+          white-space: pre-wrap;
+
+          .content-container {
+            position: relative;
+
+            .message + fs-gallery {
+              padding-top: 5px;
+              display: block;
+            }
+
+            fs-gallery {
+              margin-bottom: 3px;
+                  
+              ::ng-deep {
+                fs-filter {
+                  display: none;
+                }
+
+                .fs-gallery-thumbnail {
+                  &:hover .file-menu {
+                    display: inline-block;
+                  }
+
+                  .file-menu {
+                    position: absolute;
+                    top: 2px;
+                    right: 2px;
+                    display: none;
+                    background: rgb(255 255 255 / 26%);
+                  }
+                }
+              }
+            
+            }
+          }
+        }
+
+        .message {
+          padding: 6px 8px;
+          border-radius: 5px;
+          display: inline-block;
+          background-color: #E6F0F7;
+        }
+      }
+    }
+
+    &:not(.active-account) {
+      .message-container { 
+        margin-left: $messageContainerSideMargin;
+
+        .content {
+          fs-menu.item-menu {
+            right: -40px;
+          }          
+        }
+      }
+    }
+
+    &.active-account {
+      .participant {
+        flex-direction: row-reverse;
+      }
+
+      .message-container {
+        .content {
+          flex-direction: row-reverse;
+
+          fs-menu.item-menu {
+            left: -40px;
+          }          
+        }
+
+        .create-date {
+          margin: 0 5px 0 0;
+        }
+        .message {
+          text-align: right;
+          white-space: pre-wrap;
+          background-color: #E7F7E6;
+        }
+      }
+    }
+  }
+}

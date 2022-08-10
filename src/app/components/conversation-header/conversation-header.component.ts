@@ -1,22 +1,21 @@
 import {
-  Component, OnInit, OnDestroy,
+  Component, OnDestroy,
   ChangeDetectionStrategy, Input, Output, EventEmitter, 
 } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
 import { list } from '@firestitch/common';
-import { FsPrompt } from '@firestitch/prompt';
 
-import { forkJoin, Observable, of, Subject, timer, iif } from 'rxjs';
-import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
-import { Account, IConversation } from '../../interfaces';
+import { Account, Conversation } from '../../types';
 import { ConversationService } from '../../services';
-import { ParticipantsListComponent } from '../participants-list';
 import { ParticipantsAddComponent } from '../participants-add';
 import { ConversationSettingsComponent } from '../conversation-settings';
+import { ConversationRole } from '../../enums';
 
 
 @Component({
@@ -25,13 +24,12 @@ import { ConversationSettingsComponent } from '../conversation-settings';
   styleUrls: ['./conversation-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationHeaderComponent implements OnInit, OnDestroy {
+export class ConversationHeaderComponent implements OnDestroy {
 
-  @Input() public conversation: IConversation = null;
+  @Input() public conversation: Conversation = null;
   @Input() public conversationService: ConversationService;
 
-  @Output() public participantsChanged = new EventEmitter();
-  @Output() public conversationChange = new EventEmitter<IConversation>();
+  @Output() public conversationChange = new EventEmitter<Conversation>();
 
   public ConversationStates = ConversationStates;
   public conversationStates = list(ConversationStates, 'name', 'value');
@@ -43,24 +41,8 @@ export class ConversationHeaderComponent implements OnInit, OnDestroy {
     private _dialog: MatDialog,    
   ) {}
 
-  public ngOnInit(): void {
-    
-  }
-
-  public openParticipants(): void {
-    this._dialog.open(ParticipantsListComponent, {
-      data: {
-        conversationId: this.conversation.id,
-        conversationService: this.conversationService,
-      },
-    })
-      .afterClosed()
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.participantsChanged.emit();
-      });
+  public get hasAdminConversationRole(): boolean {
+    return this.conversation.accountConversationRoles.indexOf(ConversationRole.Admin) !== -1;
   }
 
   public participantAdd(): void {
@@ -72,20 +54,20 @@ export class ConversationHeaderComponent implements OnInit, OnDestroy {
     })
     .afterClosed()
     .subscribe(() => {
-      this.participantsChanged.emit();
+      this.conversationChange.emit();
     });
   }
 
-  public settingsOpen(): void {
+  public settingsOpen(tab = 'settings'): void {
     this._dialog.open(ConversationSettingsComponent, {
       data: { 
         conversation: this.conversation,
-        conversationConfig: this.conversationService.conversationConfig,
+        conversationService: this.conversationService,
+        tab,
       },
     })
       .afterClosed()
       .pipe(
-        filter((conversation) => (!!conversation)),
         takeUntil(this._destroy$),
       )
       .subscribe((conversation) => {

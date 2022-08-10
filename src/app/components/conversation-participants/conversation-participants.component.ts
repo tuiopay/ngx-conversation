@@ -6,7 +6,7 @@ import {
   Input,
 } from '@angular/core';
 
-import { IConversationParticipant } from '../../interfaces';
+import { ConversationParticipant } from '../../types';
 
 
 @Component({
@@ -18,7 +18,7 @@ import { IConversationParticipant } from '../../interfaces';
 export class ConversationParticipantsComponent {
 
   @Input()
-  public conversationParticipants: IConversationParticipant[] = [];
+  public conversationParticipants: ConversationParticipant[] = [];
 
   @Input()
   public size = 24;

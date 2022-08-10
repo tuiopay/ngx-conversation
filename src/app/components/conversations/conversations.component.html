@@ -28,13 +28,6 @@
         <span>{{ selectedFilter.name }}</span>
       </div>
       <div class="actions">
-        <!-- <button
-            mat-raised-button
-            color="primary"
-            (click)="conversationCreate()"
-            type="button">
-          Create
-        </button> -->
         <button
             mat-raised-button
             color="primary"
@@ -55,14 +48,14 @@
               people
             </mat-icon>
           </div>
-          <div class="last-conversation-item" *ngIf="row.lastConversationItem && row.lastConversationItem.payload.message">
+          <div class="last-conversation-item" *ngIf="row.lastConversationItem">
             <app-conversation-participant
               [showBadge]="true"
               [conversationParticipant]="row.lastConversationItem.conversationParticipant">
             </app-conversation-participant>
 
             <div class="message">
-              {{row.lastConversationItem.payload.message}}
+              {{row.lastConversationItem.message}}
               <div class="small">
                 <fs-date-ago [date]="row.lastConversationItem.createDate"></fs-date-ago>
               </div>

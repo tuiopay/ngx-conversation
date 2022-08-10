@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { accountData} from 'playground/app/data';
 import { ConversationsApiService } from 'playground/app/services';
-import { ConversationConfig } from 'src/app/interfaces';
+import { ConversationConfig } from 'src/app/types';
 
 
 @Component({

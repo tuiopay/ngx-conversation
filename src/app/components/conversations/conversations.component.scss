@@ -82,9 +82,11 @@ fs-list {
 
     .avatar {
       margin-right: 5px;
+      display: flex;
 
       mat-icon {
         line-height: normal;
+        color: #656565;
       }
     }
 
@@ -110,6 +112,7 @@ fs-list {
         margin-left: 2px;
         display: flex;
         transform: scale(.7);
+        color: #656565;
       }
     }
 

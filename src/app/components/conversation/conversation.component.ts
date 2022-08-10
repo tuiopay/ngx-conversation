@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, Input, Injector,
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject,  
 } from '@angular/core';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -8,17 +8,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FsMessage } from '@firestitch/message';
 import { FsFormDirective } from '@firestitch/form';
 import { FsFile } from '@firestitch/file';
-import { FsGalleryConfig, GalleryLayout } from '@firestitch/gallery';
 import { list } from '@firestitch/common';
-import { FsPrompt } from '@firestitch/prompt';
 
-import { forkJoin, Observable, of, Subject, timer, iif } from 'rxjs';
-import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { forkJoin, Observable, of, Subject } from 'rxjs';
+import { finalize, switchMap, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
-import { Account, IConversation, IConversationParticipant } from '../../interfaces';
-import { ConversationItemState, ConversationItemType } from '../../enums';
+import { Account, Conversation } from '../../types';
+import { ConversationItemType, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
+import { ConversationItemsComponent } from '../conversation-items';
 
 
 @Component({
@@ -28,46 +27,33 @@ import { ConversationService } from '../../services';
 })
 export class ConversationComponent implements OnInit, OnDestroy {
 
-  @ViewChild('nameForm', { read: FsFormDirective })
-  public nameForm: FsFormDirective;
+  @ViewChild(ConversationItemsComponent)
+  public conversationItems: ConversationItemsComponent;
 
-  @ViewChild('messageForm', { read: FsFormDirective })
+  @ViewChild(FsFormDirective)
   public messageForm: FsFormDirective;
 
-  public conversation: IConversation = null;
+  public conversation: Conversation = null;
   public message = '';
+  public ConversationState = ConversationState;
   public files: FsFile[] = [];
-  public conversationItems;
-  public activeConversationParticipant;
-  public conversationParticipants: IConversationParticipant[] = [];
+  public sessionConversationParticipant;
   public ConversationStates = ConversationStates;
   public conversationStates = list(ConversationStates, 'name', 'value');
   public account: Account;
 
-  @Input() public isAdmin = true;
-
-  // public get isAdmin(): boolean {
-  //   return this._experienceService.isExperienceOrganization;
-  // }
-
   private _destroy$ = new Subject();
   private _conversationService: ConversationService;
-  private _disableItemsAutoLoad = false;
-
-  // (“Apple”) key is not considered a modifier key—instead, we should listen on keydown/keyup, so
-  // Cmd key has own event
-  private _keysPressed: KeyboardEvent[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: {
-      conversation: IConversation,
+      conversation: Conversation,
       conversationService: ConversationService,
       account: Account,
     },
     private _dialogRef: MatDialogRef<ConversationComponent>,
     private _cdRef: ChangeDetectorRef,
     private _message: FsMessage,
-    private _prompt: FsPrompt,
   ) {}
 
   public get conversationService(): ConversationService {
@@ -79,92 +65,15 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.account = this._data.account;
     this._dialogRef.addPanelClass('conversation');
 
-    this.loadConversation$()
-      .pipe(
-        tap(() => {
-          timer(0, 5000)
-            .pipe(
-              filter(() => !this._disableItemsAutoLoad),
-              takeUntil(this._destroy$),
-            )
-            .subscribe((iterator) => {
-              this.loadConversationItems(iterator === 0);
-            });
-        }),
-      )
-      .subscribe(() => {
+    this._conversationService.conversationConfig
+      .conversationParticipantSession(this._data.conversation.id)
+      .subscribe((conversationParticipant) => {
+        this.sessionConversationParticipant = conversationParticipant;
         this._cdRef.markForCheck();
-      });
-  }
+      })
 
-  public loadConversationItems(unreadUpdate = false): void {
-    this.conversationItems = this.conversationItems || [];
-    const maxConversationItemId = this.conversationItems[0]?.id;
-
-    this._conversationService.conversationConfig.conversationItemsGet(this.conversation.id, {
-      conversationParticipants: true,
-      conversationParticipantAccounts: true,
-      objects: true,
-      conversationItemFiles: true,
-      maxConversationItemId,
-      order: 'conversation_item_id,desc',
-    })
-      .pipe(
-        map((response) => {
-          return response.conversationItems
-            .map((conversationItem) => {
-              return {
-                ...conversationItem,
-                galleryConfig: {
-                  map: (conversationItemFile) => {
-                    return {
-                      name: conversationItemFile.file.name,
-                      preview: conversationItemFile.file.preview ?.small,
-                      url: conversationItemFile.file.preview ?
-                        conversationItemFile.file.preview.actual :
-                        conversationItemFile.file.name,
-                      index: conversationItemFile.id,
-                    };
-                  },
-                  info: false,
-                  thumbnail: {
-                    heightScale: 0.7,
-                    width: 200,
-                  },
-                  layout: GalleryLayout.Flow,
-                  toolbar: false,
-                  zoom: false,
-                  fetch: () => {
-                    return of(conversationItem.conversationItemFiles);
-                  },
-                } as FsGalleryConfig,
-              };
-            });
-        }),
-        tap((conversationItems) => {
-          if (this.activeConversationParticipant && conversationItems.length) {
-            const data = {
-              id: this.activeConversationParticipant.id,
-              conversationId: this.activeConversationParticipant.conversationId,
-              lastViewedConversationItemId: conversationItems[0].id,
-            };
-
-            this._conversationService.conversationConfig.conversationParticipantSave(this.conversation.id, data)
-              .subscribe(() => {
-                if (unreadUpdate) {
-                  //this._notificationService.reload();
-                }
-              });
-          }
-
-        }),
-      )
-      .subscribe((conversationItems) => {
-        this.conversationItems = [
-          ...conversationItems,
-          ...this.conversationItems,
-        ];
-
+    this.loadConversation$()
+      .subscribe(() => {
         this._cdRef.markForCheck();
       });
   }
@@ -179,7 +88,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   public conversationItemCreate(config) {
-    this._disableItemsAutoLoad = true;
+    this.conversationItems.autoload = false;
     return this._conversationService
       .conversationConfig.conversationItemSave({
         conversationId: this.conversation.id,
@@ -196,9 +105,11 @@ export class ConversationComponent implements OnInit, OnDestroy {
             )
             : of(true);          
         }),
-        tap(() => {
-          this._disableItemsAutoLoad = false;
-          this.loadConversationItems();
+        tap(() => {          
+          this.conversationItems.load();
+        }),
+        finalize(() => {
+          this.conversationItems.autoload = false;
         }),
       );
   }
@@ -212,59 +123,11 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.messageForm.dirty();
   }
 
-  public trackByconversationItem(index, conversationItem) {
-    return conversationItem.id;
-  }
-
-  public conversationItemDelete(conversationItem): void {
-    this._prompt.confirm({
-      title: 'Confirm',
-      template: 'Are you sure that you want to delete the message?',
-    })
-      .pipe(
-        switchMap(() => {
-          return this._conversationService.conversationConfig.conversationItemSave({
-            conversationId: conversationItem.conversationId,
-            id: conversationItem.id,
-            state: ConversationItemState.Deleted,
-          });
-        }),
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.conversationItems = this.conversationItems
-          .filter((conversationItem_) => {
-            return conversationItem_.id !== conversationItem.id;
-          });
-        this._cdRef.markForCheck();
-      });
-  }
-
-  public fileDownload(conversationItem, fileItem): void {
-    this._conversationService.conversationConfig.conversationItemFileDownload(conversationItem, fileItem.id);
-  }
-
   public messageKeydown(event: KeyboardEvent) {
-    this._keysPressed.push(event);
-    const action = this._keyAction();
-    if (action) {
+    if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
+      this.messageForm.triggerSubmit();
     }
-  }
-
-  public messageKeyup(event: KeyboardEvent) {
-    let action = this._keyAction();
-
-    switch (action) {
-      case 'send':
-        this.messageForm.triggerSubmit();
-        break;
-      case 'newLine':
-        this.message += '\n';
-        break;
-    }
-
-    this._keysPressed = [];
   }
 
   public messageSend = () => {
@@ -283,16 +146,18 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  public getActiveConversationParticipant(): Account {
-    return this.conversation.conversationParticipants
-      .find((conversationParticipant) => {
-        return conversationParticipant.accountId === this.account.id;
-      });
-  }
-
   public loadConversation() {
     this.loadConversation$()
       .subscribe();
+  }
+
+  public loadConversationItems() {
+    this.conversationItems.load();
+  }
+
+  public conversationChange() {
+    this.loadConversation();
+    this.loadConversationItems();
   }
 
   public loadConversation$(): Observable<any> {
@@ -300,7 +165,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
       conversationParticipantCounts: true,
       conversationParticipants: true,
       conversationParticipantLimit: 3,
-      conversationParticipantOrder: 'activity_date,desc',
+      conversationParticipantOrder: 'read_date,desc',
       conversationParticipantAccounts: true,
     })
       .pipe(
@@ -309,24 +174,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
           this._cdRef.markForCheck();
         }),      
       );
-  }
-
-  private _keyAction() {
-    let action: 'send' | 'newLine' = null;
-
-    const metaClicked = this._keysPressed.some((item) => item.metaKey);
-    const ctrlClicked = this._keysPressed.some((item) => item.ctrlKey);
-    const enterClicked = this._keysPressed.some((item) => item.key === 'Enter');
-
-    if (enterClicked) {
-      if (metaClicked || ctrlClicked) {
-        action = 'newLine';
-      } else {
-        action = 'send';
-      }
-    }
-
-    return action;
   }
 
 }

@@ -3,4 +3,6 @@ export enum ConversationItemType {
   Message = 'message',
   File = 'file',
   End = 'end',
+  ParticipantAdd = 'participantAdded',
+  ParticipantRemoved = 'participantRemoved',
 }

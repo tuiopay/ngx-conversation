@@ -4,7 +4,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { IConversation } from '../../interfaces';
+import { Conversation } from '../../types';
 
 import { ConversationStates } from '../../consts';
 import { index } from '@firestitch/common';
@@ -18,7 +18,7 @@ import { index } from '@firestitch/common';
 })
 export class ConversationStateComponent implements OnInit {
 
-  @Input() public conversation: IConversation;
+  @Input() public conversation: Conversation;
 
   public conversationState;
   public ConversationStates = index(ConversationStates, 'value');

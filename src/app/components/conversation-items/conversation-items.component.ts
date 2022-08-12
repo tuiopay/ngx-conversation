@@ -143,7 +143,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   }
 
   public canDelete(conversationItem) {
-    return conversationItem.conversationParticipant.accountId === this.account.id ||
+    return conversationItem.conversationParticipant?.accountId === this.account.id ||
       this.conversation.accountConversationRoles.indexOf(ConversationRole.Admin) !== -1;
   }
 

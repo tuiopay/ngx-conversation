@@ -1,2 +1,2 @@
 export * from './scroll-into-view.directive';
-export * from './converstation-settings.directive';
+export * from './conversation-settings.directive';

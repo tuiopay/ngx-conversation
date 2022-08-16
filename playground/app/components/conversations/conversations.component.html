@@ -11,4 +11,7 @@
       </mat-checkbox>
     </fs-label-field>
   </ng-template>
+  <ng-template fsConversationColumn let-conversation="conversation" let-template="template">
+    <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{ conversation: conversation }"></ng-container>
+  </ng-template>
 </fs-conversations>

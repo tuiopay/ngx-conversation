@@ -25,4 +25,6 @@ export type ConversationConfig = {
 
   accountsGet: (query?: any) => Observable<{ accounts: Account[], paging?: any }>;
 
+  beforeConverstation?: (conversation: Conversation) => Observable<Conversation>;
+
 }

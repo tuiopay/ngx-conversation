@@ -35,7 +35,7 @@ import {
   ConversationReadParticipantsPopoverComponent,
   ConversationReadParticipantsDialogComponent
 } from './components';
-import { ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
+import { ConversationColumnDirective, ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
 
 
 @NgModule({
@@ -84,10 +84,12 @@ import { ConversationSettingsDirective, ScrollIntoViewDirective } from './direct
     ConversationSettingsDirective,
     ConversationReadParticipantsPopoverComponent,
     ConversationReadParticipantsDialogComponent,
+    ConversationColumnDirective,
   ],
   exports: [
     ConversationsComponent,
     ConversationSettingsDirective,
+    ConversationColumnDirective,
   ],
 })
 export class FsConversationModule {}

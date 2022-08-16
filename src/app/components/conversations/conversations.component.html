@@ -40,34 +40,41 @@
     <fs-list [config]="listConfig" *ngIf="selectedFilter">
       <fs-list-column>
         <ng-template fs-list-cell let-row="row" class="col-converstaion">
-          <div class="converstaion">
-            <a>{{ row.name }}</a> 
-            <mat-icon
-                [matTooltip]="row.conversationParticipantCount === 1 ? '1 Participant' : row.conversationParticipantCount + ' Participants'"
-                class="count">
-              people
-            </mat-icon>
+          <div class="converstaion-row">
+            <ng-container *ngIf="conversationColumnTemplate">
+              <ng-container [ngTemplateOutlet]="conversationColumnTemplate" [ngTemplateOutletContext]="{ conversation: row, template: conversationTemplate }"></ng-container>
+            </ng-container>
+            <ng-container *ngIf="!conversationColumnTemplate">
+              <ng-container [ngTemplateOutlet]="conversationTemplate" [ngTemplateOutletContext]="{ conversation: row }"></ng-container>
+            </ng-container>
           </div>
-          <div class="last-conversation-item" *ngIf="row.lastConversationItem">
-            <app-conversation-participant
-              [showBadge]="true"
-              [conversationParticipant]="row.lastConversationItem.conversationParticipant">
-            </app-conversation-participant>
-
-            <div class="message">
-              {{row.lastConversationItem.message}}
-              <div class="small">
-                <fs-date-ago [date]="row.lastConversationItem.createDate"></fs-date-ago>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-      </fs-list-column>
-      <fs-list-column>
-        <ng-template fs-list-cell let-row="row" class="col-unread">
-          <div class="unread" matTooltip="Unread" *ngIf="row.unread"></div>
         </ng-template>
       </fs-list-column>
     </fs-list>
   </div>
 </div>
+
+<ng-template #conversationTemplate let-conversation="conversation">
+  <div class="converstaion">
+    <div class="name">
+      <a>{{ conversation.name }}</a>
+      <mat-icon
+        [matTooltip]="conversation.conversationParticipantCount === 1 ? '1 Participant' : conversation.conversationParticipantCount + ' Participants'"
+        class="count">
+        people
+      </mat-icon>
+    </div>
+    <div class="last-conversation-item" *ngIf="conversation.lastConversationItem">
+      <app-conversation-participant [showBadge]="true"
+        [conversationParticipant]="conversation.lastConversationItem.conversationParticipant">
+      </app-conversation-participant>
+      <div class="message">
+        {{conversation.lastConversationItem.message}}
+        <div class="small">
+          <fs-date-ago [date]="conversation.lastConversationItem.createDate"></fs-date-ago>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="unread" matTooltip="Unread" *ngIf="conversation.unread"></div>
+</ng-template>

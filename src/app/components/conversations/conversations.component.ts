@@ -16,7 +16,7 @@ import { ConversationCreateComponent, ConversationComponent } from '../../compon
 import { Account, ConversationConfig, ConversationFilter, Conversation } from '../../types';
 import { ConversationRole, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
-import { ConversationSettingsDirective } from '../../directives';
+import { ConversationColumnDirective, ConversationSettingsDirective } from '../../directives';
 
 
 @Component({
@@ -30,6 +30,9 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
 
   @ContentChild(ConversationSettingsDirective, { read: TemplateRef })
   public conversationSettingTemplate: TemplateRef<any>;
+
+  @ContentChild(ConversationColumnDirective, { read: TemplateRef })
+  public conversationColumnTemplate: TemplateRef<any>;
 
   @ViewChild(FsListComponent)
   public listComponent: FsListComponent;
@@ -216,8 +219,11 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
       });
   }
 
-  public conversationStart(conversation: Conversation = { id: null }): void {
-    conversation.name = format(new Date());
+  public conversationStart(conversation: Conversation = {}): void {
+    conversation = {
+      ...conversation,
+      name: format(new Date()),
+    };
 
     this._conversationConfig.conversationSave(conversation)
       .pipe(

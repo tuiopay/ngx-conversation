@@ -99,20 +99,39 @@ fs-list {
 }
 
 :host ::ng-deep {
+  .fs-list tr:first-child td {
+    border-top: none !important;
+  }
+
+  .fs-list tr:last-child td {
+    border-bottom: none !important;
+  }
+
   .col-converstaion {
-    .converstaion {
+    .converstaion-row {
       display: flex;
       align-items: center;
+    }
 
-      a {
-        font-weight: bold;
-      }
+    .converstaion {
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
 
-      .count {
-        margin-left: 2px;
+      .name {
         display: flex;
-        transform: scale(.7);
-        color: #656565;
+        align-items: center;
+      
+        a {
+          font-weight: bold;
+        }
+
+        .count {
+          margin-left: 2px;
+          display: flex;
+          transform: scale(.7);
+          color: #656565;
+        }
       }
     }
 
@@ -125,10 +144,6 @@ fs-list {
         margin-left: 6px;
       }
     }
-  }
-
-  .col-unread {
-    width: 1%;
   }
 
   .unread {

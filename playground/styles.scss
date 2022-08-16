@@ -7,12 +7,14 @@
 @import "~@firestitch/chip/styles";
 @import "~@firestitch/file/styles";
 @import '~@firestitch/form/styles';
+@import '~@firestitch/selection/styles';
 @import '../src/app/styles.scss';
 
 @include fs-style.core();
 @include fs-drawer($mat-blue);
 @include fs-file(mat.$blue-palette);
 @include fs-form($app-theme);
+@include fs-selection(mat.$blue-palette);
 
 small {
   font-size: 10px;

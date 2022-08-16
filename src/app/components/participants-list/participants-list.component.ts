@@ -10,14 +10,16 @@ import {
 
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { FsListComponent, FsListConfig } from '@firestitch/list';
+import { FsListActionSelected, FsListComponent, FsListConfig } from '@firestitch/list';
 
 import { Subject, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 
 import { ParticipantsAddComponent } from '../participants-add';
 import { Conversation, ConversationParticipant } from '../../types';
 import { ConversationService } from '../../services';
+import { SelectionActionType } from '@firestitch/selection';
+import { FsPrompt } from '@firestitch/prompt';
 
 
 @Component({
@@ -42,6 +44,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
 
   constructor(
     private _dialog: MatDialog,
+    private _prompt: FsPrompt,
   ) { }
 
   public reload(): void {
@@ -72,6 +75,39 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
           label: 'Add',
         },
       ],
+      selection: {
+        actions: [
+          {
+            name: 'remove',
+            label: 'Remove',
+            type: SelectionActionType.Action,
+          },
+        ],
+        actionSelected: (actionSelected: FsListActionSelected) => { 
+          return of(true)
+          .pipe(
+            switchMap(() => actionSelected.action.name === 'remove' ?
+              this._prompt.confirm({
+                title: 'Remove Participants',
+                template: 'Are you sure you want to remove these participants from this conversation?',
+              }) : of(true)),
+            switchMap(() => {
+              const data = {
+                action: actionSelected.action.name,
+                conversationParticipantIds: actionSelected.selected
+                  .map((conversationParticipant) => conversationParticipant.id),
+              };
+
+              return this.conversationService.conversationConfig
+                .conversationParticipantBulk(this.conversation.id, data)
+            }),
+            tap(() => {
+              this.reload();
+            }),
+          );          
+        },
+        selectAll: false,
+      },
       rowActions: [
         {
           click: (conversationParticipant) => {

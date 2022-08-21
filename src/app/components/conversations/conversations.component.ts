@@ -10,7 +10,7 @@ import { FsMessage } from '@firestitch/message';
 import { format } from '@firestitch/date';
 
 import { map, takeUntil, tap } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 
 import { ConversationCreateComponent, ConversationComponent } from '../../components';
 import { Account, ConversationConfig, ConversationFilter, Conversation } from '../../types';
@@ -58,20 +58,33 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
     this._conversationService.conversationConfig = this.config;
     this._conversationConfig = this.config;
     this.filters = [
+      { name: this.account.name, type: 'account', image: this.account.image.tiny },
       { name: 'Open', type: 'open', icon: 'chat' },
       { name: 'Closed', type: 'closed', icon: 'chat_bubble' },
     ];
+    this.selectedFilter = this.filters[0];
 
-    this.filters.unshift(
-      { name: this.account.name, type: 'account', image: this.account.image.tiny },
-    );
+    timer(5000, 5000)
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        if (this.listComponent.list.paging.page === 1) {
+          this.listComponent.reload();
+        }
 
+        this.loadStats();
+      });
+
+    
     this.loadStats();
-    this.filterSelect(this.filters[0]);
-
     this.listConfig = {
       status: false,
       loadMore: true,
+      queryParam: false,
+      paging: {
+        limit: 2,
+      },
       rowEvents: {
         click: (event) => {
           this.conversationOpen(event.row);

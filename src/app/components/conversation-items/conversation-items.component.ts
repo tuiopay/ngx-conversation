@@ -47,20 +47,13 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    of(true)
+    timer(0, 5000)
       .pipe(
-        tap(() => {
-          timer(0, 5000)
-            .pipe(
-              filter(() => this.autoload),
-              takeUntil(this._destroy$),
-            )
-            .subscribe(() => {
-              this.load();
-            });
-        }),
+        filter(() => this.autoload),
+        takeUntil(this._destroy$),
       )
       .subscribe(() => {
+        this.load();
         this._cdRef.markForCheck();
       });
   }

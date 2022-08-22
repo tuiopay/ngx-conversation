@@ -3,10 +3,10 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, Input,
 } from '@angular/core';
 
-import { FsGalleryConfig, GalleryLayout } from '@firestitch/gallery';
+import { FsGalleryConfig, FsGalleryItem, GalleryLayout, GalleryThumbnailSize } from '@firestitch/gallery';
 import { FsPrompt } from '@firestitch/prompt';
 
-import { of, Subject, timer } from 'rxjs';
+import { Observable, of, Subject, timer } from 'rxjs';
 import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { Account, Conversation, ConversationItem, ConversationParticipant } from '../../types';
@@ -80,27 +80,28 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
               return {
                 ...conversationItem,
                 canDelete: this.canDelete(conversationItem),
-                galleryConfig: {
-                  map: (conversationItemFile) => {
-                    return {
-                      name: conversationItemFile.file.name,
-                      preview: conversationItemFile.file.preview ?.small,
-                      url: conversationItemFile.file.preview ?
-                        conversationItemFile.file.preview.actual :
-                        conversationItemFile.file.name,
-                      index: conversationItemFile.id,
-                    };
-                  },
+                galleryConfig: {                 
                   info: false,
                   thumbnail: {
                     heightScale: 0.7,
                     width: 200,
+                    size: GalleryThumbnailSize.Cover,
                   },
                   layout: GalleryLayout.Flow,
                   toolbar: false,
                   zoom: false,
-                  fetch: () => {
-                    return of(conversationItem.conversationItemFiles);
+                  fetch: (query): Observable<FsGalleryItem[]> => {
+                    return of(conversationItem.conversationItemFiles
+                      .map((conversationItemFile) => {
+                        return {
+                          name: conversationItemFile.file.name,
+                          preview: conversationItemFile.file.preview?.small,
+                          url: conversationItemFile.file.preview?.actual,
+                          index: conversationItemFile.id,
+                          data: conversationItemFile,
+                          extension: conversationItemFile.file.extension,                          
+                        };
+                      }));
                   },
                 } as FsGalleryConfig,
               };

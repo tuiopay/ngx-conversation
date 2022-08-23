@@ -64,7 +64,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
     ];
     this.selectedFilter = this.filters[0];
 
-    timer(5000, 5000)
+    timer(15000, 15000)
       .pipe(
         takeUntil(this._destroy$),
       )
@@ -82,9 +82,6 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
       status: false,
       loadMore: true,
       queryParam: false,
-      paging: {
-        limit: 2,
-      },
       rowEvents: {
         click: (event) => {
           this.conversationOpen(event.row);

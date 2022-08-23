@@ -19,20 +19,19 @@
       </ng-container>      
       <div class="small create-date-read">
         <fs-date-ago [date]="conversationItem.createDate"></fs-date-ago>  
-        <ng-container *ngIf="conversationItem.conversationParticipantsReadCount; else read">
-          <fs-popover 
+        <fs-popover 
             [template]="readTemplate"
             [indication]="false"
+            [autoShow]="false"
             [data]="conversationItem">
-            <a (click)="openReadParticipants(conversationItem)">
-              <ng-container *ngTemplateOutlet="read"></ng-container>
-            </a>
-          </fs-popover>
-        </ng-container>
+          <a (click)="openReadParticipants(conversationItem)">
+            <ng-container *ngTemplateOutlet="read"></ng-container>
+          </a>
+        </fs-popover>
 
         <ng-template #read>
           <span class="read">
-            <mat-icon>remove_red_eye</mat-icon> {{conversationItem.conversationParticipantsReadCount}}
+            <mat-icon>remove_red_eye</mat-icon>
           </span>
         </ng-template>
       </div>   
@@ -94,9 +93,10 @@
   </div>            
 </div>
 
-<ng-template #readTemplate let-conversationItem="data">
+<ng-template #readTemplate let-conversationItem="data" let-popover="popover">
   <app-conversation-read-participants-popover
     [conversationService]="conversationService"
+    [popover]="popover"
     [account]="account"
     [conversationItem]="conversationItem">
   </app-conversation-read-participants-popover>

@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { Account, ConversationItem } from '../../types';
 import { ConversationService } from '../../services';
 import { FsListConfig } from '@firestitch/list';
+import { ItemType } from '@firestitch/filter';
 
 
 @Component({
@@ -36,10 +37,22 @@ export class ConversationReadParticipantsDialogComponent implements OnInit {
 
   public ngOnInit(): void {    
     this.listConfig = {
+      paging: {
+        limit: 10,
+      },
+      filters: [
+        {
+          name: 'keyword',
+          type: ItemType.Keyword,
+          label: 'Search',
+        }
+      ],
+      status: true,
       fetch: (query) => {
         const conversationItem = this._data.conversationItem;
         query = {
           ...query,
+          limit: 10,
           maxReadConversationItemId: conversationItem.id,
           notConversationParticipantId: conversationItem.conversationParticipantId,
           accounts: true,

@@ -1,13 +1,14 @@
-<div class="small">
-  Read by {{conversationItem.conversationParticipantsReadCount}}
-</div>
+<ng-container *ngIf="conversationParticipants">
+  <div class="small">
+    Read by {{readCount}}
+  </div>
 
- <div class="participants">
-  <app-conversation-participant
-    *ngFor="let conversationParticipant of conversationParticipants"
-    [showBadge]="true"
-    [showName]="true"
-    [conversationParticipant]="conversationParticipant">
-  </app-conversation-participant>
-</div>
-
+  <div class="participants" *ngIf="conversationParticipants.length">
+    <app-conversation-participant
+      *ngFor="let conversationParticipant of conversationParticipants"
+      [showBadge]="true"
+      [showName]="true"
+      [conversationParticipant]="conversationParticipant">
+    </app-conversation-participant>
+  </div>
+</ng-container>

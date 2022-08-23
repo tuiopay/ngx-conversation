@@ -1,17 +1,17 @@
 import {
   Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject,  
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, HostListener,  
 } from '@angular/core';
 
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
 import { FsFormDirective } from '@firestitch/form';
 import { FsFile } from '@firestitch/file';
 import { list } from '@firestitch/common';
 
-import { forkJoin, Observable, of, Subject } from 'rxjs';
-import { finalize, switchMap, tap } from 'rxjs/operators';
+import { forkJoin, fromEvent, Observable, of, Subject } from 'rxjs';
+import { filter, finalize, switchMap, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
 import { Account, Conversation } from '../../types';
@@ -54,6 +54,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     private _dialogRef: MatDialogRef<ConversationComponent>,
     private _cdRef: ChangeDetectorRef,
     private _message: FsMessage,
+    private _dialog: MatDialog,
   ) {}
 
   public get conversationService(): ConversationService {

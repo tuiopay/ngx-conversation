@@ -11,7 +11,7 @@ import { FsMessage } from '@firestitch/message';
 import { Observable, of, Subject } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
-import { ConversationParticipantType } from '../../enums';
+import { ConversationParticipantType, ConversationState } from '../../enums';
 import { ConversationStates } from '../../consts';
 import { Conversation } from '../../types';
 import { ConversationService } from '../../services';
@@ -26,8 +26,8 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
 
   public conversation: Conversation = null;
   public ConversationStates = ConversationStates;
-  public tab;
   public conversationStates = index(ConversationStates, 'name', 'value');
+  public tab;
 
   private _conversationService: ConversationService;
   private _destroy$ = new Subject();
@@ -49,6 +49,8 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.tab = this._data.tab;
+    this.ConversationStates = ConversationStates
+      .filter((conversationState) => conversationState.value !== ConversationState.Deleted);
     this._conversationService = this._data.conversationService;
     this.conversation = {
       ...this._data.conversation,

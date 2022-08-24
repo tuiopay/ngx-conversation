@@ -36,6 +36,7 @@ import {
   ConversationReadParticipantsDialogComponent
 } from './components';
 import { ConversationColumnDirective, ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
+import { FsFilterModule } from '@firestitch/filter';
 
 
 @NgModule({
@@ -57,6 +58,7 @@ import { ConversationColumnDirective, ConversationSettingsDirective, ScrollIntoV
     FsDateModule,
     FsListModule,
     FsFileModule,
+    FsFilterModule,
     FsMenuModule,
     FsGalleryModule,
     FsChipModule,

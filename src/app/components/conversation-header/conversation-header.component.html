@@ -11,24 +11,27 @@
   <app-conversation-state 
     [conversation]="conversation">
   </app-conversation-state> 
-  <div class="actions">      
-    <button
-      *ngIf="hasAdminConversationRole"
-      type="button"
-      tabindex="-1"
-      (click)="participantAdd()"
-      mat-icon-button>
-    <mat-icon>person_add_alt_1</mat-icon>
-    </button> 
-    <button
-      *ngIf="hasAdminConversationRole"
-      type="button"
-      tabindex="-1"
-      (click)="settingsOpen()"
-      mat-icon-button>
-    <mat-icon>settings</mat-icon>
-    </button> 
-  </div>          
+  <ng-container *ngIf="hasAdminConversationRole">
+    <div class="actions">      
+      <fs-filter
+        [config]="filterConf">
+      </fs-filter>
+      <button
+        type="button"
+        tabindex="-1"
+        (click)="participantAdd()"
+        mat-icon-button>
+      <mat-icon>person_add_alt_1</mat-icon>
+      </button> 
+      <button
+        type="button"
+        tabindex="-1"
+        (click)="settingsOpen()"
+        mat-icon-button>
+      <mat-icon>settings</mat-icon>
+      </button> 
+    </div>          
+  </ng-container>
 </div>
 
 <ng-template #conversationParticipants>

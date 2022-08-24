@@ -2,9 +2,12 @@
   <div 
       *ngFor="let conversationItem of conversationItems; let index = index; trackBy: trackByconversationItem"
       [class]="'item item-type-' + conversationItem.type"
-      [ngClass]="{ 'active-account': conversationItem.conversationParticipant?.id === sessionConversationParticipant?.id }">
+      [ngClass]="{ 
+        'active-account': conversationItem.conversationParticipant?.id === sessionConversationParticipant?.id,
+        'deleted': conversationItem.state === ConversationItemState.Deleted
+      }">
     <div scrollIntoView *ngIf="index === 0"></div>
-    <div class="participant" *ngIf="conversationItem.type === ConversationItemType.Message">
+    <div class="info" *ngIf="conversationItem.type === ConversationItemType.Message">
       <ng-container *ngIf="conversationItem.conversationParticipant?.id !== sessionConversationParticipant?.id">
         <app-conversation-participant
           [size]="30"
@@ -17,7 +20,7 @@
           [showName]="true">
         </app-conversation-participant>
       </ng-container>      
-      <div class="small create-date-read">
+      <div class="row">
         <fs-date-ago [date]="conversationItem.createDate"></fs-date-ago>  
         <fs-popover 
             [template]="readTemplate"
@@ -25,27 +28,29 @@
             [autoShow]="false"
             [data]="conversationItem">
           <a (click)="openReadParticipants(conversationItem)">
-            <ng-container *ngTemplateOutlet="read"></ng-container>
+            <span class="read">
+              <mat-icon>remove_red_eye</mat-icon>
+            </span>
           </a>
         </fs-popover>
-
-        <ng-template #read>
-          <span class="read">
-            <mat-icon>remove_red_eye</mat-icon>
-          </span>
-        </ng-template>
       </div>   
-      <fs-menu class="item-menu" *ngIf="conversationItem.canDelete">
-        <ng-template fs-menu-item (click)="conversationItemDelete(conversationItem)">
-          Delete
-        </ng-template>
-      </fs-menu>        
+      <ng-container *ngIf="conversationItem.state === ConversationItemState.Active">
+        <fs-menu class="item-menu" *ngIf="conversationItem.canDelete">
+          <ng-template fs-menu-item (click)="conversationItemDelete(conversationItem)">
+            Delete
+          </ng-template>
+        </fs-menu>        
+      </ng-container>
     </div>
     <ng-container *ngIf="conversationItem.type === ConversationItemType.Message">
       <div class="message-container">
         <div class="content">
           <div class="content-container">
-            <div class="message" *ngIf="conversationItem.message">
+            <div 
+                class="message" 
+                [matTooltip]="'Deleted'"
+                [matTooltipDisabled]="conversationItem.state === ConversationItemState.Active"
+                *ngIf="conversationItem.message">
               <span [innerHTML]="conversationItem.message"></span>                    
             </div>
             <fs-gallery 
@@ -87,7 +92,7 @@
         <ng-container *ngIf="conversationItem.type === ConversationItemType.Start">
             Conversation Started
         </ng-container>
-        · <fs-date-ago [date]="conversationItem.createDate"></fs-date-ago> 
+        <span class="dot">·</span><fs-date-ago [date]="conversationItem.createDate"></fs-date-ago> 
       </div>
     </ng-container>                 
   </div>            

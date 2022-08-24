@@ -156,6 +156,11 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.conversationItems.load();
   }
 
+  public filterChanged(event) {
+    this.conversationItems.query = event.query;
+    this.conversationItems.reload();
+  }
+
   public conversationChange() {
     this.loadConversation();
     this.loadConversationItems();

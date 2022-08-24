@@ -7,10 +7,10 @@ import { FsGalleryConfig, FsGalleryItem, GalleryLayout, GalleryThumbnailSize } f
 import { FsPrompt } from '@firestitch/prompt';
 
 import { Observable, of, Subject, timer } from 'rxjs';
-import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
 import { Account, Conversation, ConversationItem, ConversationParticipant } from '../../types';
-import { ConversationItemType, ConversationRole } from '../../enums';
+import { ConversationItemState, ConversationItemType, ConversationRole, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
 import { MatDialog } from '@angular/material/dialog';
 import { ConversationReadParticipantsDialogComponent } from '../conversation-read-participants-dialog';
@@ -26,6 +26,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
 
   @Input() public conversation: Conversation;
   @Input() public account: Account;
+  @Input() public query = {};
   @Input() public sessionConversationParticipant: ConversationParticipant;
   @Input() public conversationService: ConversationService;
 
@@ -33,6 +34,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   public conversationParticipants: ConversationParticipant[] = [];
   public ConversationItemType = ConversationItemType;
   public lastConversationItem: ConversationItem;
+  public ConversationItemState = ConversationItemState;
   public conversationItems: (ConversationItem & { 
     canDelete?: boolean,
     galleryConfig?: FsGalleryConfig,
@@ -58,11 +60,19 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
       });
   }
 
+  public reload(): void {
+    this.conversationItems = [];
+    this.lastConversationItem = null;
+    this.load();
+  }
+
   public load(): void {
     this.autoload = false;
     const maxConversationItemId = this.conversationItems[0]?.id;
 
-    this.conversationService.conversationConfig.conversationItemsGet(this.conversation.id, {
+    this.conversationService.conversationConfig
+    .conversationItemsGet(this.conversation.id, {
+      ...this.query,
       conversationParticipants: true,
       conversationParticipantAccounts: true,
       conversationParticipantsAddedCounts: true,
@@ -157,10 +167,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this.conversationItems = this.conversationItems
-          .filter((conversationItem_) => {
-            return conversationItem_.id !== conversationItem.id;
-          });
+        conversationItem.state = ConversationState.Deleted;
         this._cdRef.markForCheck();
       });
   }

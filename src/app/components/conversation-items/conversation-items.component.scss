@@ -22,7 +22,7 @@ $messageContainerSideMargin: 34px;
       visibility: visible;
     }
 
-    .create-date-read {
+    .info {
       position: relative;
       margin-left: 5px;
       display: flex;
@@ -47,27 +47,70 @@ $messageContainerSideMargin: 34px;
       width: 100%;
       font-size: 90%;
       color: rgb(90, 90, 90);
+
+      .row {
+        display: flex;
+        align-items: center;
+      }
     }
 
-    .participant {
-      display: inline-flex;
-      align-items: center;
-      margin-top: 5px;
-      margin-bottom: 2px;
+    &.item-type-message {
+      .info {
+        display: inline-flex;
+        align-items: center;
+        margin-top: 5px;
+        margin-bottom: 2px;
 
-      app-conversation-participant {
-        font-size: 95%;
-        font-weight: bold;
-        display: flex;
+        app-conversation-participant {
+          font-size: 95%;
+          font-weight: bold;
+          display: flex;
 
-        &.name {
-          margin: 0 4px;
+          &.name {
+            margin: 0 4px;
+          }
+        }
+      }
+    }
+
+    &:not(.item-type-message) {
+      .info {
+        justify-content: center;
+
+        .dot {
+          margin: 0 3px;
         }
       }
     }
 
     &.item-type-message {
       display: flex;
+
+      &.active-account {
+        .info {
+          flex-direction: row-reverse;
+        }
+    
+        .message-container {
+          .content {
+            flex-direction: row-reverse;
+    
+            fs-menu.item-menu {
+              left: -40px;
+            }
+          }
+    
+          .create-date {
+            margin: 0 5px 0 0;
+          }
+    
+          .message {
+            text-align: right;
+            white-space: pre-wrap;
+            background-color: #E7F7E6;
+          }
+        }
+      }
 
       .message-container {
         .content {
@@ -132,27 +175,10 @@ $messageContainerSideMargin: 34px;
       }
     }
 
-    &.active-account {
-      .participant {
-        flex-direction: row-reverse;
-      }
-
+    &.item.deleted {
       .message-container {
-        .content {
-          flex-direction: row-reverse;
-
-          fs-menu.item-menu {
-            left: -40px;
-          }          
-        }
-
-        .create-date {
-          margin: 0 5px 0 0;
-        }
         .message {
-          text-align: right;
-          white-space: pre-wrap;
-          background-color: #E7F7E6;
+          background-color: #e3e3e3;
         }
       }
     }

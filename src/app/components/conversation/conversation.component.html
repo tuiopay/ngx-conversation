@@ -4,6 +4,7 @@
       <app-conversation-header
         [conversationService]="conversationService"
         [conversation]="conversation"
+        (filterChanged)="filterChanged($event)"
         (conversationChange)="conversationChange()">
       </app-conversation-header>
       <mat-dialog-content *fsSkeletonForm="conversation">

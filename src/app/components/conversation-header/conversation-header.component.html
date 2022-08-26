@@ -1,37 +1,41 @@
 <div class="heading-container">
   <div class="heading">
     <a 
-        *ngIf="hasAdminConversationRole; else conversationParticipants"
+        *ngIf="hasAdminRole; else conversationParticipants"
         class="participants"
         (click)="settingsOpen('participants')">
       <ng-container *ngTemplateOutlet="conversationParticipants"></ng-container>
     </a>     
-    <span>{{conversation.name}}</span>
+    <a 
+        (click)="settingsOpen()"
+        class="name">
+      {{conversation.name}}
+    </a>
   </div>
   <app-conversation-state 
     [conversation]="conversation">
   </app-conversation-state> 
-  <ng-container *ngIf="hasAdminConversationRole">
-    <div class="actions">      
-      <fs-filter
-        [config]="filterConf">
-      </fs-filter>
-      <button
-        type="button"
-        tabindex="-1"
-        (click)="participantAdd()"
-        mat-icon-button>
-      <mat-icon>person_add_alt_1</mat-icon>
-      </button> 
-      <button
+  <div class="actions">      
+    <fs-filter
+      *ngIf="hasAdminRole"
+      [config]="filterConf">
+    </fs-filter>
+    <button 
+      *ngIf="hasAdminRole"
+      type="button"
+      tabindex="-1"
+      (click)="participantAdd()"
+      mat-icon-button>
+    <mat-icon>person_add_alt_1</mat-icon>
+    </button> 
+    <button
         type="button"
         tabindex="-1"
         (click)="settingsOpen()"
         mat-icon-button>
       <mat-icon>settings</mat-icon>
-      </button> 
-    </div>          
-  </ng-container>
+    </button> 
+  </div>          
 </div>
 
 <ng-template #conversationParticipants>

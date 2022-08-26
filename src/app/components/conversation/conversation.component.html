@@ -4,6 +4,8 @@
       <app-conversation-header
         [conversationService]="conversationService"
         [conversation]="conversation"
+        [joined]="joined"
+        [account]="account"
         (filterChanged)="filterChanged($event)"
         (conversationChange)="conversationChange()">
       </app-conversation-header>
@@ -17,9 +19,20 @@
               [sessionConversationParticipant]="sessionConversationParticipant">
             </app-conversation-items>
           </div> 
+          <ng-container *ngIf="!joined">
+            <div class="join-conversation">
+              <button 
+                  mat-raised-button 
+                  (click)="conversationJoin()"
+                  color="primary" 
+                  type="button">
+                Join Conversation
+              </button>
+            </div>
+          </ng-container>
         </div>
       </mat-dialog-content>
-      <mat-dialog-actions>
+      <mat-dialog-actions *ngIf="joined">
         <div class="message-send-container">
           <div class="message-actions">
             <mat-form-field floatLabel="never">

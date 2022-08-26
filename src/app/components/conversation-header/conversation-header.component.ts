@@ -5,6 +5,7 @@ import {
 
 import { MatDialog } from '@angular/material/dialog';
 
+import { FilterConfig, ItemType } from '@firestitch/filter';
 import { list } from '@firestitch/common';
 
 import { Subject } from 'rxjs';
@@ -15,8 +16,8 @@ import { Account, Conversation } from '../../types';
 import { ConversationService } from '../../services';
 import { ParticipantsAddComponent } from '../participants-add';
 import { ConversationSettingsComponent } from '../conversation-settings';
-import { ConversationRole, ConversationItemState } from '../../enums';
-import { FilterConfig, ItemType } from '@firestitch/filter';
+import { ConversationItemState } from '../../enums';
+import { hasAdminRole } from '../../helpers';
 
 
 @Component({
@@ -27,15 +28,16 @@ import { FilterConfig, ItemType } from '@firestitch/filter';
 })
 export class ConversationHeaderComponent implements OnDestroy, OnInit {
 
-  @Input() public conversation: Conversation = null;
+  @Input() public conversation: Conversation;
+  @Input() public joined: boolean;
   @Input() public conversationService: ConversationService;
+  @Input() public account: Account;
 
   @Output() public conversationChange = new EventEmitter<Conversation>();
   @Output() public filterChanged = new EventEmitter<{ query: any, sort: any }>();
 
   public ConversationStates = ConversationStates;
   public conversationStates = list(ConversationStates, 'name', 'value');
-  public account: Account;
   public filterConf: FilterConfig;
 
   private _destroy$ = new Subject();
@@ -71,8 +73,8 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
     };
   }
 
-  public get hasAdminConversationRole(): boolean {
-    return this.conversation.accountConversationRoles.indexOf(ConversationRole.Admin) !== -1;
+  public get hasAdminRole(): boolean {
+    return hasAdminRole(this.conversation);
   }
 
   public participantAdd(): void {
@@ -93,6 +95,8 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
       data: { 
         conversation: this.conversation,
         conversationService: this.conversationService,
+        joined: this.joined,
+        account: this.account,
         tab,
       },
     })
@@ -109,7 +113,6 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
         this.conversationChange.emit();
       });
   }
-
 
   public ngOnDestroy(): void {
     this._destroy$.next();

@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, HostListener,  
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject,   
 } from '@angular/core';
 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -11,10 +11,10 @@ import { FsFile } from '@firestitch/file';
 import { list } from '@firestitch/common';
 
 import { forkJoin, fromEvent, Observable, of, Subject } from 'rxjs';
-import { filter, finalize, switchMap, tap } from 'rxjs/operators';
+import { filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
-import { Account, Conversation } from '../../types';
+import { Account, Conversation, ConversationConfig } from '../../types';
 import { ConversationItemType, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
 import { ConversationItemsComponent } from '../conversation-items';
@@ -41,6 +41,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   public ConversationStates = ConversationStates;
   public conversationStates = list(ConversationStates, 'name', 'value');
   public account: Account;
+  public joined = false;
 
   private _destroy$ = new Subject();
   private _conversationService: ConversationService;
@@ -54,11 +55,14 @@ export class ConversationComponent implements OnInit, OnDestroy {
     private _dialogRef: MatDialogRef<ConversationComponent>,
     private _cdRef: ChangeDetectorRef,
     private _message: FsMessage,
-    private _dialog: MatDialog,
-  ) {}
+  ) { }
 
   public get conversationService(): ConversationService {
     return this._conversationService;
+  }
+
+  public get conversationConfig(): ConversationConfig {
+    return this._conversationService.conversationConfig;
   }
 
   public ngOnInit(): void {
@@ -71,7 +75,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
       .subscribe((conversationParticipant) => {
         this.sessionConversationParticipant = conversationParticipant;
         this._cdRef.markForCheck();
-      })
+      });
 
     this.loadConversation$()
       .subscribe(() => {
@@ -161,24 +165,42 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.conversationItems.reload();
   }
 
+  public conversationJoin() {
+    this.conversationConfig.conversationParticipantAdd(this.conversation.id, {
+      accountIds: [this.account.id]
+    })
+    .subscribe(() => {
+      this.conversationChange();
+    });
+  }
+
   public conversationChange() {
     this.loadConversation();
     this.loadConversationItems();
   }
 
-  public loadConversation$(): Observable<any> {
-    return this._conversationService.conversationGet(this._data.conversation.id, {
-      conversationParticipantCounts: true,
-      conversationParticipants: true,
-      conversationParticipantLimit: 3,
-      conversationParticipantOrder: 'read_date,desc',
-      conversationParticipantAccounts: true,
-    })
-      .pipe(
-        tap((conversation) => {
-          this.conversation = conversation;
+  public loadConversation$(): Observable<Conversation> {
+    return forkJoin({
+      conversation: this._conversationService
+        .conversationGet(this._data.conversation.id, {
+          conversationParticipantCounts: true,
+          conversationParticipants: true,
+          conversationParticipantLimit: 3,
+          conversationParticipantOrder: 'read_date,desc',
+          conversationParticipantAccounts: true,
+        }),
+        conversationParticipants: this.conversationConfig
+        .conversationParticipantsGet(this._data.conversation.id, {
+          accountId: this.account.id,
+        }),
+      })
+      .pipe(        
+        tap((response) => {
+          this.joined = response.conversationParticipants.conversationParticipants.length > 0;
+          this.conversation = response.conversation;
           this._cdRef.markForCheck();
-        }),      
+        }), 
+        map((response) => response.conversation) ,    
       );
   }
 

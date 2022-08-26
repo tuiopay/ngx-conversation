@@ -24,7 +24,6 @@ $messageContainerSideMargin: 34px;
 
     .info {
       position: relative;
-      margin-left: 5px;
       display: flex;
       align-items: center;
 
@@ -60,6 +59,7 @@ $messageContainerSideMargin: 34px;
         align-items: center;
         margin-top: 5px;
         margin-bottom: 2px;
+        margin-left: 5px;
 
         app-conversation-participant {
           font-size: 95%;

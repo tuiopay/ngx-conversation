@@ -249,6 +249,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
   public conversationOpen(conversation: Conversation): void {
     this._dialog.open(ConversationComponent, {
       autoFocus: true,
+      id: 'converstationDialog',
       data: { 
         conversation,
         conversationService: this._conversationService,

@@ -28,12 +28,17 @@ form {
 }
 
 .message-send-container {
-  width: 100%;
+  padding: 8px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  box-sizing: content-box;
+  margin-bottom: -24px;
   
   .message-actions {
     display: flex;
-    align-items: center;
-    margin-left: 5px;
+    align-items: flex-end;
+    width: 100%;
 
     mat-form-field {
       width: 100%;
@@ -42,10 +47,8 @@ form {
     .buttons {
       display: flex;
       white-space: nowrap;
-
-      button + button {
-        margin-left: 5px;
-      }
+      margin-left: 5px;
+      margin-bottom: 10px;
     }
   }
 

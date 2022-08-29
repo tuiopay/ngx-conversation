@@ -1,5 +1,11 @@
 <div class="heading-container">
   <div class="heading">
+    <a  
+        class="close"
+        mat-icon-button
+        mat-dialog-close>
+      <mat-icon>arrow_back_ios_new</mat-icon>
+    </a>
     <a 
         *ngIf="hasAdminRole; else conversationParticipants"
         class="participants"
@@ -12,22 +18,22 @@
       {{conversation.name}}
     </a>
   </div>
-  <app-conversation-state 
+  <!-- <app-conversation-state 
     [conversation]="conversation">
-  </app-conversation-state> 
+  </app-conversation-state>  -->
   <div class="actions">      
     <fs-filter
       *ngIf="hasAdminRole"
       [config]="filterConf">
     </fs-filter>
-    <button 
+    <!-- <button 
       *ngIf="hasAdminRole"
       type="button"
       tabindex="-1"
       (click)="participantAdd()"
       mat-icon-button>
     <mat-icon>person_add_alt_1</mat-icon>
-    </button> 
+    </button>  -->
     <button
         type="button"
         tabindex="-1"

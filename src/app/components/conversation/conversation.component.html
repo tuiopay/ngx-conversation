@@ -32,23 +32,30 @@
           </ng-container>
         </div>
       </mat-dialog-content>
-      <mat-dialog-actions *ngIf="joined">
+      <ng-container *ngIf="joined">
         <div class="message-send-container">
           <div class="message-actions">
             <mat-form-field floatLabel="never">
-              <textarea matInput (keydown)="messageKeydown($event)" cdkTextareaAutosize [(ngModel)]="message"
+              <textarea 
+                matInput 
+                (keydown)="messageKeydown($event)" 
+                [autofocus]="true"
+                cdkTextareaAutosize 
+                [(ngModel)]="message"
                 [disabled]="conversation.state === ConversationState.Closed" name="message" placeholder="Type a message">
                     </textarea>
             </mat-form-field>
             <div class="buttons">
-              <a 
+              <button 
                   mat-icon-button 
                   type="submit" 
+                  class="button"
                   [disabled]="!message || conversation.state === ConversationState.Closed"
                   color="primary">
                 <mat-icon>send</mat-icon>
-              </a>
-              <fs-file 
+              </button>
+              <fs-file                   
+                  class="button"
                   [disabled]="conversation.state === ConversationState.Closed" (select)="fileSelect($event)"
                   [multiple]="true" 
                   imageWidth="1200" 
@@ -60,9 +67,6 @@
                   <mat-icon>attach_file</mat-icon>
                 </a>
               </fs-file>
-              <button mat-button mat-dialog-close type="button">
-                Close
-              </button>
             </div>
           </div>
 
@@ -72,7 +76,7 @@
             </ng-template>
           </fs-file-previews>
         </div>
-      </mat-dialog-actions>
+      </ng-container>
     </ng-container>
   </form>
 </fs-dialog>

@@ -64,17 +64,17 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
     ];
     this.selectedFilter = this.filters[0];
 
-    timer(15000, 15000)
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        if (this.listComponent.list.paging.page === 1) {
-          this.listComponent.reload();
-        }
+    // timer(15000, 15000)
+    //   .pipe(
+    //     takeUntil(this._destroy$),
+    //   )
+    //   .subscribe(() => {
+    //     if (this.listComponent.list.paging.page === 1) {
+    //       this.listComponent.reload();
+    //     }
 
-        this.loadStats();
-      });
+    //     this.loadStats();
+    //   });
 
     
     this.loadStats();
@@ -248,7 +248,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
 
   public conversationOpen(conversation: Conversation): void {
     this._dialog.open(ConversationComponent, {
-      autoFocus: true,
+      autoFocus: false,
       id: 'converstationDialog',
       data: { 
         conversation,

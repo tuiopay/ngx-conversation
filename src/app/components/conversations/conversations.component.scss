@@ -7,6 +7,10 @@
 
 fs-list {
   ::ng-deep {
+    table {
+      table-layout: fixed;
+    }
+
     .fs-list-table {
       .fs-list-row {
         cursor: pointer;
@@ -117,6 +121,7 @@ fs-list {
       display: flex;
       flex-grow: 1;
       flex-direction: column;
+      min-width: 0;
 
       .name {
         display: flex;
@@ -138,10 +143,15 @@ fs-list {
     .last-conversation-item {
       display: flex;
       margin-top: 7px;
+      min-width: 0;
 
       .message {        
         margin-top: -3px;
         margin-left: 6px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        overflow: hidden;
       }
     }
   }

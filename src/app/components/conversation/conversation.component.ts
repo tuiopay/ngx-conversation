@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject,   
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, TemplateRef,   
 } from '@angular/core';
 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -10,7 +10,7 @@ import { FsFormDirective } from '@firestitch/form';
 import { FsFile } from '@firestitch/file';
 import { list } from '@firestitch/common';
 
-import { forkJoin, fromEvent, Observable, of, Subject } from 'rxjs';
+import { forkJoin, fromEvent, Observable, of, Subject, throwError } from 'rxjs';
 import { filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
@@ -18,6 +18,7 @@ import { Account, Conversation, ConversationConfig } from '../../types';
 import { ConversationItemType, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
 import { ConversationItemsComponent } from '../conversation-items';
+import { MatInput } from '@angular/material/input';
 
 
 @Component({
@@ -32,6 +33,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
   @ViewChild(FsFormDirective)
   public messageForm: FsFormDirective;
+
+  @ViewChild(MatInput, { static: true })
+  public input: MatInput;
 
   public conversation: Conversation = null;
   public message = '';
@@ -136,8 +140,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   public messageSend = () => {
-    return this.conversationItemCreate({ message: this.message.trim() })
+    return of(this.message.trim())
       .pipe(
+        switchMap((message) => message.length === 0 ? throwError(false) : of(message)),
+        switchMap((message) => this.conversationItemCreate({ message })),
         tap(() => {
           this.message = '';
           this.files = [];

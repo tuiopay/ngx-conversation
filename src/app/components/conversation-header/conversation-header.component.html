@@ -1,5 +1,24 @@
 <div class="heading-container">
-  <div class="heading">
+  <ng-container *ngIf="conversationService.conversationHeadingTemplate; else template">
+    <ng-container 
+      [ngTemplateOutlet]="conversationService.conversationHeadingTemplate"
+      [ngTemplateOutletContext]="{
+        conversation: conversation,
+        template: template,
+        actionsTemplate: actionsTemplate,
+        infoTemplate: infoTemplate
+      }">
+    </ng-container>
+  </ng-container>     
+</div>
+
+<ng-template #template>
+  <ng-container [ngTemplateOutlet]="infoTemplate"></ng-container>
+  <ng-container [ngTemplateOutlet]="actionsTemplate"></ng-container>
+</ng-template>
+
+<ng-template #infoTemplate>
+  <div class="info">
     <a  
         class="close"
         mat-icon-button
@@ -17,32 +36,24 @@
         class="name">
       {{conversation.name}}
     </a>
-  </div>
-  <!-- <app-conversation-state 
-    [conversation]="conversation">
-  </app-conversation-state>  -->
+  </div>  
+</ng-template>
+
+<ng-template #actionsTemplate>
   <div class="actions">      
     <fs-filter
       *ngIf="hasAdminRole"
       [config]="filterConf">
     </fs-filter>
-    <!-- <button 
-      *ngIf="hasAdminRole"
-      type="button"
-      tabindex="-1"
-      (click)="participantAdd()"
-      mat-icon-button>
-    <mat-icon>person_add_alt_1</mat-icon>
-    </button>  -->
     <button
         type="button"
         tabindex="-1"
         (click)="settingsOpen()"
         mat-icon-button>
       <mat-icon>settings</mat-icon>
-    </button> 
-  </div>          
-</div>
+    </button>  
+  </div>
+</ng-template>
 
 <ng-template #conversationParticipants>
   <app-conversation-participants

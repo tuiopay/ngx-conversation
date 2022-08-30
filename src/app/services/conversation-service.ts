@@ -11,6 +11,7 @@ import { ConversationConfig, Conversation, ConversationParticipant } from '../ty
 export class ConversationService {
 
   public conversationSettingTemplate: TemplateRef<any>;
+  public conversationHeadingTemplate: TemplateRef<any>;
   public conversationConfig: ConversationConfig;
 
   public conversationGet(conversationId: number, query?: any, config?: RequestConfig): Observable<Conversation> {

@@ -16,7 +16,7 @@ import { ConversationCreateComponent, ConversationComponent } from '../../compon
 import { Account, ConversationConfig, ConversationFilter, Conversation } from '../../types';
 import { ConversationRole, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
-import { ConversationColumnDirective, ConversationSettingsDirective } from '../../directives';
+import { ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective } from '../../directives';
 
 
 @Component({
@@ -27,6 +27,9 @@ import { ConversationColumnDirective, ConversationSettingsDirective } from '../.
   providers: [ConversationService],
 })
 export class ConversationsComponent implements OnInit, OnDestroy, AfterContentInit {
+
+  @ContentChild(ConversationHeaderDirective, { read: TemplateRef })
+  public conversationHeadingTemplate: TemplateRef<any>;
 
   @ContentChild(ConversationSettingsDirective, { read: TemplateRef })
   public conversationSettingTemplate: TemplateRef<any>;
@@ -172,6 +175,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
 
   public ngAfterContentInit(): void {
     this._conversationService.conversationSettingTemplate = this.conversationSettingTemplate;
+    this._conversationService.conversationHeadingTemplate = this.conversationHeadingTemplate;
   }
 
   public conversationParticipantsChange(): void {

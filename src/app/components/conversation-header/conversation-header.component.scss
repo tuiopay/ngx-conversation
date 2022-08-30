@@ -4,10 +4,11 @@
   margin: -10px;
   margin-bottom: 14px;
 
-  .heading {
+  .info {
     display: flex;
     align-items: center;
     min-width: 0;
+    flex-grow: 1;
 
     .close {
       margin: 0 5px 0 -5px;
@@ -39,7 +40,6 @@
   }
 
   .actions {
-    flex-grow: 1;
     justify-content: end;
     display: flex;
   }

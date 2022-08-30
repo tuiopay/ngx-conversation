@@ -36,7 +36,15 @@
       </div>   
       <ng-container *ngIf="conversationItem.state === ConversationItemState.Active">
         <fs-menu class="item-menu" *ngIf="conversationItem.canDelete">
-          <ng-template fs-menu-item (click)="conversationItemDelete(conversationItem)">
+          <ng-template 
+              *ngIf="conversationItem.conversationItemFiles.length > 1"
+              fs-menu-item 
+              (click)="filesDownload(conversationItem)">
+            Download All
+          </ng-template>          
+          <ng-template 
+            fs-menu-item 
+            (click)="conversationItemDelete(conversationItem)">
             Delete
           </ng-template>
         </fs-menu>        
@@ -56,12 +64,20 @@
             <fs-gallery 
                 [config]="conversationItem.galleryConfig" 
                 *ngIf="conversationItem.conversationItemFiles.length">
-              <ng-template fsGalleryThumbnailPreview let-item="item" let-template="template">
+              <ng-template fsGalleryThumbnail let-item="item" let-previewTemplate="previewTemplate">
                 <ng-container 
-                  [ngTemplateOutlet]="template"      
+                  [ngTemplateOutlet]="previewTemplate"      
                   [ngTemplateOutletContext]="{ item: item }">
                 </ng-container>
+
+                <ng-container *ngIf="item.mime.type !== MimeType.Image">
+                  <fs-gallery-thumbnail-info 
+                    [showIcon]="false"
+                    [item]="item">
+                  </fs-gallery-thumbnail-info>
+                </ng-container>
                 <button 
+                    type="button"
                     [fsMenuTriggerFor]="menu" 
                     mat-icon-button 
                     class="file-menu"

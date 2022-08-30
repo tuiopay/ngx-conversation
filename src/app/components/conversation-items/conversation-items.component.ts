@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, Input,
 } from '@angular/core';
 
-import { FsGalleryConfig, FsGalleryItem, GalleryLayout, GalleryThumbnailSize } from '@firestitch/gallery';
+import { FsGalleryConfig, FsGalleryItem, GalleryLayout, GalleryThumbnailSize, MimeType } from '@firestitch/gallery';
 import { FsPrompt } from '@firestitch/prompt';
 
 import { Observable, of, Subject, timer } from 'rxjs';
@@ -31,6 +31,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   @Input() public conversationService: ConversationService;
 
   public autoload = true;
+  public MimeType = MimeType;
   public conversationParticipants: ConversationParticipant[] = [];
   public ConversationItemType = ConversationItemType;
   public lastConversationItem: ConversationItem;
@@ -174,6 +175,13 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
 
   public fileDownload(conversationItem, fileItem): void {
     this.conversationService.conversationConfig.conversationItemFileDownload(conversationItem, fileItem.id);
+  }
+
+  public filesDownload(conversationItem: ConversationItem): void {
+    conversationItem.conversationItemFiles
+    .forEach((conversationItemFile) => {
+      this.conversationService.conversationConfig.conversationItemFileDownload(conversationItem, conversationItemFile.id);
+    });    
   }
 
   public ngOnDestroy(): void {

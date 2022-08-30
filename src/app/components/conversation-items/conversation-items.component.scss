@@ -105,8 +105,8 @@ $messageContainerSideMargin: 34px;
           }
     
           .message {
-            text-align: right;
-            white-space: pre-wrap;
+            display: flex;
+            align-self: self-end;
             background-color: #E7F7E6;
           }
         }
@@ -121,6 +121,8 @@ $messageContainerSideMargin: 34px;
 
           .content-container {
             position: relative;
+            display: flex;
+            flex-direction: column;
 
             .message + fs-gallery {
               padding-top: 5px;
@@ -135,9 +137,18 @@ $messageContainerSideMargin: 34px;
                   display: none;
                 }
 
+                .fs-gallery-thumbnails {
+                  align-items: flex-start;
+                }
+
                 .fs-gallery-thumbnail {
                   &:hover .file-menu {
                     display: inline-block;
+                  }
+
+                  .file-name {
+                    font-size: 80%;
+                    padding: 5px 0;
                   }
 
                   .file-menu {
@@ -146,6 +157,12 @@ $messageContainerSideMargin: 34px;
                     right: 2px;
                     display: none;
                     background: rgb(255 255 255 / 26%);
+                  }
+
+                  fs-gallery-thumbnail-info {
+                    .info {
+                      padding-bottom: 7px;
+                    }
                   }
                 }
               }
@@ -157,6 +174,7 @@ $messageContainerSideMargin: 34px;
         .message {
           padding: 6px 8px;
           border-radius: 5px;
+          white-space: pre-wrap;
           display: inline-block;
           background-color: #E6F0F7;
         }

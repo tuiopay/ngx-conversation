@@ -50,7 +50,7 @@
                   mat-icon-button 
                   type="submit" 
                   class="button"
-                  [disabled]="!message || conversation.state === ConversationState.Closed"
+                  [disabled]="(!message && !files.length) || conversation.state === ConversationState.Closed"
                   color="primary">
                 <mat-icon>send</mat-icon>
               </button>

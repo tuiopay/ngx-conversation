@@ -3,15 +3,15 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, TemplateRef,   
 } from '@angular/core';
 
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
 import { FsFormDirective } from '@firestitch/form';
 import { FsFile } from '@firestitch/file';
 import { list } from '@firestitch/common';
 
-import { forkJoin, fromEvent, Observable, of, Subject, throwError } from 'rxjs';
-import { filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { forkJoin, Observable, of, Subject, throwError } from 'rxjs';
+import { finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
 import { Account, Conversation, ConversationConfig } from '../../types';
@@ -142,7 +142,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   public messageSend = () => {
     return of(this.message.trim())
       .pipe(
-        switchMap((message) => message.length === 0 ? throwError(false) : of(message)),
+        switchMap((message) => !this.files.length && message.length === 0 ? throwError(false) : of(message)),
         switchMap((message) => this.conversationItemCreate({ message })),
         tap(() => {
           this.message = '';

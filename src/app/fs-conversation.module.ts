@@ -35,7 +35,7 @@ import {
   ConversationReadParticipantsPopoverComponent,
   ConversationReadParticipantsDialogComponent
 } from './components';
-import { AutofocusDirective, ConversationColumnDirective, ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
+import { AutofocusDirective, ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
 import { FsFilterModule } from '@firestitch/filter';
 
 
@@ -88,11 +88,13 @@ import { FsFilterModule } from '@firestitch/filter';
     ConversationReadParticipantsDialogComponent,
     ConversationColumnDirective,
     AutofocusDirective,
+    ConversationHeaderDirective,
   ],
   exports: [
     ConversationsComponent,
     ConversationSettingsDirective,
     ConversationColumnDirective,
+    ConversationHeaderDirective,
   ],
 })
 export class FsConversationModule {}

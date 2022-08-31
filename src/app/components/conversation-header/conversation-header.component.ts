@@ -51,6 +51,7 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
       persist: false,
       inline: false,
       chips: false,
+      queryParam: false,
       button: {
         style: 'icon',
         label: '',

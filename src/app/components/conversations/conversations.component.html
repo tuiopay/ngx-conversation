@@ -9,8 +9,8 @@
         <a (click)="filterSelect(filter)">{{filter.name}}</a>
         <div class="count">
           <div
-            *ngIf="filter.unread"
             class="unread"
+            [ngClass]="{ 'has-unread': !!filter.unread }"
             matTooltip="{{ filter.unread }} Unread">
           </div>
           <span>{{ filter.count }}</span>
@@ -76,5 +76,10 @@
       </div>
     </div>
   </div>
-  <div class="unread" matTooltip="Unread" *ngIf="conversation.unread"></div>
+  <div 
+    *ngIf="!!conversation.unread"
+    class="unread" 
+    [ngClass]="{ 'has-unread': !!conversation.unread }"
+    matTooltip="Unread">
+  </div>
 </ng-template>

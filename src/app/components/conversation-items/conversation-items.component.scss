@@ -112,6 +112,22 @@ $messageContainerSideMargin: 34px;
         }
       }
 
+      &:not(.active-account) {
+        .message-container { 
+          margin-left: $messageContainerSideMargin;
+
+          .content {
+            fs-menu.item-menu {
+              right: -40px;
+            }          
+          }
+
+          .message {
+            align-self: flex-start;
+          }
+        }
+      }
+
       .message-container {
         .content {
           position: relative;
@@ -177,18 +193,6 @@ $messageContainerSideMargin: 34px;
           white-space: pre-wrap;
           display: inline-block;
           background-color: #E6F0F7;
-        }
-      }
-    }
-
-    &:not(.active-account) {
-      .message-container { 
-        margin-left: $messageContainerSideMargin;
-
-        .content {
-          fs-menu.item-menu {
-            right: -40px;
-          }          
         }
       }
     }

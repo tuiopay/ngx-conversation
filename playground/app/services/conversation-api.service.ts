@@ -13,7 +13,7 @@ import { ConversationConfig, Conversation, ConversationItem, ConversationItemMes
 })
 export class ConversationsApiService {
 
-  private _url = 'https://tuiopay.local.firestitch.com/api/';
+  private _url = 'http://tuiopay.local.firestitch.com/api/';
   
   public constructor(
     private _api: FsApi,

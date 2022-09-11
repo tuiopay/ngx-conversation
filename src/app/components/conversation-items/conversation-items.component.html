@@ -12,12 +12,14 @@
         <app-conversation-participant
           [size]="30"
           [conversationParticipant]="conversationItem.conversationParticipant"
-          [showBadge]="true">
+          [showBadge]="true"
+          [showTooltip]="true">
         </app-conversation-participant>
         <app-conversation-participant
           class="name"
           [conversationParticipant]="conversationItem.conversationParticipant"
-          [showName]="true">
+          [showName]="true"
+          [showTooltip]="true">
         </app-conversation-participant>
       </ng-container>      
       <div class="row">

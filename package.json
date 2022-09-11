@@ -1,7 +1,7 @@
 {
   "name": "@firestitch/conversation",
   "title": "Conversation",
-  "version": "12.2.13",
+  "version": "12.2.14",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-conversation"
@@ -72,7 +72,11 @@
     "@firestitch/store": "^12.0.0",
     "@firestitch/style": "^12.0.0",
     "@firestitch/tabs": "^12.0.2",
+    "@firestitch/skeleton": "^12.0.0",
     "@firestitch/upload": "^8.0.4",
+    "@firestitch/scroll": "^12.0.2",
+    "@firestitch/mask": "^12.2.3",
+    "@firestitch/core": "^12.0.3",
     "codelyzer": "^6.0.0",
     "cpx": "^1.5.0",
     "date-fns": "^2.27.0",
@@ -84,6 +88,7 @@
     "ng-packagr": "^12.2.6",
     "ngx-highlightjs": "^4.1.4",
     "ngx-toastr": "^14.2.1",
+    "ng2-dragula": "^2.1.1",
     "npm-run-all": "^4.1.5",
     "parse-messy-time": "^2.1.0",
     "rxjs": "^6.5.3",

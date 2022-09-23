@@ -61,7 +61,7 @@
             Save
           </button>
           <button 
-              *ngIf="joined"
+              *ngIf="hasAdminRole && joined"
               mat-button
               (click)="leave()"
               color="warn" 

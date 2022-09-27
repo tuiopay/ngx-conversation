@@ -72,14 +72,17 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        if (this.listComponent.list.paging.page === 1) {
-          this.listComponent.reload();
-        }
 
-        this.loadStats();
+        if(!this._conversationService.hasWebSocketConnection()) {
+          if (this.listComponent.list.paging.page === 1) {
+            this.listComponent.reload();
+          }
+
+          this.loadStats();
+        }
       });
 
-    
+
     this.loadStats();
     this.listConfig = {
       status: false,
@@ -129,7 +132,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
       ],
       fetch: (query) => {
         query = {
-          ...query,   
+          ...query,
           lastConversationItems: true,
           lastConversationItemConversationParticipants: true,
           lastConversationItemConversationParticipantsAccounts: true,
@@ -159,18 +162,28 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
               this.loadStats();
             }),
             map((response) => {
-              return { 
+              return {
                 data: response.conversations
                 .map((conversation) => {
                   return {
                     ...conversation,
                   };
-                }), paging: response.paging 
+                }), paging: response.paging
               };
             }),
           );
       },
     };
+
+
+    //when notified that user has conversation updates then reload stuff
+    this._conversationService.onUnreadNotice(this.account.id)
+    .subscribe((message) => {
+      if (this.listComponent) {
+        this.listComponent.reload();
+      }
+
+    });
   }
 
   public ngAfterContentInit(): void {
@@ -254,7 +267,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
     this._dialog.open(ConversationComponent, {
       autoFocus: false,
       id: 'converstationDialog',
-      data: { 
+      data: {
         conversation,
         conversationService: this._conversationService,
         account: this.account,

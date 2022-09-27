@@ -18,13 +18,18 @@
               [conversation]="conversation"
               [sessionConversationParticipant]="sessionConversationParticipant">
             </app-conversation-items>
-          </div> 
+
+            <div class="typing" *ngIf="typing.state==='single'">{{typing.name}} is typing..</div>
+            <div class="typing" *ngIf="typing.state==='multiple'">People are typing..</div>
+            <div class="typing" *ngIf="typing.state==='none'">&nbsp;</div>
+
+          </div>
           <ng-container *ngIf="!joined">
             <div class="join-conversation">
-              <button 
-                  mat-raised-button 
+              <button
+                  mat-raised-button
                   (click)="conversationJoin()"
-                  color="primary" 
+                  color="primary"
                   type="button">
                 Join Conversation
               </button>
@@ -36,32 +41,33 @@
         <div class="message-send-container">
           <div class="message-actions">
             <mat-form-field floatLabel="never">
-              <textarea 
-                matInput 
-                (keydown)="messageKeydown($event)" 
+              <textarea
+                matInput
+                (keydown)="messageKeydown($event)"
                 [autofocus]="true"
-                cdkTextareaAutosize 
+                cdkTextareaAutosize
                 [(ngModel)]="message"
-                [disabled]="conversation.state === ConversationState.Closed" name="message" placeholder="Type a message">
-                    </textarea>
+                [disabled]="conversation.state === ConversationState.Closed" name="message" placeholder="Type a message"
+                (keypress)="typingStart()">
+              </textarea>
             </mat-form-field>
             <div class="buttons">
-              <button 
-                  mat-icon-button 
-                  type="submit" 
+              <button
+                  mat-icon-button
+                  type="submit"
                   class="button"
                   [disabled]="(!message && !files.length) || conversation.state === ConversationState.Closed"
                   color="primary">
                 <mat-icon>send</mat-icon>
               </button>
-              <fs-file                   
+              <fs-file
                   class="button"
                   [disabled]="conversation.state === ConversationState.Closed" (select)="fileSelect($event)"
-                  [multiple]="true" 
-                  imageWidth="1200" 
+                  [multiple]="true"
+                  imageWidth="1200"
                   imageQuality=".8">
-                <a 
-                    mat-icon-button 
+                <a
+                    mat-icon-button
                     [disabled]="conversation.state === ConversationState.Closed" type="button"
                     color="basic">
                   <mat-icon>attach_file</mat-icon>

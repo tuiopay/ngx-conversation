@@ -26,10 +26,10 @@ import { FsTabsModule } from '@firestitch/tabs';
 import { FsPopoverModule } from '@firestitch/popover';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 
-import { 
-  ConversationComponent, ConversationCreateComponent, ConversationParticipantComponent, ConversationParticipantsComponent, 
-  ConversationsComponent, ConversationSettingsComponent, ConversationStateComponent, ParticipantsListComponent, 
-  ParticipantsAddComponent, 
+import {
+  ConversationComponent, ConversationCreateComponent, ConversationParticipantComponent, ConversationParticipantsComponent,
+  ConversationsComponent, ConversationSettingsComponent, ConversationStateComponent, ParticipantsListComponent,
+  ParticipantsAddComponent,
   ConversationHeaderComponent,
   ConversationItemsComponent,
   ConversationReadParticipantsPopoverComponent,

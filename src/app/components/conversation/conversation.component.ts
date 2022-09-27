@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, TemplateRef,   
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, TemplateRef,
 } from '@angular/core';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -10,7 +10,7 @@ import { FsFormDirective } from '@firestitch/form';
 import { FsFile } from '@firestitch/file';
 import { list } from '@firestitch/common';
 
-import { forkJoin, Observable, of, Subject, throwError } from 'rxjs';
+import { forkJoin, Observable, of, Subject, Subscription, throwError } from 'rxjs';
 import { finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
@@ -49,6 +49,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject();
   private _conversationService: ConversationService;
+
+  private _wsSubscriptions: Subscription[] = [];
+  public typing = {state: 'none', name: '', accounts: []};
+
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: {
@@ -112,9 +116,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
                 return this._conversationService.conversationConfig.conversationItemFilePost(conversationItem, fsFile.file);
               }),
             )
-            : of(true);          
+            : of(true);
         }),
-        tap(() => {          
+        tap(() => {
           this.conversationItems.load();
         }),
         finalize(() => {
@@ -145,6 +149,8 @@ export class ConversationComponent implements OnInit, OnDestroy {
         switchMap((message) => !this.files.length && message.length === 0 ? throwError(false) : of(message)),
         switchMap((message) => this.conversationItemCreate({ message })),
         tap(() => {
+          this.conversationService.sendMessageNotice(this.conversation.id, this.account.id);
+
           this.message = '';
           this.files = [];
           this._cdRef.markForCheck();
@@ -152,7 +158,14 @@ export class ConversationComponent implements OnInit, OnDestroy {
       );
   };
 
+
+  private _unsubscribe(): void {
+    this._wsSubscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
   public ngOnDestroy(): void {
+    this._unsubscribe();
+
     this._destroy$.next();
     this._destroy$.complete();
   }
@@ -200,14 +213,64 @@ export class ConversationComponent implements OnInit, OnDestroy {
           accountId: this.account.id,
         }),
       })
-      .pipe(        
+      .pipe(
         tap((response) => {
+          this._unsubscribe();
+
           this.joined = response.conversationParticipants.conversationParticipants.length > 0;
           this.conversation = response.conversation;
+
+          //handle typing updates
+          this._wsSubscriptions.push(this.conversationService.onTypingNotice(this.conversation.id)
+            .subscribe((message) => {
+              if(message.data.isTyping) {
+                if(!this.typing.accounts.some((el) => el.id === message.data.accountId )) {
+                  this.typing.accounts.push({id: message.data.accountId, name: message.data.accountName});
+                }
+              } else {
+                this.typing.accounts = this.typing.accounts.filter((el) => el.id !== message.data.accountId );
+              }
+              this._updateTypingState();
+            })
+          );
+
+          //handle new messages
+          this._wsSubscriptions.push(this.conversationService.onMessageNotice(this.conversation.id)
+            .subscribe((message) => {
+              this.conversationChange();
+            })
+          );
+
           this._cdRef.markForCheck();
-        }), 
-        map((response) => response.conversation) ,    
+        }),
+        map((response) => response.conversation) ,
       );
+  }
+
+
+  private _updateTypingState() {
+    this.typing.accounts = this.typing.accounts.filter(function (el) {
+      return el != null;
+    });
+
+
+    if(this.typing.accounts.length==0) {
+      this.typing.state = 'none';
+      this.typing.name = '';
+    } else if(this.typing.accounts.length==1) {
+      this.typing.state = 'single';
+      this.typing.name = this.typing.accounts[0].name;
+    } else {
+      this.typing.state = 'multiple';
+      this.typing.name = '';
+    }
+
+    this._cdRef.markForCheck();
+  }
+
+
+  public typingStart() {
+    this.conversationService.sendTypingStartNotice(this.conversation.id, this.account.id);
   }
 
 }

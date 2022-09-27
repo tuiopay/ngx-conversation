@@ -36,7 +36,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   public ConversationItemType = ConversationItemType;
   public lastConversationItem: ConversationItem;
   public ConversationItemState = ConversationItemState;
-  public conversationItems: (ConversationItem & { 
+  public conversationItems: (ConversationItem & {
     canDelete?: boolean,
     galleryConfig?: FsGalleryConfig,
   })[] = [];
@@ -50,14 +50,19 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
+    this.load();
+
     timer(0, 5000)
       .pipe(
         filter(() => this.autoload),
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this.load();
-        this._cdRef.markForCheck();
+        //if no socket connection fall pack to polling
+        if (!this.conversationService.hasWebSocketConnection()) {
+          this.load();
+          this._cdRef.markForCheck();
+        }
       });
   }
 
@@ -91,7 +96,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
               return {
                 ...conversationItem,
                 canDelete: this.canDelete(conversationItem),
-                galleryConfig: {                 
+                galleryConfig: {
                   info: false,
                   thumbnail: {
                     heightScale: 0.7,
@@ -110,7 +115,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
                           url: conversationItemFile.file.preview?.actual,
                           index: conversationItemFile.id,
                           data: conversationItemFile,
-                          extension: conversationItemFile.file.extension,                          
+                          extension: conversationItemFile.file.extension,
                         };
                       }));
                   },
@@ -136,11 +141,11 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
         this._cdRef.markForCheck();
       });
   }
-  
+
   public openReadParticipants(conversationItem) {
     this._dialog.open(ConversationReadParticipantsDialogComponent, {
       data: {
-        conversationItem, 
+        conversationItem,
         conversationService: this.conversationService,
         account: this.account,
       },
@@ -181,7 +186,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
     conversationItem.conversationItemFiles
     .forEach((conversationItemFile) => {
       this.conversationService.conversationConfig.conversationItemFileDownload(conversationItem, conversationItemFile.id);
-    });    
+    });
   }
 
   public ngOnDestroy(): void {

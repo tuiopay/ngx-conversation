@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { FsApi } from '@firestitch/api';
+import { FsWebSocket } from '@firestitch/web-socket';
 
-import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ConversationConfig, Conversation, ConversationItem, ConversationItemMessage, ConversationParticipant, Account } from 'src/app/types';
@@ -13,11 +13,13 @@ import { ConversationConfig, Conversation, ConversationItem, ConversationItemMes
 })
 export class ConversationsApiService {
 
-  private _url = 'http://tuiopay.local.firestitch.com/api/';
-  
+  private _url = 'https://tuiopay.local.firestitch.com/api/';
+
   public constructor(
     private _api: FsApi,
-  ) {}
+    private _websocketService: FsWebSocket,
+  ) {
+  }
 
   public save(url, data) {
     return data.id ? this._api.put(`${this._url}${url}/${data.id}`, data) : this._api.post(`${this._url}${url}`, data);
@@ -62,13 +64,13 @@ export class ConversationsApiService {
         .pipe(
           map((response) => response.conversationItem),
         );
-    }, 
+    },
     conversationItemDelete: (conversationItem: ConversationItem | ConversationItemMessage) => {
       return this.delete(`conversations/${conversationItem.conversationId}/items`, conversationItem)
         .pipe(
           map((response) => response.conversationItem),
         );
-    }, 
+    },
     conversationItemFilePost: (conversationItem: ConversationItem, file: Blob) => {
       return this.post(`conversations/${conversationItem.conversationId}/items/${conversationItem.id}/files`, { file });
     },
@@ -102,6 +104,9 @@ export class ConversationsApiService {
     accountsGet: (query?: any) => {
       return this.get('accounts', query);
     },
+    websocketService: () => {
+      return this._websocketService;
+    }
   }
 
 }

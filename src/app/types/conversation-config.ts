@@ -12,11 +12,11 @@ export type ConversationConfig = {
   conversationSave: (conversation: Conversation, config?: RequestConfig) => Observable<Conversation>;
   conversationDelete: (conversation: Conversation, config?: RequestConfig) => Observable<Conversation>;
   conversationRead: (conversation: Conversation, conversationItemId: number, config?: RequestConfig) => Observable<Conversation>;
-  
+
   conversationItemsGet: (conversationId: number, query?: any, config?: RequestConfig) => Observable<{ conversationItems: ConversationItem[], paging?: any }>;
-  
-  conversationItemSave: (conversationItem: ConversationItem | ConversationItemMessage, config?: RequestConfig) => Observable<ConversationItem>;  
-  conversationItemDelete: (conversationItem: ConversationItem | ConversationItemMessage, config?: RequestConfig) => Observable<ConversationItem>;  
+
+  conversationItemSave: (conversationItem: ConversationItem | ConversationItemMessage, config?: RequestConfig) => Observable<ConversationItem>;
+  conversationItemDelete: (conversationItem: ConversationItem | ConversationItemMessage, config?: RequestConfig) => Observable<ConversationItem>;
   conversationItemFilePost: (conversationItem: ConversationItem, file: Blob, config?: RequestConfig) => Observable<any>;
   conversationItemFileDownload: (conversationItem: ConversationItem | ConversationItemMessage, fileId: number, config?: RequestConfig) => void;
 
@@ -31,4 +31,5 @@ export type ConversationConfig = {
 
   beforeConverstation?: (conversation: Conversation) => Observable<Conversation>;
 
+  websocketService?: () => any;
 }

@@ -5,7 +5,8 @@ import { FsWebSocket } from '@firestitch/web-socket';
 
 import { map } from 'rxjs/operators';
 
-import { ConversationConfig, Conversation, ConversationItem, ConversationItemMessage, ConversationParticipant, Account } from 'src/app/types';
+import { ConversationConfig, Conversation, ConversationItem,
+  ConversationItemMessage, ConversationParticipant } from 'src/app/types';
 
 
 @Injectable({
@@ -42,7 +43,7 @@ export class ConversationsApiService {
       return this._api.get(`${this._url}conversations`, query);
     },
     conversationsStats: (query?: any) => {
-      return this._api.get(`${this._url}conversations/stats`, query);;
+      return this._api.get(`${this._url}conversations/stats`, query);
     },
     conversationSave: (conversation: Conversation) => {
       return this.save('conversations', conversation)

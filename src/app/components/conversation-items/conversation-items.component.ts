@@ -58,7 +58,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        //if no socket connection fall pack to polling
+        // if no socket connection fall pack to polling
         if (!this.conversationService.hasWebSocketConnection()) {
           this.load();
           this._cdRef.markForCheck();
@@ -132,7 +132,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
         ];
 
         const lastConversationItem = this.conversationItems[0];
-        if(lastConversationItem && lastConversationItem !== this.lastConversationItem) {
+        if (lastConversationItem && lastConversationItem !== this.lastConversationItem) {
           this.conversationService.conversationConfig.conversationRead(this.conversation, lastConversationItem.id)
           .subscribe();
         }
@@ -185,7 +185,10 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   public filesDownload(conversationItem: ConversationItem): void {
     conversationItem.conversationItemFiles
     .forEach((conversationItemFile) => {
-      this.conversationService.conversationConfig.conversationItemFileDownload(conversationItem, conversationItemFile.id);
+      this.conversationService.conversationConfig.conversationItemFileDownload(
+        conversationItem,
+        conversationItemFile.id
+      );
     });
   }
 

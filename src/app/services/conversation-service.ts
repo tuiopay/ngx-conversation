@@ -1,7 +1,7 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { RequestConfig } from '@firestitch/api';
 
-import { Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { ConversationConfig, Conversation, ConversationParticipant } from '../types';
@@ -25,7 +25,11 @@ export class ConversationService {
       );
   }
 
-  public conversationParticipantGet(conversationId: number, query?: any, config?: RequestConfig): Observable<ConversationParticipant> {
+  public conversationParticipantGet(
+    conversationId: number,
+    query?: any,
+    config?: RequestConfig
+  ): Observable<ConversationParticipant> {
     return this.conversationConfig.conversationParticipantsGet(conversationId, {
       ...query,
     }, config)
@@ -66,7 +70,7 @@ export class ConversationService {
     if (this.hasWebSocketConnection()) {
       return this.conversationConfig.websocketService().routeObservable(`account/${accountId}/unreadconversations`);
     } else {
-      return of({});
+      return EMPTY;
     }
   }
 
@@ -74,7 +78,7 @@ export class ConversationService {
     if (this.hasWebSocketConnection()) {
       return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/message`);
     } else {
-      return of({});
+      return EMPTY;
     }
   }
 
@@ -82,7 +86,7 @@ export class ConversationService {
     if (this.hasWebSocketConnection()) {
       return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/typing`);
     } else {
-      return of({});
+      return EMPTY;
     }
   }
 

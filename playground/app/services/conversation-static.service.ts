@@ -10,7 +10,7 @@ import { accountsData } from '../data/accounts-data';
   providedIn: 'root'
 })
 export class ConversationsStaticService {
-  
+
   public conversationConfig: ConversationConfig = {
     conversationsGet: (query?: any) => {
       return of(conversationsData);
@@ -35,8 +35,8 @@ export class ConversationsStaticService {
       .filter((conversationItem) => {
         return conversationId === conversationItem.conversationId
       });
-      
-      if(query?.maxConversationItemId) {
+
+      if (query?.maxConversationItemId) {
         conversationItems = conversationItems
           .filter((conversationItem) => (conversationItem.id > query.maxConversationItemId));
       }
@@ -45,13 +45,13 @@ export class ConversationsStaticService {
     },
     conversationItemSave: (conversationItem: ConversationItem | ConversationItemMessage) => {
       return of(conversationItem);
-    }, 
+    },
     conversationParticipantAdd: (conversationId: number, data) => {
       return of(null)
     },
     conversationItemDelete: (conversationItem: ConversationItem | ConversationItemMessage) => {
       return of(conversationItem);
-    }, 
+    },
     conversationItemFilePost: (conversationItem: ConversationItem, file: Blob) => {
       return of(true);
     },
@@ -64,7 +64,7 @@ export class ConversationsStaticService {
     conversationParticipantSave: (conversationId: number, conversationParticipant: ConversationParticipant) => {
       return of(conversationParticipant);
     },
-    conversationParticipantSession: (conversationId: number) => { 
+    conversationParticipantSession: (conversationId: number) => {
       return of({});
     },
     conversationParticipantDelete: (conversationId: number, conversationParticipant: ConversationParticipant) => {

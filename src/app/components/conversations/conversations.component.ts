@@ -73,7 +73,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
       )
       .subscribe(() => {
 
-        if(!this._conversationService.hasWebSocketConnection()) {
+        if (!this._conversationService.hasWebSocketConnection()) {
           if (this.listComponent.list.paging.page === 1) {
             this.listComponent.reload();
           }
@@ -108,7 +108,8 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
             );
           },
           show: (conversation) => {
-            return conversation.accountConversationRoles.indexOf(ConversationRole.Admin) !== -1 && conversation.state === ConversationState.Open;
+            return conversation.accountConversationRoles
+              .indexOf(ConversationRole.Admin) !== -1 && conversation.state === ConversationState.Open;
           },
           remove: {
             title: 'Confirm',
@@ -176,7 +177,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
     };
 
 
-    //when notified that user has conversation updates then reload stuff
+    // when notified that user has conversation updates then reload stuff
     this._conversationService.onUnreadNotice(this.account.id)
     .subscribe((message) => {
       if (this.listComponent) {
@@ -214,7 +215,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
         Object.keys(data)
           .forEach((type) => {
             const filter = this.filters
-              .find((filter_: ConversationFilter) => (filter_.type === type)) as ConversationFilter;
+              .find((cFilter: ConversationFilter) => (cFilter.type === type)) as ConversationFilter;
 
             if (filter) {
               const item = data[type];

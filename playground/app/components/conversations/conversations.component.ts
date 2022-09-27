@@ -24,7 +24,7 @@ export class ConversationsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    //create web socket
+    // create web socket
     this._websocketService.connect();
   }
 }

@@ -113,7 +113,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
           return this.files.length ?
             forkJoin(
               this.files.map((fsFile: FsFile) => {
-                return this._conversationService.conversationConfig.conversationItemFilePost(conversationItem, fsFile.file);
+                return this._conversationService.conversationConfig.conversationItemFilePost(
+                  conversationItem,
+                  fsFile.file
+                );
               }),
             )
             : of(true);
@@ -220,11 +223,11 @@ export class ConversationComponent implements OnInit, OnDestroy {
           this.joined = response.conversationParticipants.conversationParticipants.length > 0;
           this.conversation = response.conversation;
 
-          //handle typing updates
+          // handle typing updates
           this._wsSubscriptions.push(this.conversationService.onTypingNotice(this.conversation.id)
             .subscribe((message) => {
-              if(message.data.isTyping) {
-                if(!this.typing.accounts.some((el) => el.id === message.data.accountId )) {
+              if (message.data.isTyping) {
+                if (!this.typing.accounts.some((el) => el.id === message.data.accountId )) {
                   this.typing.accounts.push({id: message.data.accountId, name: message.data.accountName});
                 }
               } else {
@@ -234,7 +237,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
             })
           );
 
-          //handle new messages
+          // handle new messages
           this._wsSubscriptions.push(this.conversationService.onMessageNotice(this.conversation.id)
             .subscribe((message) => {
               this.conversationChange();
@@ -254,10 +257,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
     });
 
 
-    if(this.typing.accounts.length==0) {
+    if (this.typing.accounts.length === 0) {
       this.typing.state = 'none';
       this.typing.name = '';
-    } else if(this.typing.accounts.length==1) {
+    } else if (this.typing.accounts.length === 1) {
       this.typing.state = 'single';
       this.typing.name = this.typing.accounts[0].name;
     } else {

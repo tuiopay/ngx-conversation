@@ -38,34 +38,52 @@ export class ConversationService {
 
 
   public hasWebSocketConnection(): boolean {
-    return this.conversationConfig.websocketService() && !this.conversationConfig.websocketService().isConnected();
+    return this.conversationConfig.websocketService() && this.conversationConfig.websocketService().isConnected();
   }
 
 
-  public sendMessageNotice(conversationId: number, accountId: number) {
+  public sendMessageNotice(conversationId: number, accountId: number): void {
+    if (this.hasWebSocketConnection()) {
       this.sendTypingStopNotice(conversationId, accountId);
       this.conversationConfig.websocketService().send(`conversation/${conversationId}/message`);
+    }
   }
 
   public sendTypingStartNotice(conversationId: number, accountId: number) {
-    this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, {isTyping: true})
+    if (this.hasWebSocketConnection()) {
+      this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, {isTyping: true})
+    }
   }
 
-  public sendTypingStopNotice(conversationId: number, accountId: number) {
-    this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, {isTyping: false})
+  public sendTypingStopNotice(conversationId: number, accountId: number): void {
+    if (this.hasWebSocketConnection()) {
+      this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, {isTyping: false})
+    }
   }
 
 
   public onUnreadNotice(accountId: number): Observable<any> {
-    return this.conversationConfig.websocketService().routeObservable(`account/${accountId}/unreadconversations`);
+    if (this.hasWebSocketConnection()) {
+      return this.conversationConfig.websocketService().routeObservable(`account/${accountId}/unreadconversations`);
+    } else {
+      return of({});
+    }
   }
 
   public onMessageNotice(conversationId: number): Observable<any> {
-    return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/message`);
+    if (this.hasWebSocketConnection()) {
+      return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/message`);
+    } else {
+      return of({});
+    }
   }
 
   public onTypingNotice(conversationId: number): Observable<any> {
-    return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/typing`);
+    if (this.hasWebSocketConnection()) {
+      return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/typing`);
+    } else {
+      return of({});
+    }
   }
 
 }

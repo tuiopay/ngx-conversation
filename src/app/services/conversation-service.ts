@@ -12,7 +12,20 @@ export class ConversationService {
 
   public conversationSettingTemplate: TemplateRef<any>;
   public conversationHeadingTemplate: TemplateRef<any>;
-  public conversationConfig: ConversationConfig;
+
+  public get conversationConfig(): ConversationConfig {
+    return this._conversationConfig;
+  }
+
+  public set conversationConfig(conversationConfig: ConversationConfig) {
+    conversationConfig.converstationSettings = {
+      showLeaveConverstation: true,
+      ...conversationConfig.converstationSettings,
+    };
+    this._conversationConfig = conversationConfig;
+  }
+
+  private _conversationConfig: ConversationConfig;
 
 
   public conversationGet(conversationId: number, query?: any, config?: RequestConfig): Observable<Conversation> {

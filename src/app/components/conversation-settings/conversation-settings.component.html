@@ -61,12 +61,12 @@
             Save
           </button>
           <button 
-              *ngIf="joined"
+              *ngIf="joined && showLeaveConverstation"
               mat-button
               (click)="leave()"
               color="warn" 
               type="button">
-            Leave Conversation
+              Leave Conversation
           </button>
           <button
               mat-button

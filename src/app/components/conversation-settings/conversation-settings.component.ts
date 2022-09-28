@@ -53,6 +53,10 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
     return this._conversationService;
   }
 
+  public get showLeaveConverstation(): boolean {
+    return this._conversationService.conversationConfig.converstationSettings?.showLeaveConverstation;
+  }
+
   public ngOnInit(): void {
     this.tab = this._data.tab;
     this.joined = this._data.joined;
@@ -60,6 +64,7 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
     this.ConversationStates = ConversationStates
       .filter((conversationState) => conversationState.value !== ConversationState.Deleted);
     this._conversationService = this._data.conversationService;
+    console.log(this._conversationService);
     this.conversation = {
       ...this._data.conversation,
     };

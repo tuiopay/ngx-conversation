@@ -32,4 +32,8 @@ export type ConversationConfig = {
   beforeConverstation?: (conversation: Conversation) => Observable<Conversation>;
 
   websocketService?: () => any;
+
+  converstationSettings?: {
+    showLeaveConverstation?: boolean;
+  }
 }

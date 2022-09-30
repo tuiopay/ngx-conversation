@@ -64,7 +64,7 @@
         people
       </mat-icon>
     </div>
-    <div class="last-conversation-item" *ngIf="conversation.lastConversationItem?.message">
+    <div class="last-conversation-item" *ngIf="conversation.lastConversationItem && conversation.lastConversationItem.message">
       <app-conversation-participant [showBadge]="true"
         [conversationParticipant]="conversation.lastConversationItem.conversationParticipant">
       </app-conversation-participant>

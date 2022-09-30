@@ -64,7 +64,7 @@
         people
       </mat-icon>
     </div>
-    <div class="last-conversation-item" *ngIf="conversation.lastConversationItem">
+    <div class="last-conversation-item" *ngIf="conversation.lastConversationItem?.message">
       <app-conversation-participant [showBadge]="true"
         [conversationParticipant]="conversation.lastConversationItem.conversationParticipant">
       </app-conversation-participant>
@@ -76,9 +76,9 @@
       </div>
     </div>
   </div>
-  <div 
+  <div
     *ngIf="!!conversation.unread"
-    class="unread" 
+    class="unread"
     [ngClass]="{ 'has-unread': !!conversation.unread }"
     matTooltip="Unread">
   </div>

@@ -80,7 +80,7 @@ export class ConversationService {
 
 
   public onUnreadNotice(accountId: number): Observable<any> {
-    if (this.hasWebSocketConnection()) {
+    if (this.conversationConfig.websocketService()) {
       return this.conversationConfig.websocketService().routeObservable(`account/${accountId}/unreadconversations`);
     } else {
       return EMPTY;
@@ -88,7 +88,7 @@ export class ConversationService {
   }
 
   public onMessageNotice(conversationId: number): Observable<any> {
-    if (this.hasWebSocketConnection()) {
+    if (this.conversationConfig.websocketService()) {
       return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/message`);
     } else {
       return EMPTY;
@@ -96,7 +96,7 @@ export class ConversationService {
   }
 
   public onTypingNotice(conversationId: number): Observable<any> {
-    if (this.hasWebSocketConnection()) {
+    if (this.conversationConfig.websocketService()) {
       return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/typing`);
     } else {
       return EMPTY;

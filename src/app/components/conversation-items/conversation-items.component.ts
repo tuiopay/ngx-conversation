@@ -7,7 +7,7 @@ import { FsGalleryConfig, FsGalleryItem, GalleryLayout, GalleryThumbnailSize, Mi
 import { FsPrompt } from '@firestitch/prompt';
 
 import { Observable, of, Subject, timer } from 'rxjs';
-import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { Account, Conversation, ConversationItem, ConversationParticipant } from '../../types';
 import { ConversationItemState, ConversationItemType, ConversationRole, ConversationState } from '../../enums';
@@ -153,6 +153,10 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   }
 
   public canDelete(conversationItem) {
+    if (conversationItem.state !== ConversationItemState.Active) {
+      return false;
+    }
+
     return conversationItem.conversationParticipant?.accountId === this.account.id ||
       this.conversation.accountConversationRoles.indexOf(ConversationRole.Admin) !== -1;
   }
@@ -168,7 +172,12 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
     })
       .pipe(
         switchMap(() => {
-          return this.conversationService.conversationConfig.conversationItemDelete(conversationItem);
+          return this.conversationService.conversationConfig.conversationItemDelete(conversationItem)
+          .pipe(
+            tap(() => {
+              this.conversationService.sendMessageNotice(this.conversation.id, this.account.id);
+            })
+          );
         }),
         takeUntil(this._destroy$),
       )

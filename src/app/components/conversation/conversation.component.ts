@@ -240,7 +240,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           // handle new messages
           this._wsSubscriptions.push(this.conversationService.onMessageNotice(this.conversation.id)
             .subscribe((message) => {
-              this.conversationChange();
+              this.conversationItems.reload();
             })
           );
 

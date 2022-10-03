@@ -2,6 +2,7 @@
   "/ws": {
     "target": "ws://localhost:9501/",
     "secure": false,
-    "ws": true
+    "ws": true,
+    "changeOrigin": true
   }
 }

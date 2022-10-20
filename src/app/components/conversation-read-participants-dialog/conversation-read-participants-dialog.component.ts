@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, 
+  Component, OnInit,
   ChangeDetectionStrategy, Inject,
 } from '@angular/core';
 
@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { map } from 'rxjs/operators';
 
-import { Account, ConversationItem } from '../../types';
+import { Account, Conversation, ConversationItem } from '../../types';
 import { ConversationService } from '../../services';
 import { FsListConfig } from '@firestitch/list';
 import { ItemType } from '@firestitch/filter';
@@ -25,6 +25,7 @@ export class ConversationReadParticipantsDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: {
+      conversation: Conversation,
       conversationItem: ConversationItem,
       conversationService: ConversationService,
       account: Account,
@@ -35,7 +36,7 @@ export class ConversationReadParticipantsDialogComponent implements OnInit {
     return this._conversationService;
   }
 
-  public ngOnInit(): void {    
+  public ngOnInit(): void {
     this.listConfig = {
       paging: {
         limit: 10,
@@ -50,6 +51,8 @@ export class ConversationReadParticipantsDialogComponent implements OnInit {
       status: true,
       fetch: (query) => {
         const conversationItem = this._data.conversationItem;
+        const conversation = this._data.conversation;
+
         query = {
           ...query,
           limit: 10,
@@ -58,7 +61,7 @@ export class ConversationReadParticipantsDialogComponent implements OnInit {
           accounts: true,
         }
 
-        return this._data.conversationService.conversationConfig.conversationParticipantsGet(conversationItem.conversationId, query)
+        return this._data.conversationService.conversationConfig.conversationParticipantsGet(conversation, query)
           .pipe(
             map((response) => ({ data: response.conversationParticipants, paging: response.paging })),
           );

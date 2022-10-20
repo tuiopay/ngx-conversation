@@ -79,7 +79,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this._dialogRef.addPanelClass('conversation');
 
     this._conversationService.conversationConfig
-      .conversationParticipantSession(this._data.conversation.id)
+      .conversationParticipantSession(this._data.conversation)
       .subscribe((conversationParticipant) => {
         this.sessionConversationParticipant = conversationParticipant;
         this._cdRef.markForCheck();
@@ -188,7 +188,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   public conversationJoin() {
-    this.conversationConfig.conversationParticipantAdd(this.conversation.id, {
+    this.conversationConfig.conversationParticipantAdd(this.conversation, {
       accountIds: [this.account.id]
     })
     .subscribe(() => {
@@ -212,7 +212,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           conversationParticipantAccounts: true,
         }),
         conversationParticipants: this.conversationConfig
-        .conversationParticipantsGet(this._data.conversation.id, {
+        .conversationParticipantsGet(this._data.conversation, {
           accountId: this.account.id,
         }),
       })

@@ -4,13 +4,14 @@ import {
   Input,
   OnInit,
   ChangeDetectorRef,
+  OnDestroy,
 } from '@angular/core';
 import { FsPopoverRef } from '@firestitch/popover';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { ConversationService } from '../../services';
-import { Account, ConversationItem, ConversationParticipant } from '../../types';
+import { Account, Conversation, ConversationItem, ConversationParticipant } from '../../types';
 
 
 @Component({
@@ -19,8 +20,9 @@ import { Account, ConversationItem, ConversationParticipant } from '../../types'
   styleUrls: ['./conversation-read-participants-popover.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationReadParticipantsPopoverComponent implements OnInit {
+export class ConversationReadParticipantsPopoverComponent implements OnInit, OnDestroy {
 
+  @Input() public conversation: Conversation;
   @Input() public conversationItem: ConversationItem;
   @Input() public conversationService: ConversationService;
   @Input() public account: Account;
@@ -30,7 +32,7 @@ export class ConversationReadParticipantsPopoverComponent implements OnInit {
   public readCount;
 
   private _destroy$ = new Subject();
-  
+
   public constructor(
     private _cdRef: ChangeDetectorRef,
   ) {}
@@ -38,14 +40,14 @@ export class ConversationReadParticipantsPopoverComponent implements OnInit {
   public ngOnInit(): void {
     forkJoin({
       readCount: this.conversationService.conversationConfig
-        .conversationItemsGet(this.conversationItem.conversationId, {
+        .conversationItemsGet(this.conversation, {
           conversationItemId: this.conversationItem.id,
           conversationParticipantsReadCounts: true,
           conversationParticipantsReadCountNotAccountId: this.account.id,
           conversationParticipantsReadCountNotCreator: true,
         }),
       conversationParticipants: this.conversationService.conversationConfig
-        .conversationParticipantsGet(this.conversationItem.conversationId, {
+        .conversationParticipantsGet(this.conversation, {
           maxReadConversationItemId: this.conversationItem.id,
           limit: 5,
           notAccountId: this.account.id,

@@ -30,10 +30,10 @@ export class ConversationsStaticService {
         state: ConversationState.Deleted,
       });
     },
-    conversationItemsGet: (conversationId: number, query?: any) => {
+    conversationItemsGet: (conversation: Conversation, query?: any) => {
       let conversationItems = conversationData.conversationItems
       .filter((conversationItem) => {
-        return conversationId === conversationItem.conversationId
+        return conversation.id === conversationItem.conversationId
       });
 
       if (query?.maxConversationItemId) {
@@ -46,7 +46,7 @@ export class ConversationsStaticService {
     conversationItemSave: (conversationItem: ConversationItem | ConversationItemMessage) => {
       return of(conversationItem);
     },
-    conversationParticipantAdd: (conversationId: number, data) => {
+    conversationParticipantAdd: (conversation: Conversation, data) => {
       return of(null)
     },
     conversationItemDelete: (conversationItem: ConversationItem | ConversationItemMessage) => {
@@ -58,22 +58,22 @@ export class ConversationsStaticService {
     conversationItemFileDownload: (conversationItem: ConversationItem | ConversationItemMessage, fileId: number) =>  {
 
     },
-    conversationParticipantsGet: (conversationId: number, query?: any) => {
+    conversationParticipantsGet: (conversation: Conversation, query?: any) => {
       return of(conversationParticipantData);
     },
-    conversationParticipantSave: (conversationId: number, conversationParticipant: ConversationParticipant) => {
+    conversationParticipantSave: (conversation: Conversation, conversationParticipant: ConversationParticipant) => {
       return of(conversationParticipant);
     },
-    conversationParticipantSession: (conversationId: number) => {
+    conversationParticipantSession: (conversation: Conversation) => {
       return of({});
     },
-    conversationParticipantDelete: (conversationId: number, conversationParticipant: ConversationParticipant) => {
+    conversationParticipantDelete: (conversation: Conversation, conversationParticipant: ConversationParticipant) => {
       return of(conversationParticipant);
     },
-    conversationParticipantBulk: (conversationId: number, data: any) => {
+    conversationParticipantBulk: (conversation: Conversation, data: any) => {
       return of({});
     },
-    accountsGet: (query?: any) => {
+    accountsGet: (conversation: Conversation, query?: any) => {
       return of(accountsData)
     },
   }

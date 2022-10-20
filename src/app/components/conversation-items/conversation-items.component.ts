@@ -77,7 +77,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
     const maxConversationItemId = this.conversationItems[0]?.id;
 
     this.conversationService.conversationConfig
-    .conversationItemsGet(this.conversation.id, {
+    .conversationItemsGet(this.conversation, {
       ...this.query,
       conversationParticipants: true,
       conversationParticipantAccounts: true,
@@ -133,7 +133,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
 
         const lastConversationItem = this.conversationItems[0];
         if (lastConversationItem && lastConversationItem !== this.lastConversationItem) {
-          this.conversationService.conversationConfig.conversationRead(this.conversation, lastConversationItem.id)
+          this.conversationService.conversationConfig.conversationRead(this.conversation, lastConversationItem)
           .subscribe();
         }
 
@@ -145,6 +145,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   public openReadParticipants(conversationItem) {
     this._dialog.open(ConversationReadParticipantsDialogComponent, {
       data: {
+        conversation: this.conversation,
         conversationItem,
         conversationService: this.conversationService,
         account: this.account,

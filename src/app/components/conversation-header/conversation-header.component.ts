@@ -1,6 +1,6 @@
 import {
   Component, OnDestroy,
-  ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, 
+  ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit,
 } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -43,7 +43,7 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
   private _destroy$ = new Subject();
 
   constructor(
-    private _dialog: MatDialog,    
+    private _dialog: MatDialog,
   ) {}
 
   public ngOnInit(): void {
@@ -81,7 +81,7 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
   public participantAdd(): void {
     this._dialog.open(ParticipantsAddComponent, {
       data: {
-        conversationId: this.conversation.id,
+        conversation: this.conversation,
         conversationService: this.conversationService,
       },
     })
@@ -93,7 +93,7 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
 
   public settingsOpen(tab = 'settings'): void {
     this._dialog.open(ConversationSettingsComponent, {
-      data: { 
+      data: {
         conversation: this.conversation,
         conversationService: this.conversationService,
         joined: this.joined,

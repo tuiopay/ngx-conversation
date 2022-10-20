@@ -8,7 +8,7 @@ import { forkJoin, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { ConversationService } from '../../services';
-import { Account, ConversationParticipant } from '../../types';
+import { Account, Conversation, ConversationParticipant } from '../../types';
 
 
 @Component({
@@ -19,7 +19,7 @@ import { Account, ConversationParticipant } from '../../types';
 export class ParticipantsAddComponent implements OnInit, OnDestroy {
 
   public accounts: Account[] = [];
-  public conversationId: number;
+  public conversation: Conversation;
 
   private _destroy$ = new Subject<void>();
   private _conversationService: ConversationService;
@@ -27,7 +27,7 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: {
       conversationParticipants: ConversationParticipant[];
-      conversationId: number;
+      conversation: Conversation;
       conversationService: ConversationService,
     },
     private _dialogRef: MatDialogRef<ParticipantsAddComponent>,
@@ -35,7 +35,7 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.conversationId = this._data.conversationId;
+    this.conversation = this._data.conversation;
     this._conversationService = this._data.conversationService;
   }
 
@@ -45,7 +45,7 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
   }
 
   public save = () => {
-    return this._conversationService.conversationConfig.conversationParticipantAdd(this.conversationId, 
+    return this._conversationService.conversationConfig.conversationParticipantAdd(this.conversation,
         {
           accountIds: this.accounts.map((account) => account.id),
         })
@@ -58,12 +58,14 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
   }
 
   public accountsFetch = (keyword) => {
-    return this._conversationService.conversationConfig.accountsGet({
-      keyword,
-      avatars: true,
-      notConversationId: this.conversationId,
-      limit: 30,
-    })
+    return this._conversationService.conversationConfig.accountsGet(
+      this.conversation,
+      {
+        keyword,
+        avatars: true,
+        notConversationId: this.conversation.id,
+        limit: 30,
+      })
       .pipe(
         map((response) => response.accounts)
       );

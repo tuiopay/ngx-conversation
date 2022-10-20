@@ -70,21 +70,7 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
     };
   }
 
-  public conversationParticipantFetch = (keyword) => {
-    return this.conversationService.conversationConfig.accountsGet({
-      keyword,
-      avatars: true,
-    })
-      .pipe(
-        map((response) => {
-          return response.accounts
-          .map((account) => ({
-            type: ConversationParticipantType.Account,
-            account,
-          }));
-        }),
-      );
-  };
+
 
   public save = (): Observable<any> => {
     return of(true)
@@ -115,14 +101,14 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
   }
 
   public leave(): void {
-    this.conversationService.conversationParticipantGet(this.conversation.id, {
+    this.conversationService.conversationParticipantGet(this.conversation, {
       accountId: this.account.id,
     })
     .pipe(
       filter((conversationParticipant) => !!conversationParticipant),
       switchMap((conversationParticipant) => {
         return this._conversationService.conversationConfig
-          .conversationParticipantDelete(this.conversation.id, conversationParticipant);
+          .conversationParticipantDelete(this.conversation, conversationParticipant);
       }),
     )
     .subscribe(() => {

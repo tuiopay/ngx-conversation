@@ -60,7 +60,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
             this._dialog.open(ParticipantsAddComponent, {
               data: {
                 conversationParticipants: this.conversationParticipants,
-                conversationId: this.conversation.id,
+                conversation: this.conversation,
                 conversationService: this.conversationService,
               },
             })
@@ -83,7 +83,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
             type: SelectionActionType.Action,
           },
         ],
-        actionSelected: (actionSelected: FsListActionSelected) => { 
+        actionSelected: (actionSelected: FsListActionSelected) => {
           return of(true)
           .pipe(
             switchMap(() => actionSelected.action.name === 'remove' ?
@@ -99,12 +99,12 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
               };
 
               return this.conversationService.conversationConfig
-                .conversationParticipantBulk(this.conversation.id, data)
+                .conversationParticipantBulk(this.conversation, data)
             }),
             tap(() => {
               this.reload();
             }),
-          );          
+          );
         },
         selectAll: false,
       },
@@ -112,7 +112,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
         {
           click: (conversationParticipant) => {
             return this.conversationService.conversationConfig
-              .conversationParticipantDelete(this.conversation.id, conversationParticipant);
+              .conversationParticipantDelete(this.conversation, conversationParticipant);
           },
           remove: true,
           label: 'Remove',
@@ -124,7 +124,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
           accounts: true,
         };
 
-        return this.conversationService.conversationConfig.conversationParticipantsGet(this.conversation.id, query)
+        return this.conversationService.conversationConfig.conversationParticipantsGet(this.conversation, query)
         .pipe(
           map((response) => ({ data: response.conversationParticipants, paging: response.paging })),
         );

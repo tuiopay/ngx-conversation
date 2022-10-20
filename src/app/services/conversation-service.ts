@@ -39,11 +39,11 @@ export class ConversationService {
   }
 
   public conversationParticipantGet(
-    conversationId: number,
+    conversation: Conversation,
     query?: any,
     config?: RequestConfig
   ): Observable<ConversationParticipant> {
-    return this.conversationConfig.conversationParticipantsGet(conversationId, {
+    return this.conversationConfig.conversationParticipantsGet(conversation, {
       ...query,
     }, config)
       .pipe(

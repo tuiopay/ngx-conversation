@@ -54,11 +54,11 @@ export class ConversationsApiService {
     conversationDelete: (conversation: Conversation) => {
       return this.delete('conversations', conversation);
     },
-    conversationRead: (conversation: Conversation, conversationItemId: number) => {
-      return this.post(`conversations/${conversation.id}/read`, { conversationItemId });
+    conversationRead: (conversation: Conversation, conversationItem: ConversationItem) => {
+      return this.post(`conversations/${conversation.id}/read`, { conversationItemId: conversationItem.id });
     },
-    conversationItemsGet: (conversationId: number, query?: any) => {
-      return this.get(`conversations/${conversationId}/items`, query);
+    conversationItemsGet: (conversation: Conversation, query?: any) => {
+      return this.get(`conversations/${conversation.id}/items`, query);
     },
     conversationItemSave: (conversationItem: ConversationItem | ConversationItemMessage) => {
       return this.save(`conversations/${conversationItem.conversationId}/items`, conversationItem)
@@ -78,31 +78,31 @@ export class ConversationsApiService {
     conversationItemFileDownload: (conversationItem: ConversationItem, conversationItemFileId: number) => {
       console.log(`conversations/${conversationItem.conversationId}/items/${conversationItem.id}/files/${conversationItemFileId}/download`);
     },
-    conversationParticipantsGet: (conversationId: number, query?: any) => {
-      return this.get(`conversations/${conversationId}/participants`, query);
+    conversationParticipantsGet: (conversation: Conversation, query?: any) => {
+      return this.get(`conversations/${conversation.id}/participants`, query);
     },
-    conversationParticipantAdd: (conversationId: number, data) => {
-      return this.post(`conversations/${conversationId}/participants`, data);
+    conversationParticipantAdd: (conversation: Conversation, data) => {
+      return this.post(`conversations/${conversation.id}/participants`, data);
     },
-    conversationParticipantSave: (conversationId: number, conversationParticipant: ConversationParticipant) => {
-      return this.save(`conversations/${conversationId}/participants`, conversationParticipant)
+    conversationParticipantSave: (conversation: Conversation, conversationParticipant: ConversationParticipant) => {
+      return this.save(`conversations/${conversation.id}/participants`, conversationParticipant)
         .pipe(
           map((response) => response.conversationParticipant),
         );
     },
-    conversationParticipantSession: (conversationId: number) => {
-      return this.get(`conversations/${conversationId}/participants/session`)
+    conversationParticipantSession: (conversation: Conversation) => {
+      return this.get(`conversations/${conversation.id}/participants/session`)
         .pipe(
           map((response) => response.conversationParticipant),
         );
     },
-    conversationParticipantDelete: (conversationId: number, conversationParticipant: ConversationParticipant) => {
-      return this.delete(`conversations/${conversationId}/participants`, conversationParticipant);
+    conversationParticipantDelete: (conversation: Conversation, conversationParticipant: ConversationParticipant) => {
+      return this.delete(`conversations/${conversation.id}/participants`, conversationParticipant);
     },
-    conversationParticipantBulk: (conversationId: number, data: any) => {
-      return this.post(`conversations/${conversationId}/participants/bulk`, data);
+    conversationParticipantBulk: (conversation: Conversation, data: any) => {
+      return this.post(`conversations/${conversation.id}/participants/bulk`, data);
     },
-    accountsGet: (query?: any) => {
+    accountsGet: (conversation: Conversation, query?: any) => {
       return this.get('accounts', query);
     },
     websocketService: () => {

@@ -20,4 +20,5 @@ export type Conversation = {
   participantsEnvironmentId?: number;
   conversationParticipantCount?: number;
   addAllParents?: boolean;
+  environment?: any;
 }

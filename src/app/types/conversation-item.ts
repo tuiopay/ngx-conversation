@@ -18,5 +18,6 @@ export type ConversationItem = {
   conversationParticipantsAddedCount?: number;
   conversationParticipantsRemovedCount?: number;
   conversationParticipantsReadCount?: number;
+  lastConversationItemParticipantAddRemove?: any;
 }
 

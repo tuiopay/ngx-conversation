@@ -64,13 +64,27 @@
         people
       </mat-icon>
     </div>
-    <div class="last-conversation-item" *ngIf="conversation.lastConversationItem && conversation.lastConversationItem.message">
-      <app-conversation-participant [showBadge]="true"
+    <div class="last-conversation-item" *ngIf="conversation.lastConversationItem">
+      <app-conversation-participant 
+        [showBadge]="true"
+        [showTooltip]="true"
         [conversationParticipant]="conversation.lastConversationItem.conversationParticipant">
       </app-conversation-participant>
-      <div class="message">
-        {{conversation.lastConversationItem.message}}
-        <div class="small">
+      <div class="summary">
+        <ng-container *ngIf="conversation.lastConversationItem.message; else lastFile">
+          <div class="message">
+            {{conversation.lastConversationItem.message}}
+          </div>
+        </ng-container>
+        <ng-template #lastFile>
+          <ng-container *ngIf="conversation.lastConversationItem.lastConversationItemFile">
+            <div class="file">
+              <mat-icon>insert_drive_file</mat-icon>
+              {{conversation.lastConversationItem.lastConversationItemFile.name}}
+            </div>
+          </ng-container>
+        </ng-template>
+        <div class="small create-date">
           <fs-date-ago [date]="conversation.lastConversationItem.createDate"></fs-date-ago>
         </div>
       </div>

@@ -46,7 +46,12 @@ export class ConversationsApiService {
       return this._api.get(`${this._url}conversations/stats`, query);
     },
     conversationSave: (conversation: Conversation) => {
-      return this.save('conversations', conversation)
+      const data: any = conversation;
+      if(!data.environmentId) {
+        data.environmentId = 12;
+      }
+      
+      return this.save('conversations', data)
         .pipe(
           map((response) => response.conversation),
         );

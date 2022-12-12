@@ -13,6 +13,10 @@ fs-list {
 
     .fs-list-table {
       .fs-list-row {
+        &:hover td {
+          background-color: transparent !important;
+        }
+
         cursor: pointer;
       }
     }
@@ -145,13 +149,35 @@ fs-list {
       margin-top: 7px;
       min-width: 0;
 
+      .summary {
+        margin-left: 6px;
+      }
+
+      .file {
+        display: flex;
+        align-items: center;
+
+        mat-icon {
+          transform: scale(.6);
+          width: 18px;
+          height: 18px;
+          margin-right: 2px;
+          color: #656565;
+          display: block;
+        }
+      }
+
       .message {        
         margin-top: -3px;
-        margin-left: 6px;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
         overflow: hidden;
+      }
+
+      .message + .create-date,
+      .file + .create-date {
+        margin-top: 3px;
       }
     }
   }

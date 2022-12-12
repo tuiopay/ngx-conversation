@@ -99,13 +99,26 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="conversationItem.type === ConversationItemType.ParticipantAdd || conversationItem.type === ConversationItemType.ParticipantRemoved || conversationItem.type === ConversationItemType.Start">
+    <ng-container *ngIf="
+        conversationItem.type === ConversationItemType.ParticipantAdd || 
+        conversationItem.type === ConversationItemType.ParticipantRemoved || 
+        conversationItem.type === ConversationItemType.Start">
       <div class="info">
         <ng-container *ngIf="conversationItem.type === ConversationItemType.ParticipantRemoved">
-          {{conversationItem.conversationParticipantsRemovedCount === 1 ? '1 Participant' : conversationItem.conversationParticipantsRemovedCount + ' Participants'}}  Removed
+          <ng-container *ngIf="conversationItem.lastConversationItemParticipantAddRemove?.account && conversationItem.conversationParticipantsRemovedCount === 1; else removed">
+            {{conversationItem.lastConversationItemParticipantAddRemove.account.name}} Removed
+          </ng-container>
+          <ng-template #removed>
+            {{conversationItem.conversationParticipantsRemovedCount === 1 ? '1 Participant' : conversationItem.conversationParticipantsRemovedCount + ' Participants'}}  Removed
+          </ng-template>
         </ng-container>
         <ng-container *ngIf="conversationItem.type === ConversationItemType.ParticipantAdd">
-          {{conversationItem.conversationParticipantsAddedCount === 1 ? '1 Participant' : conversationItem.conversationParticipantsAddedCount + ' Participants'}}  Added
+          <ng-container *ngIf="conversationItem.lastConversationItemParticipantAddRemove?.account && conversationItem.conversationParticipantsAddedCount === 1; else added">
+            {{conversationItem.lastConversationItemParticipantAddRemove.account.name}} Added
+          </ng-container>
+          <ng-template #added>
+            {{conversationItem.conversationParticipantsAddedCount === 1 ? '1 Participant' : conversationItem.conversationParticipantsAddedCount + ' Participants'}}  Added
+          </ng-template>
         </ng-container>
         <ng-container *ngIf="conversationItem.type === ConversationItemType.Start">
             Conversation Started

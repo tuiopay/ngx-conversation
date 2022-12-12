@@ -140,6 +140,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
           unreads: true,
           accountConversationRoles: true,
           conversationParticipantCounts: true,
+          lastConversationItemFiles: true,
           order: 'unread,desc;activityDate,desc',
         };
 

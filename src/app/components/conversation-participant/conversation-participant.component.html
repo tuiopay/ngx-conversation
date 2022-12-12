@@ -1,6 +1,8 @@
-<div class="row" [matTooltip]="name" [matTooltipDisabled]="!showTooltip">
+<div class="row">
   <fs-badge 
     [size]="size"
+    [matTooltip]="name" 
+    [matTooltipDisabled]="!showTooltip"
     *ngIf="showBadge"
     color="#ccc"       
     [image]="image">

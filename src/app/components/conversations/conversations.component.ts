@@ -48,7 +48,6 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
   public selectedFilter: ConversationFilter;
 
   private _destroy$ = new Subject<void>();
-  private _conversationConfig: ConversationConfig;
 
   constructor(
     private _dialog: MatDialog,
@@ -57,9 +56,20 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
     private _cdRef: ChangeDetectorRef,
   ) {}
 
+  public get conversationConfig(): ConversationConfig {
+    return this._conversationService.conversationConfig;
+  }
+
+  public get conversationService(): ConversationService {
+    return this._conversationService;
+  }
+
   public ngOnInit(): void {
     this._conversationService.conversationConfig = this.config;
-    this._conversationConfig = this.config;
+
+    this.conversationService.initStartConversation()
+      .subscribe(() => this._cdRef.markForCheck());
+
     this.filters = [
       { name: this.account.name, type: 'account', image: this.account.image.tiny },
       { name: 'Open', type: 'open', icon: 'chat' },
@@ -99,7 +109,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
       rowActions: [
         {
           click: (conversation) => {
-            return this._conversationConfig.conversationSave({
+            return this.conversationConfig.conversationSave({
               id: conversation.id,
               state: ConversationState.Closed,
             })
@@ -119,7 +129,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
         },
         {
           click: (data) => {
-            return this._conversationConfig.conversationDelete(data);
+            return this.conversationConfig.conversationDelete(data);
           },
           show: (conversation) => {
             return conversation.accountConversationRoles.indexOf(ConversationRole.Admin) !== -1;
@@ -158,7 +168,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
             break;
         }
 
-        return this._conversationConfig.conversationsGet(query)
+        return this.conversationConfig.conversationsGet(query)
           .pipe(
             tap(() => {
               this.loadStats();
@@ -211,7 +221,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
       closed: true,
     };
 
-    this._conversationConfig.conversationsStats(statsFilters)
+    this.conversationConfig.conversationsStats(statsFilters)
       .subscribe((data) => {
         Object.keys(data)
           .forEach((type) => {
@@ -254,7 +264,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
       name: format(new Date()),
     };
 
-    this._conversationConfig.conversationSave(conversation)
+    this.conversationConfig.conversationSave(conversation)
       .pipe(
         takeUntil(this._destroy$),
       )

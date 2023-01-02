@@ -28,13 +28,18 @@
         <span>{{ selectedFilter.name }}</span>
       </div>
       <div class="actions">
-        <button
-            mat-raised-button
-            color="primary"
-            (click)="conversationStart()"
-            type="button">
-          Start
-        </button>
+        <ng-container *ngIf="conversationService.startConversation.show">
+          <span [matTooltip]="conversationService.startConversation.tooltip">
+            <button
+                mat-raised-button
+                color="primary"
+                [disabled]="conversationService.startConversation.disabled"              
+                (click)="conversationStart()"
+                type="button">
+              Start
+            </button>
+          </span>
+        </ng-container>
       </div>
     </div>
     <fs-list [config]="listConfig">

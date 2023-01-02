@@ -54,7 +54,7 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
   }
 
   public get showLeaveConverstation(): boolean {
-    return this._conversationService.conversationConfig.converstationSettings?.showLeaveConverstation;
+    return this._conversationService.leaveConverstation.show;
   }
 
   public ngOnInit(): void {

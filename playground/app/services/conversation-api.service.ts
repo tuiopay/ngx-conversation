@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { FsApi } from '@firestitch/api';
 import { FsWebSocket } from '@firestitch/web-socket';
+import { Observable, of } from 'rxjs';
 
 import { map } from 'rxjs/operators';
 
@@ -112,6 +113,22 @@ export class ConversationsApiService {
     },
     websocketService: () => {
       return this._websocketService;
+    },
+
+    leaveConversation: {
+      show: () => true,
+    },
+    
+    startConversation: {
+      show: () => {
+        return of(true);
+      },
+      disabled: () => {
+        return of(true);
+      },
+      tooltip: () => {
+        return of('This is a tooltip');
+      }
     }
   }
 

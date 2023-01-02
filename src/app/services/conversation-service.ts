@@ -1,8 +1,8 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { RequestConfig } from '@firestitch/api';
 
-import { EMPTY, Observable, of } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { EMPTY, forkJoin, Observable, of } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 
 import { ConversationConfig, Conversation, ConversationParticipant } from '../types';
 
@@ -12,21 +12,27 @@ export class ConversationService {
 
   public conversationSettingTemplate: TemplateRef<any>;
   public conversationHeadingTemplate: TemplateRef<any>;
+  public startConversation = {
+    disabled: false,
+    show: true,
+    tooltip: '',
+  };
+
+  public leaveConverstation: {
+    show?: boolean,
+  };
+
+  private _conversationConfig: ConversationConfig;
 
   public get conversationConfig(): ConversationConfig {
     return this._conversationConfig;
   }
 
   public set conversationConfig(conversationConfig: ConversationConfig) {
-    conversationConfig.converstationSettings = {
-      showLeaveConverstation: true,
-      ...conversationConfig.converstationSettings,
+    this._conversationConfig = {
+      ...conversationConfig,
     };
-    this._conversationConfig = conversationConfig;
   }
-
-  private _conversationConfig: ConversationConfig;
-
 
   public conversationGet(conversationId: number, query?: any, config?: RequestConfig): Observable<Conversation> {
     return this.conversationConfig.conversationsGet({
@@ -51,13 +57,47 @@ export class ConversationService {
       );
   }
 
+  public initStartConversation(): Observable<any> {
+    const startConversation = this.conversationConfig.startConversation || {};
+    const leaveConversation = this.conversationConfig.leaveConversation || {};
+    const startConversationShow = startConversation.show ? startConversation.show() : undefined;
+    const startConversationDisabled = startConversation.disabled ? startConversation.disabled() : undefined;
+    const startConversationTooltip = startConversation.tooltip ? startConversation.tooltip() : undefined;
+    const leaveConversationShow = leaveConversation.show ? leaveConversation.show() : undefined;
 
+    const configs$: { 
+      startConversationShow?: Observable<boolean>,
+      startConversationDisabled?: Observable<boolean>,
+      startConversationTooltip?: Observable<string>,
+      leaveConversationShow?: Observable<boolean>,
+      dummy?: Observable<boolean>,
+    } = {
+      startConversationShow: startConversationShow instanceof Observable ? startConversationShow : of(startConversationShow),
+      startConversationDisabled: startConversationDisabled instanceof Observable ? startConversationDisabled : of(startConversationDisabled),
+      startConversationTooltip: startConversationTooltip instanceof Observable ? startConversationTooltip : of(startConversationTooltip),
+      leaveConversationShow: leaveConversationShow instanceof Observable ? leaveConversationShow : of(leaveConversationShow),
+      dummy: of(true),
+    };
 
+    return forkJoin(configs$)
+      .pipe(
+        filter((config: any) => config.show ?? true),
+        tap((config) => {
+          this.startConversation = {
+            show: config.startConversationShow ?? true,
+            disabled: config.startConversationDisabled ?? false,
+            tooltip: config.startConversationTooltip,
+          };
+          this.leaveConverstation = {
+            show: config.leaveConversationShow,
+          }
+        }), 
+      );
+  }
 
   public hasWebSocketConnection(): boolean {
     return this.conversationConfig.websocketService() && this.conversationConfig.websocketService().isConnected();
   }
-
 
   public sendMessageNotice(conversationId: number, accountId: number): void {
     if (this.hasWebSocketConnection()) {

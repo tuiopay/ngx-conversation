@@ -31,7 +31,13 @@ export type ConversationConfig = {
 
   websocketService?: () => any;
 
-  converstationSettings?: {
-    showLeaveConverstation?: boolean;
+  leaveConversation?: {
+    show?: () => Observable<boolean> | boolean,
+  },
+
+  startConversation?: {
+    disabled?: () => Observable<boolean> | boolean,
+    tooltip?: () => Observable<string> | string,
+    show?: () => Observable<boolean> | boolean,
   }
 }

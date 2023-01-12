@@ -65,7 +65,7 @@ export class ConversationService {
     const startConversationTooltip = startConversation.tooltip ? startConversation.tooltip() : undefined;
     const leaveConversationShow = leaveConversation.show ? leaveConversation.show() : undefined;
 
-    const configs$: { 
+    const configs$: {
       startConversationShow?: Observable<boolean>,
       startConversationDisabled?: Observable<boolean>,
       startConversationTooltip?: Observable<string>,
@@ -91,7 +91,7 @@ export class ConversationService {
           this.leaveConverstation = {
             show: config.leaveConversationShow,
           }
-        }), 
+        }),
       );
   }
 
@@ -99,9 +99,11 @@ export class ConversationService {
     return this.conversationConfig.websocketService() && this.conversationConfig.websocketService().isConnected();
   }
 
-  public sendMessageNotice(conversationId: number, accountId: number): void {
+  public sendMessageNotice(conversationId: number, accountId: number = null): void {
     if (this.hasWebSocketConnection()) {
-      this.sendTypingStopNotice(conversationId, accountId);
+      if(accountId)
+        this.sendTypingStopNotice(conversationId, accountId);
+
       this.conversationConfig.websocketService().send(`conversation/${conversationId}/message`);
     }
   }

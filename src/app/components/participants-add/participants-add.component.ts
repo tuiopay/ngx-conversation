@@ -53,6 +53,8 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
         tap((response) => {
           this._message.success('Saved Changes');
           this._dialogRef.close(response);
+
+          this._conversationService.sendMessageNotice(this.conversation.id);
         }),
       );
   }

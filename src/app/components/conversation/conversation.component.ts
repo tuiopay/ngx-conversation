@@ -3,15 +3,13 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, TemplateRef, Input, Output, EventEmitter,
 } from '@angular/core';
 
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
 import { FsMessage } from '@firestitch/message';
 import { FsFormDirective } from '@firestitch/form';
 import { FsFile } from '@firestitch/file';
 import { list } from '@firestitch/common';
 
-import { forkJoin, Observable, of, Subject, Subscription, throwError } from 'rxjs';
-import { finalize, map, switchMap, tap } from 'rxjs/operators';
+import { forkJoin, Observable, of, Subject, throwError } from 'rxjs';
+import { finalize, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
 import { Account, Conversation, ConversationConfig } from '../../types';
@@ -29,8 +27,8 @@ import { MatInput } from '@angular/material/input';
 })
 export class ConversationComponent implements OnInit, OnDestroy {
 
-  @Input() public conversation: Conversation;
   @Input() public account: Account;
+  @Input() public conversation: Conversation;
 
   @Output() public conversationClose = new EventEmitter();
 
@@ -50,11 +48,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
   public ConversationStates = ConversationStates;
   public conversationStates = list(ConversationStates, 'name', 'value');
   public joined = false;
+  public inited = false;
   public typing = {state: 'none', name: '', accounts: []};
 
   private _destroy$ = new Subject();
-  private _wsSubscriptions: Subscription[] = [];
-
 
   constructor(
     private _cdRef: ChangeDetectorRef,
@@ -71,17 +68,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this._conversationService.conversationConfig
-      .conversationParticipantSession(this.conversation)
-      .subscribe((conversationParticipant) => {
-        this.sessionConversationParticipant = conversationParticipant;
-        this._cdRef.markForCheck();
-      });
-
-    this.loadConversation$()
-      .subscribe(() => {
-        this._cdRef.markForCheck();
-      });
+    this.loadConversation(this.conversation);
   }
 
   public saveConversation(conversation): Observable<any> {
@@ -154,25 +141,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
       );
   };
 
-
-  private _unsubscribe(): void {
-    this._wsSubscriptions.forEach((subscription) => subscription.unsubscribe());
-  }
-
   public ngOnDestroy(): void {
-    this._unsubscribe();
-
     this._destroy$.next();
     this._destroy$.complete();
-  }
-
-  public loadConversation() {
-    this.loadConversation$()
-      .subscribe();
-  }
-
-  public loadConversationItems() {
-    this.conversationItems.load();
   }
 
   public filterChanged(event) {
@@ -184,20 +155,21 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.conversationConfig.conversationParticipantAdd(this.conversation, {
       accountIds: [this.account.id]
     })
-    .subscribe(() => {
-      this.conversationChange();
-    });
+      .pipe(
+        switchMap(() => this.loadConversation$(this.conversation)),
+      )
+      .subscribe();
   }
 
-  public conversationChange(): void {
-    this.loadConversation();
-    this.loadConversationItems();
+  public conversationReload() {
+    this.loadConversation$(this.conversation)
+      .subscribe();
   }
 
-  public loadConversation$(): Observable<Conversation> {
+  public loadConversation$(conversation: Conversation): Observable<{ conversation: Conversation, conversationParticipants: any }> {
     return forkJoin({
       conversation: this._conversationService
-        .conversationGet(this.conversation.id, {
+        .conversationGet(conversation.id, {
           conversationParticipantCounts: true,
           conversationParticipants: true,
           conversationParticipantLimit: 3,
@@ -205,19 +177,31 @@ export class ConversationComponent implements OnInit, OnDestroy {
           conversationParticipantAccounts: true,
         }),
         conversationParticipants: this.conversationConfig
-        .conversationParticipantsGet(this.conversation, {
+        .conversationParticipantsGet(conversation, {
           accountId: this.account.id,
         }),
       })
       .pipe(
-        tap((response) => {
-          this._unsubscribe();
+        tap(({ conversation, conversationParticipants }) => {
+          this.joined = conversationParticipants.conversationParticipants.length > 0;
+          this.conversation = conversation;
+          this._cdRef.markForCheck();
+        })
+      );
+  }
 
-          this.joined = response.conversationParticipants.conversationParticipants.length > 0;
-          this.conversation = response.conversation;
+  public loadConversation(conversation: Conversation) {
+    this.loadConversation$(conversation)
+      .pipe(
+        tap(() => {
+          this.inited = true;
+          this._cdRef.markForCheck();
 
           // handle typing updates
-          this._wsSubscriptions.push(this.conversationService.onTypingNotice(this.conversation.id)
+          this.conversationService.onTypingNotice(this.conversation.id)
+            .pipe(
+              takeUntil(this._destroy$),
+            )
             .subscribe((message) => {
               if (message.data.isTyping) {
                 if (!this.typing.accounts.some((el) => el.id === message.data.accountId )) {
@@ -227,20 +211,19 @@ export class ConversationComponent implements OnInit, OnDestroy {
                 this.typing.accounts = this.typing.accounts.filter((el) => el.id !== message.data.accountId );
               }
               this._updateTypingState();
-            })
-          );
+            });
 
           // handle new messages
-          this._wsSubscriptions.push(this.conversationService.onMessageNotice(this.conversation.id)
-            .subscribe((message) => {
+          this.conversationService.onMessageNotice(this.conversation.id)
+          .pipe(
+            takeUntil(this._destroy$),
+          ) 
+            .subscribe(() => {
               this.conversationItems.reload();
-            })
-          );
-
-          this._cdRef.markForCheck();
+            });
         }),
-        map((response) => response.conversation) ,
-      );
+      )
+        .subscribe();
   }
 
   private _updateTypingState() {

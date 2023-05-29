@@ -1,3 +1,8 @@
+:host {
+  height: 100%;
+  display: block;
+}
+
 .container-pane {
   height: 100%;
   box-sizing: border-box;
@@ -7,6 +12,9 @@
   .conversations-pane {
     width: 500px;
     max-width: 100%;
+    height: 100%;
+    display: block;
+    overflow: auto;
   }
 
   .conversation-pane {
@@ -36,6 +44,10 @@ mat-tab-group .unread {
 
 @media (max-width: 600px) {
   .container-pane {
+    .conversation-pane {
+      margin: 0;
+    }
+
     &.conversation-open {
       .conversations-pane {
         display: none;

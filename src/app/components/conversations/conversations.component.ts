@@ -1,17 +1,14 @@
 import {
   Component, OnInit, 
-  ChangeDetectionStrategy, OnDestroy, Input, ChangeDetectorRef, TemplateRef, ContentChild, AfterContentInit,
+  ChangeDetectionStrategy, OnDestroy, Input, ChangeDetectorRef, TemplateRef, ContentChild, AfterContentInit, ViewChild,
 } from '@angular/core';
-
-import { MatDialog } from '@angular/material/dialog';
-
-import { FsMessage } from '@firestitch/message';
 
 import { Subject } from 'rxjs';
 
 import { Account, Conversation, ConversationConfig } from '../../types';
 import { ConversationService } from '../../services';
 import { ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective } from '../../directives';
+import { ConversationComponent } from '../conversation/conversation.component';
 
 
 @Component({
@@ -32,16 +29,14 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
   @ContentChild(ConversationColumnDirective, { read: TemplateRef })
   public conversationColumnTemplate: TemplateRef<any>;
 
+  public conversation: Conversation;
+
   @Input() public config: ConversationConfig;
   @Input() public account: Account;
-
-  public conversation: Conversation;
 
   private _destroy$ = new Subject<void>();
 
   constructor(
-    private _dialog: MatDialog,
-    private _message: FsMessage,
     private _conversationService: ConversationService,
     private _cdRef: ChangeDetectorRef,
   ) {}
@@ -72,7 +67,14 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
   }
 
   public conversationOpen(conversation: Conversation): void {
-    this.conversation = conversation;
+    if(this.conversation?.id !== conversation.id) {
+      this.conversation = null;
+      this._cdRef.markForCheck();
+      setTimeout(() => {
+        this.conversation = conversation;
+        this._cdRef.markForCheck();
+      });
+    }
   }
 
 }

@@ -72,14 +72,13 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-
         if (!this._conversationService.hasWebSocketConnection()) {
           if (this.listComponent.list.paging.page === 1) {
             this.reload();
           }
-
-          this.loadStats();
         }
+        
+        this.loadStats();
       });
 
 
@@ -200,11 +199,10 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
 
     // when notified that user has conversation updates then reload stuff
     this._conversationService.onUnreadNotice(this.account.id)
-    .subscribe((message) => {
+    .subscribe(() => {
       if (this.listComponent) {
         this.listComponent.reload();
       }
-
     });
   }
 

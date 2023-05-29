@@ -11,8 +11,9 @@
     <div class="conversation-pane">
       <ng-container *ngIf="conversation">
         <app-conversation 
-          (conversationClose)="conversation = null"
-          [conversation]="conversation">
+          [account]="account"
+          [conversation]="conversation"
+          (conversationClose)="conversation = null">
         </app-conversation>
       </ng-container>
     </div>

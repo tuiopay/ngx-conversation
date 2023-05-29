@@ -129,27 +129,27 @@ export class ConversationService {
   }
 
   public onUnreadNotice(accountId: number): Observable<any> {
-    if (this.conversationConfig.websocketService()) {
-      return this.conversationConfig.websocketService().routeObservable(`account/${accountId}/unreadconversations`);
-    } else {
-      return EMPTY;
+    if (!this.conversationConfig.websocketService()) {
+      return of(null);
     }
+    
+    return this.conversationConfig.websocketService().routeObservable(`account/${accountId}/unreadconversations`);
   }
 
   public onMessageNotice(conversationId: number): Observable<any> {
     if (this.conversationConfig.websocketService()) {
-      return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/message`);
-    } else {
-      return EMPTY;
-    }
+      return of(null);
+    } 
+
+    return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/message`);
   }
 
   public onTypingNotice(conversationId: number): Observable<any> {
     if (this.conversationConfig.websocketService()) {
-      return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/typing`);
-    } else {
-      return EMPTY;
+      return of(null);
     }
+
+    return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/typing`);
   }
 
 }

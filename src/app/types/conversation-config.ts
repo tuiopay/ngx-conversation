@@ -30,6 +30,7 @@ export type ConversationConfig = {
   accountsGet: (conversation: Conversation, query: any, config?: RequestConfig) => Observable<{ accounts: Account[], paging?: any }>;
 
   websocketService?: () => any;
+  mapAccountAvatar?: (account) => string;
 
   leaveConversation?: {
     show?: () => Observable<boolean> | boolean,

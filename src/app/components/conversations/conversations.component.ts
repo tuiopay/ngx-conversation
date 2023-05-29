@@ -1,20 +1,15 @@
 import {
-  Component, OnInit, ViewChild,
+  Component, OnInit, 
   ChangeDetectionStrategy, OnDestroy, Input, ChangeDetectorRef, TemplateRef, ContentChild, AfterContentInit,
 } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { FsListComponent, FsListConfig } from '@firestitch/list';
 import { FsMessage } from '@firestitch/message';
-import { format } from '@firestitch/date';
 
-import { map, takeUntil, tap } from 'rxjs/operators';
-import { Subject, timer } from 'rxjs';
+import { Subject } from 'rxjs';
 
-import { ConversationCreateComponent, ConversationComponent } from '../../components';
-import { Account, ConversationConfig, ConversationFilter, Conversation } from '../../types';
-import { ConversationRole, ConversationState } from '../../enums';
+import { Account, Conversation, ConversationConfig } from '../../types';
 import { ConversationService } from '../../services';
 import { ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective } from '../../directives';
 
@@ -26,7 +21,7 @@ import { ConversationColumnDirective, ConversationHeaderDirective, ConversationS
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ConversationService],
 })
-export class ConversationsComponent implements OnInit, OnDestroy, AfterContentInit {
+export class ConversationsComponent implements OnInit, OnDestroy, AfterContentInit, OnInit {
 
   @ContentChild(ConversationHeaderDirective, { read: TemplateRef })
   public conversationHeadingTemplate: TemplateRef<any>;
@@ -37,15 +32,10 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
   @ContentChild(ConversationColumnDirective, { read: TemplateRef })
   public conversationColumnTemplate: TemplateRef<any>;
 
-  @ViewChild(FsListComponent)
-  public listComponent: FsListComponent;
-
   @Input() public config: ConversationConfig;
   @Input() public account: Account;
 
-  public listConfig: FsListConfig;
-  public filters: ConversationFilter[] = [];
-  public selectedFilter: ConversationFilter;
+  public conversation: Conversation;
 
   private _destroy$ = new Subject<void>();
 
@@ -66,136 +56,9 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
 
   public ngOnInit(): void {
     this._conversationService.conversationConfig = this.config;
-
+    
     this.conversationService.initStartConversation()
       .subscribe(() => this._cdRef.markForCheck());
-
-    this.filters = [
-      { name: this.account.name, type: 'account', image: this.account.image.tiny },
-      { name: 'Open', type: 'open', icon: 'chat' },
-      { name: 'Closed', type: 'closed', icon: 'chat_bubble' },
-    ];
-    this.selectedFilter = this.filters[0];
-
-    timer(15000, 15000)
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-
-        if (!this._conversationService.hasWebSocketConnection()) {
-          if (this.listComponent.list.paging.page === 1) {
-            this.listComponent.reload();
-          }
-
-          this.loadStats();
-        }
-      });
-
-
-    this.loadStats();
-    this.listConfig = {
-      status: false,
-      loadMore: true,
-      queryParam: false,
-      rowEvents: {
-        click: (event) => {
-          this.conversationOpen(event.row);
-        },
-      },
-      noResults: {
-        message: 'No conversations found',
-      },
-      rowActions: [
-        {
-          click: (conversation) => {
-            return this.conversationConfig.conversationSave({
-              id: conversation.id,
-              state: ConversationState.Closed,
-            })
-            .pipe(
-              tap(() => this.loadStats()),
-            );
-          },
-          show: (conversation) => {
-            return conversation.accountConversationRoles
-              .indexOf(ConversationRole.Admin) !== -1 && conversation.state === ConversationState.Open;
-          },
-          remove: {
-            title: 'Confirm',
-            template: 'Are you sure you would like to close this conversation?',
-          },
-          label: 'Close',
-        },
-        {
-          click: (data) => {
-            return this.conversationConfig.conversationDelete(data);
-          },
-          show: (conversation) => {
-            return conversation.accountConversationRoles.indexOf(ConversationRole.Admin) !== -1;
-          },
-          remove: {
-            title: 'Confirm',
-            template: 'Are you sure you would like to delete this conversation?',
-          },
-          label: 'Delete',
-        },
-      ],
-      fetch: (query) => {
-        query = {
-          ...query,
-          lastConversationItems: true,
-          lastConversationItemConversationParticipants: true,
-          lastConversationItemConversationParticipantsAccounts: true,
-          unreads: true,
-          accountConversationRoles: true,
-          conversationParticipantCounts: true,
-          lastConversationItemFiles: true,
-          order: 'unread,desc;activityDate,desc',
-        };
-
-        switch (this.selectedFilter.type) {
-          case 'account':
-            query.conversationParticipantAccountId = this.account.id;
-            break;
-
-          case 'closed':
-            query.state = ConversationState.Closed;
-            break;
-
-          case 'open':
-            query.state = ConversationState.Open;
-            break;
-        }
-
-        return this.conversationConfig.conversationsGet(query)
-          .pipe(
-            tap(() => {
-              this.loadStats();
-            }),
-            map((response) => {
-              return {
-                data: response.conversations
-                .map((conversation) => {
-                  return {
-                    ...conversation,
-                  };
-                }), paging: response.paging
-              };
-            }),
-          );
-      },
-    };
-
-
-    // when notified that user has conversation updates then reload stuff
-    this._conversationService.onUnreadNotice(this.account.id)
-    .subscribe((message) => {
-      if (this.listComponent) {
-        this.listComponent.reload();
-      }
-
-    });
   }
 
   public ngAfterContentInit(): void {
@@ -203,100 +66,13 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
     this._conversationService.conversationHeadingTemplate = this.conversationHeadingTemplate;
   }
 
-  public conversationParticipantsChange(): void {
-    this.listComponent.reload();
-  }
-
-  public filterSelect(filter): void {
-    this.selectedFilter = filter;
-    if (this.listComponent) {
-      this.listComponent.reload();
-    }
-  }
-
-  public loadStats(): void {
-    const statsFilters: any = {
-      account: true,
-      open: true,
-      closed: true,
-    };
-
-    this.conversationConfig.conversationsStats(statsFilters)
-      .subscribe((data) => {
-        Object.keys(data)
-          .forEach((type) => {
-            const filter = this.filters
-              .find((cFilter: ConversationFilter) => (cFilter.type === type)) as ConversationFilter;
-
-            if (filter) {
-              const item = data[type];
-              filter.unread = item.unread;
-              filter.count = item.count;
-            }
-          });
-
-        this._cdRef.markForCheck();
-      });
-  }
-
-  public conversationCreate(conversation: Conversation = { id: null }): void {
-    const dialogRef = this._dialog.open(ConversationCreateComponent, {
-      autoFocus: true,
-      data: { conversation },
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe((response) => {
-        if (response) {
-          this.listComponent.reload();
-          this.conversationOpen(response);
-        }
-      });
-  }
-
-  public conversationStart(conversation: Conversation = {}): void {
-    conversation = {
-      ...conversation,
-      name: format(new Date()),
-    };
-
-    this.conversationConfig.conversationSave(conversation)
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe((response) => {
-        this._message.success('Saved Changes');
-        this.listComponent.reload();
-        this.conversationOpen(response);
-      });
-  }
-
-  public conversationOpen(conversation: Conversation): void {
-    this._dialog.open(ConversationComponent, {
-      autoFocus: false,
-      id: 'converstationDialog',
-      data: {
-        conversation,
-        conversationService: this._conversationService,
-        account: this.account,
-      },
-    })
-      .afterClosed()
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.listComponent.reload();
-      });
-  }
-
   public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  public conversationOpen(conversation: Conversation): void {
+    this.conversation = conversation;
   }
 
 }

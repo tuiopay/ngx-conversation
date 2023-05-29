@@ -3,185 +3,20 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
-}
 
-fs-list {
-  ::ng-deep {
-    table {
-      table-layout: fixed;
-    }
-
-    .fs-list-table {
-      .fs-list-row {
-        &:hover td {
-          background-color: transparent !important;
-        }
-
-        cursor: pointer;
-      }
-    }
+  .conversations-pane {
+    width: 500px;
+    max-width: 100%;
   }
-}
 
-.sidenav-pane {
-  width: 220px;
-  padding-right: 30px;
-
-  .filters {
-    .filter {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-
-      &.selected a {
-        font-weight: bold;
-      }
-      
-      a {
-        display: flex;
-        flex-grow: 1;
-        align-items: center;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        display: block;
-        overflow: hidden;  
-        margin-left: 5px;    
-      }
-
-      .count {
-        text-align: right;
-        margin-left: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-
-        .unread {
-          margin-right: 5px;
-        }
-      }
-
-      .avatar {
-        mat-icon {
-          line-height: normal;
-          display: flex;
-          color: #656565;
-        }
-      }
-    }
-  }
-}
-
-.conversation-pane {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  height: 100%;
-  overflow: auto;
-
-  .filter-heading {
+  .conversation-pane {
     display: flex;
-    margin-bottom: 10px;  
-  
-    .filter {
-      display: flex;
-      align-items: center;
-      font-size: 110%;
-    }
-
-    .avatar {
-      margin-right: 5px;
-      display: flex;
-
-      mat-icon {
-        line-height: normal;
-        color: #656565;
-      }
-    }
-
-    .actions {
-      display: flex;
-      flex-grow: 1;
-      justify-content: flex-end
-    }
+    flex: 1;
+    margin-left: 30px;
   }
 }
 
 :host ::ng-deep {
-  .fs-list tr:first-child td {
-    border-top: none !important;
-  }
-
-  .fs-list tr:last-child td {
-    border-bottom: none !important;
-  }
-
-  .col-converstaion {
-    .converstaion-row {
-      display: flex;
-      align-items: center;
-    }
-
-    .converstaion {
-      display: flex;
-      flex-grow: 1;
-      flex-direction: column;
-      min-width: 0;
-
-      .name {
-        display: flex;
-        align-items: center;
-      
-        a {
-          font-weight: bold;
-        }
-
-        .count {
-          margin-left: 2px;
-          display: flex;
-          transform: scale(.7);
-          color: #656565;
-        }
-      }
-    }
-
-    .last-conversation-item {
-      display: flex;
-      margin-top: 7px;
-      min-width: 0;
-
-      .summary {
-        margin-left: 6px;
-      }
-
-      .file {
-        display: flex;
-        align-items: center;
-
-        mat-icon {
-          transform: scale(.6);
-          width: 18px;
-          height: 18px;
-          margin-right: 2px;
-          color: #656565;
-          display: block;
-        }
-      }
-
-      .message {        
-        margin-top: -3px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        overflow: hidden;
-      }
-
-      .message + .create-date,
-      .file + .create-date {
-        margin-top: 3px;
-      }
-    }
-  }
-
   .unread {
     height: 10px;
     width: 10px;
@@ -195,10 +30,23 @@ fs-list {
   }
 }
 
+mat-tab-group .unread {
+  margin-left: 5px;
+}
+
 @media (max-width: 600px) {
-  :host {
-    .container-pane {
-      flex-direction: column;
+  .container-pane {
+    &.conversation-open {
+      .conversations-pane {
+        display: none;
+      }
+    }
+
+    
+    &:not(.conversation-open) {
+      .conversation-pane {
+        display: none;
+      }
     }
   }
 }

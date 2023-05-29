@@ -15,7 +15,7 @@ import { ConversationConfig, Conversation, ConversationItem,
 })
 export class ConversationsApiService {
 
-  private _url = 'https://tuiopay.local.firestitch.com/api/';
+  private _url = 'https://cure.local.firestitch.com/api/';
 
   public constructor(
     private _api: FsApi,
@@ -112,6 +112,7 @@ export class ConversationsApiService {
       return this.get('accounts', query);
     },
     websocketService: () => {
+      return null;
       return this._websocketService;
     },
 
@@ -124,7 +125,7 @@ export class ConversationsApiService {
         return of(true);
       },
       disabled: () => {
-        return of(true);
+        return of(false);
       },
       tooltip: () => {
         return of('This is a tooltip');

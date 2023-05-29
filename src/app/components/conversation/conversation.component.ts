@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, TemplateRef,
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, TemplateRef, Input, Output, EventEmitter,
 } from '@angular/core';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -22,11 +22,17 @@ import { MatInput } from '@angular/material/input';
 
 
 @Component({
+  selector: 'app-conversation',
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConversationComponent implements OnInit, OnDestroy {
+
+  @Input() public conversation: Conversation;
+  @Input() public account: Account;
+
+  @Output() public conversationClose = new EventEmitter();
 
   @ViewChild(ConversationItemsComponent)
   public conversationItems: ConversationItemsComponent;
@@ -37,32 +43,23 @@ export class ConversationComponent implements OnInit, OnDestroy {
   @ViewChild(MatInput, { static: true })
   public input: MatInput;
 
-  public conversation: Conversation = null;
   public message = '';
   public ConversationState = ConversationState;
   public files: FsFile[] = [];
   public sessionConversationParticipant;
   public ConversationStates = ConversationStates;
   public conversationStates = list(ConversationStates, 'name', 'value');
-  public account: Account;
   public joined = false;
+  public typing = {state: 'none', name: '', accounts: []};
 
   private _destroy$ = new Subject();
-  private _conversationService: ConversationService;
-
   private _wsSubscriptions: Subscription[] = [];
-  public typing = {state: 'none', name: '', accounts: []};
 
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private _data: {
-      conversation: Conversation,
-      conversationService: ConversationService,
-      account: Account,
-    },
-    private _dialogRef: MatDialogRef<ConversationComponent>,
     private _cdRef: ChangeDetectorRef,
     private _message: FsMessage,
+    private _conversationService: ConversationService,
   ) { }
 
   public get conversationService(): ConversationService {
@@ -74,12 +71,8 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this._conversationService = this._data.conversationService;
-    this.account = this._data.account;
-    this._dialogRef.addPanelClass('conversation');
-
     this._conversationService.conversationConfig
-      .conversationParticipantSession(this._data.conversation)
+      .conversationParticipantSession(this.conversation)
       .subscribe((conversationParticipant) => {
         this.sessionConversationParticipant = conversationParticipant;
         this._cdRef.markForCheck();
@@ -196,7 +189,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     });
   }
 
-  public conversationChange() {
+  public conversationChange(): void {
     this.loadConversation();
     this.loadConversationItems();
   }
@@ -204,7 +197,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   public loadConversation$(): Observable<Conversation> {
     return forkJoin({
       conversation: this._conversationService
-        .conversationGet(this._data.conversation.id, {
+        .conversationGet(this.conversation.id, {
           conversationParticipantCounts: true,
           conversationParticipants: true,
           conversationParticipantLimit: 3,
@@ -212,7 +205,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           conversationParticipantAccounts: true,
         }),
         conversationParticipants: this.conversationConfig
-        .conversationParticipantsGet(this._data.conversation, {
+        .conversationParticipantsGet(this.conversation, {
           accountId: this.account.id,
         }),
       })
@@ -250,12 +243,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
       );
   }
 
-
   private _updateTypingState() {
     this.typing.accounts = this.typing.accounts.filter(function (el) {
       return el != null;
     });
-
 
     if (this.typing.accounts.length === 0) {
       this.typing.state = 'none';
@@ -270,7 +261,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
     this._cdRef.markForCheck();
   }
-
 
   public typingStart() {
     this.conversationService.sendTypingStartNotice(this.conversation.id, this.account.id);

@@ -12,3 +12,4 @@ export * from './participants-list';
 export * from './participants-add';
 export * from './conversation-read-participants-popover';
 export * from './conversation-read-participants-dialog';
+export * from './conversations-pane';

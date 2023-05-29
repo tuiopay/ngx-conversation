@@ -12,6 +12,7 @@ export class ConversationService {
 
   public conversationSettingTemplate: TemplateRef<any>;
   public conversationHeadingTemplate: TemplateRef<any>;
+  public inited = false;
   public startConversation = {
     disabled: false,
     show: true,
@@ -92,6 +93,9 @@ export class ConversationService {
             show: config.leaveConversationShow,
           }
         }),
+      )
+      .pipe(
+        tap(() => this.inited = true),
       );
   }
 
@@ -120,6 +124,9 @@ export class ConversationService {
     }
   }
 
+  public mapAccountAvatar(account) {
+    return this._conversationConfig.mapAccountAvatar ? this._conversationConfig.mapAccountAvatar(account) : null;
+  }
 
   public onUnreadNotice(accountId: number): Observable<any> {
     if (this.conversationConfig.websocketService()) {

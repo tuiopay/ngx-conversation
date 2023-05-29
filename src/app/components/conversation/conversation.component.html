@@ -1,88 +1,87 @@
-<fs-dialog>
-  <form fsForm [submit]="messageSend" #messageForm>
-    <ng-container *ngIf="conversation">
-      <app-conversation-header
-        [conversationService]="conversationService"
-        [conversation]="conversation"
-        [joined]="joined"
-        [account]="account"
-        (filterChanged)="filterChanged($event)"
-        (conversationChange)="conversationChange()">
-      </app-conversation-header>
-      <mat-dialog-content *fsSkeletonForm="conversation">
-        <div class="conversation-container overflow-shadow">
-          <div class="conversation">
-            <app-conversation-items
-              [account]="account"
-              [conversationService]="conversationService"
-              [conversation]="conversation"
-              [sessionConversationParticipant]="sessionConversationParticipant">
-            </app-conversation-items>
+<form fsForm [submit]="messageSend" #messageForm>
+  <ng-container *ngIf="conversation">
+    <app-conversation-header
+      [conversationService]="conversationService"
+      [conversation]="conversation"
+      [joined]="joined"
+      [account]="account"
+      (filterChanged)="filterChanged($event)"
+      (conversationClose)="conversationClose.emit()"
+      (conversationChange)="conversationChange()">
+    </app-conversation-header>
+    <mat-dialog-content *fsSkeletonForm="conversation">
+      <div class="conversation-container overflow-shadow">
+        <div class="conversation">
+          <app-conversation-items
+            [account]="account"
+            [conversationService]="conversationService"
+            [conversation]="conversation"
+            [sessionConversationParticipant]="sessionConversationParticipant">
+          </app-conversation-items>
 
-            <div class="typing" *ngIf="typing.state==='single'">{{typing.name}} is typing..</div>
-            <div class="typing" *ngIf="typing.state==='multiple'">People are typing..</div>
-            <div class="typing" *ngIf="typing.state==='none'">&nbsp;</div>
+          <div class="typing" *ngIf="typing.state==='single'">{{typing.name}} is typing..</div>
+          <div class="typing" *ngIf="typing.state==='multiple'">People are typing..</div>
+          <div class="typing" *ngIf="typing.state==='none'">&nbsp;</div>
 
-          </div>
-          <ng-container *ngIf="!joined">
-            <div class="join-conversation">
-              <button
-                  mat-raised-button
-                  (click)="conversationJoin()"
-                  color="primary"
-                  type="button">
-                Join Conversation
-              </button>
-            </div>
-          </ng-container>
         </div>
-      </mat-dialog-content>
-      <ng-container *ngIf="joined">
-        <div class="message-send-container">
-          <div class="message-actions">
-            <mat-form-field floatLabel="never">
-              <textarea
-                matInput
-                (keydown)="messageKeydown($event)"
-                [autofocus]="true"
-                cdkTextareaAutosize
-                [(ngModel)]="message"
-                [disabled]="conversation.state === ConversationState.Closed" name="message" placeholder="Type a message"
-                (keypress)="typingStart()">
-              </textarea>
-            </mat-form-field>
-            <div class="buttons">
-              <button
+        <ng-container *ngIf="!joined">
+          <div class="join-conversation">
+            <button
+                mat-raised-button
+                (click)="conversationJoin()"
+                color="primary"
+                type="button">
+              Join Conversation
+            </button>
+          </div>
+        </ng-container>
+      </div>
+    </mat-dialog-content>
+    <ng-container *ngIf="joined">
+      <div class="message-send-container">
+        <div class="message-actions">
+          <mat-form-field floatLabel="never">
+            <textarea
+              matInput
+              (keydown)="messageKeydown($event)"
+              [autofocus]="true"
+              cdkTextareaAutosize
+              [(ngModel)]="message"
+              [disabled]="conversation.state === ConversationState.Closed" name="message" placeholder="Type a message"
+              (keypress)="typingStart()">
+            </textarea>
+          </mat-form-field>
+          <div class="buttons">
+            <button
+                mat-icon-button
+                type="submit"
+                class="button"
+                [disabled]="(!message && !files.length) || conversation.state === ConversationState.Closed"
+                color="primary">
+              <mat-icon>send</mat-icon>
+            </button>
+            <fs-file
+                class="button"
+                [disabled]="conversation.state === ConversationState.Closed" (select)="fileSelect($event)"
+                [multiple]="true"
+                imageWidth="1200"
+                imageQuality=".8">
+              <a
                   mat-icon-button
-                  type="submit"
-                  class="button"
-                  [disabled]="(!message && !files.length) || conversation.state === ConversationState.Closed"
-                  color="primary">
-                <mat-icon>send</mat-icon>
-              </button>
-              <fs-file
-                  class="button"
-                  [disabled]="conversation.state === ConversationState.Closed" (select)="fileSelect($event)"
-                  [multiple]="true"
-                  imageWidth="1200"
-                  imageQuality=".8">
-                <a
-                    mat-icon-button
-                    [disabled]="conversation.state === ConversationState.Closed" type="button"
-                    color="basic">
-                  <mat-icon>attach_file</mat-icon>
-                </a>
-              </fs-file>
-            </div>
+                  [disabled]="conversation.state === ConversationState.Closed" type="button"
+                  color="basic">
+                <mat-icon>attach_file</mat-icon>
+              </a>
+            </fs-file>
           </div>
-
-          <fs-file-previews [previewWidth]="100" [previewHeight]="100" [files]="files">
-            <ng-template fs-file-preview-action placement="top-right" action="remove" tooltip="Remove">
-              <mat-icon>close</mat-icon>
-            </ng-template>
-          </fs-file-previews>
         </div>
-      </ng-container>
+
+        <fs-file-previews [previewWidth]="100" [previewHeight]="100" [files]="files">
+          <ng-template fs-file-preview-action placement="top-right" action="remove" tooltip="Remove">
+            <mat-icon>close</mat-icon>
+          </ng-template>
+        </fs-file-previews>
+      </div>
     </ng-container>
-  </form>
-</fs-dialog>
+  </ng-container>
+</form>

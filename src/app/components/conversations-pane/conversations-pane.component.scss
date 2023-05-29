@@ -1,0 +1,85 @@
+:host ::ng-deep {
+  table {
+    table-layout: fixed;
+  }
+
+  .fs-list-table {
+    .fs-list-row {
+      &:hover td {
+        background-color: transparent !important;
+      }
+
+      cursor: pointer;
+    }
+  }
+
+  .fs-list tr td {
+    border: none !important;
+  }
+
+  .col-converstaion {
+    .converstaion-row {
+      display: flex;
+      align-items: center;
+    }
+
+    .converstaion {
+      display: flex;
+      flex-grow: 1;
+      min-width: 0;
+      align-items: center;
+
+      .conversation-participant {
+        width: 48px;
+      }
+
+      .name {
+        display: flex;
+        align-items: center;
+      
+        a {
+          font-weight: bold;
+        }
+
+        .count {
+          margin-left: 2px;
+          display: flex;
+          transform: scale(.7);
+          color: #656565;
+        }
+      }
+    }
+
+    .last-conversation-item {
+      display: flex;
+      min-width: 0;
+
+      .file {
+        display: flex;
+        align-items: center;
+
+        mat-icon {
+          transform: scale(.6);
+          width: 18px;
+          height: 18px;
+          margin-right: 2px;
+          color: #656565;
+          display: block;
+        }
+      }
+
+      .message {        
+        margin-top: -3px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .message + .create-date,
+      .file + .create-date {
+        margin-top: 3px;
+      }
+    }
+  }
+}

@@ -1,104 +1,20 @@
-<div class="container-pane">
-  <div class="sidenav-pane">
-    <div class="filters">
-      <div *ngFor="let filter of filters" class="filter" [ngClass]="{ selected: selectedFilter === filter }">
-        <div class="avatar">
-          <mat-icon *ngIf="filter.icon">{{filter.icon}}</mat-icon>
-          <fs-badge *ngIf="filter.image" [image]="filter.image" size="24"></fs-badge>
-        </div>
-        <a (click)="filterSelect(filter)">{{filter.name}}</a>
-        <div class="count">
-          <div
-            class="unread"
-            [ngClass]="{ 'has-unread': !!filter.unread }"
-            matTooltip="{{ filter.unread }} Unread">
-          </div>
-          <span>{{ filter.count }}</span>
-        </div>
-      </div>
+<div 
+    class="container-pane" 
+    [ngClass]="{ 'conversation-open': !!conversation }">
+  <ng-container *ngIf="conversationService.inited">
+    <div class="conversations-pane">
+      <app-conversations-pane 
+        [account]="account"
+        (conversationOpen)="conversationOpen($event)">
+      </app-conversations-pane>
     </div>
-  </div>
-  <div class="conversation-pane">
-    <div class="filter-heading" *ngIf="selectedFilter">
-      <div class="filter">
-        <div class="avatar">
-          <mat-icon *ngIf="selectedFilter.icon">{{selectedFilter.icon}}</mat-icon>
-          <fs-badge *ngIf="selectedFilter.image" [image]="selectedFilter.image" size="32"></fs-badge>
-        </div>
-        <span>{{ selectedFilter.name }}</span>
-      </div>
-      <div class="actions">
-        <ng-container *ngIf="conversationService.startConversation.show">
-          <span [matTooltip]="conversationService.startConversation.tooltip">
-            <button
-                mat-raised-button
-                color="primary"
-                [disabled]="conversationService.startConversation.disabled"              
-                (click)="conversationStart()"
-                type="button">
-              Start
-            </button>
-          </span>
-        </ng-container>
-      </div>
+    <div class="conversation-pane">
+      <ng-container *ngIf="conversation">
+        <app-conversation 
+          (conversationClose)="conversation = null"
+          [conversation]="conversation">
+        </app-conversation>
+      </ng-container>
     </div>
-    <fs-list [config]="listConfig">
-      <fs-list-column>
-        <ng-template fs-list-cell let-row="row" class="col-converstaion">
-          <div class="converstaion-row">
-            <ng-container *ngIf="conversationColumnTemplate">
-              <ng-container [ngTemplateOutlet]="conversationColumnTemplate" [ngTemplateOutletContext]="{ conversation: row, template: conversationTemplate }"></ng-container>
-            </ng-container>
-            <ng-container *ngIf="!conversationColumnTemplate">
-              <ng-container [ngTemplateOutlet]="conversationTemplate" [ngTemplateOutletContext]="{ conversation: row }"></ng-container>
-            </ng-container>
-          </div>
-        </ng-template>
-      </fs-list-column>
-    </fs-list>
-  </div>
+  </ng-container>
 </div>
-
-<ng-template #conversationTemplate let-conversation="conversation">
-  <div class="converstaion">
-    <div class="name">
-      <a>{{ conversation.name }}</a>
-      <mat-icon
-        [matTooltip]="conversation.conversationParticipantCount === 1 ? '1 Participant' : conversation.conversationParticipantCount + ' Participants'"
-        class="count">
-        people
-      </mat-icon>
-    </div>
-    <div class="last-conversation-item" *ngIf="conversation.lastConversationItem">
-      <app-conversation-participant 
-        [showBadge]="true"
-        [showTooltip]="true"
-        [conversationParticipant]="conversation.lastConversationItem.conversationParticipant">
-      </app-conversation-participant>
-      <div class="summary">
-        <ng-container *ngIf="conversation.lastConversationItem.message; else lastFile">
-          <div class="message">
-            {{conversation.lastConversationItem.message}}
-          </div>
-        </ng-container>
-        <ng-template #lastFile>
-          <ng-container *ngIf="conversation.lastConversationItem.lastConversationItemFile">
-            <div class="file">
-              <mat-icon>insert_drive_file</mat-icon>
-              {{conversation.lastConversationItem.lastConversationItemFile.name}}
-            </div>
-          </ng-container>
-        </ng-template>
-        <div class="small create-date">
-          <fs-date-ago [date]="conversation.lastConversationItem.createDate"></fs-date-ago>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div
-    *ngIf="!!conversation.unread"
-    class="unread"
-    [ngClass]="{ 'has-unread': !!conversation.unread }"
-    matTooltip="Unread">
-  </div>
-</ng-template>

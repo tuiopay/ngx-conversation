@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import { ConversationParticipantType } from '../../enums';
+import { ConversationService } from '../../services';
 
 
 @Component({
@@ -24,11 +25,16 @@ export class ConversationParticipantComponent implements OnInit {
 
   public name;
   public image;
+  
+  constructor(
+    private _conversationService: ConversationService,
+  ) {}
+
 
   public ngOnInit(): void {
     if (this.conversationParticipant?.type === ConversationParticipantType.Account) {
       this.name = `${this.conversationParticipant.account?.firstName} ${this.conversationParticipant.account?.lastName}`;
-      this.image = this.conversationParticipant.account?.image?.tiny;
+      this.image = this._conversationService.mapAccountAvatar(this.conversationParticipant.account);
     }
   }
 

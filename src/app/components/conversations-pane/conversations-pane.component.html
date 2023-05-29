@@ -1,0 +1,103 @@
+<fs-list [config]="listConfig">
+  <fs-list-column>
+    <ng-template fs-list-cell let-row="row" class="col-converstaion">
+      <div class="converstaion-row">
+        <ng-container *ngIf="conversationColumnTemplate">
+          <ng-container [ngTemplateOutlet]="conversationColumnTemplate" [ngTemplateOutletContext]="{ conversation: row, template: conversationTemplate }"></ng-container>
+        </ng-container>
+        <ng-container *ngIf="!conversationColumnTemplate">
+          <ng-container [ngTemplateOutlet]="conversationTemplate" [ngTemplateOutletContext]="{ conversation: row }"></ng-container>
+        </ng-container>
+      </div>
+    </ng-template>
+  </fs-list-column>
+  <ng-container fs-list-content>
+    <mat-tab-group 
+        [(selectedName)]="tab"
+        (selectedNameChange)="reload()">
+      <mat-tab name="account">
+        <ng-template mat-tab-label>
+          Inbox 
+          <ng-container *ngIf="conversationsStats.account.unread">
+            <span class="unread has-unread"></span>
+          </ng-container>
+        </ng-template>
+      </mat-tab>
+      <mat-tab name="open">
+        <ng-template mat-tab-label>
+          Open
+          <ng-container *ngIf="conversationsStats.open.count">
+            ({{conversationsStats.open.count}})
+          </ng-container>
+          <ng-container *ngIf="conversationsStats.open.unread">
+            <span class="unread has-unread"></span>
+          </ng-container>
+        </ng-template>
+      </mat-tab>
+      <mat-tab name="closed">
+        <ng-template mat-tab-label>
+          Closed
+          <ng-container *ngIf="conversationsStats.closed.count">
+            ({{conversationsStats.closed.count}})
+          </ng-container>
+          <ng-container *ngIf="conversationsStats.closed.unread">
+            <span class="unread has-unread"></span>
+          </ng-container>
+        </ng-template>            
+      </mat-tab>
+    </mat-tab-group>
+  </ng-container>
+</fs-list>
+
+<ng-template #conversationTemplate let-conversation="conversation">
+  <div class="converstaion">
+    <div class="conversation-participant">
+      <ng-container *ngIf="conversation.lastConversationItem">
+        <app-conversation-participant 
+          [showBadge]="true"
+          [showTooltip]="true"
+          [size]="40"
+          [conversationParticipant]="conversation.lastConversationItem.conversationParticipant">
+        </app-conversation-participant>        
+      </ng-container>
+    </div>
+    <div>
+      <div class="name">
+        <ng-container *ngIf="conversation.name">
+          <a>{{conversation.name}}</a>
+        </ng-container>
+        <mat-icon
+          [matTooltip]="conversation.conversationParticipantCount === 1 ? '1 Participant' : conversation.conversationParticipantCount + ' Participants'"
+          class="count">
+          people
+        </mat-icon>
+      </div>  
+      <div class="last-conversation-item" *ngIf="conversation.lastConversationItem">
+        <div class="summary">
+          <ng-container *ngIf="conversation.lastConversationItem.message; else lastFile">
+            <div class="message">
+              {{conversation.lastConversationItem.message}}
+            </div>
+          </ng-container>
+          <ng-template #lastFile>
+            <ng-container *ngIf="conversation.lastConversationItem.lastConversationItemFile">
+              <div class="file">
+                <mat-icon>insert_drive_file</mat-icon>
+                {{conversation.lastConversationItem.lastConversationItemFile.name}}
+              </div>
+            </ng-container>
+          </ng-template>
+          <div class="small create-date">
+            <fs-date-ago [date]="conversation.lastConversationItem.createDate"></fs-date-ago>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </div>
+  <div
+    *ngIf="!!conversation.unread"
+    class="unread"
+    [ngClass]="{ 'has-unread': !!conversation.unread }"
+    matTooltip="Unread">
+  </div>
+</ng-template>

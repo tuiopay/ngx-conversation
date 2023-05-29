@@ -2,7 +2,7 @@
   <fs-list-column title="Name" class="col-name">
     <ng-template fs-list-cell let-row="row">
       <div class="row">
-        <fs-badge shape="circle" image="{{ row.account.image.small }}"></fs-badge>
+        <fs-badge shape="circle" [image]="row.accountAvatar"></fs-badge>
         <span>{{ row.account.firstName }} {{ row.account.lastName }}</span>
       </div>
     </ng-template>

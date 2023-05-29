@@ -34,6 +34,7 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
   @Input() public account: Account;
 
   @Output() public conversationChange = new EventEmitter<Conversation>();
+  @Output() public conversationClose = new EventEmitter<Conversation>();
   @Output() public filterChanged = new EventEmitter<{ query: any, sort: any }>();
 
   public ConversationStates = ConversationStates;

@@ -129,7 +129,16 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
 
         return this.conversationService.conversationConfig.conversationParticipantsGet(this.conversation, query)
         .pipe(
-          map((response) => ({ data: response.conversationParticipants, paging: response.paging })),
+          map((response) => ({ 
+            data: response.conversationParticipants
+            .map((conversationParticipant) => {
+              return {
+                ...conversationParticipant,
+                accountAvatar: this.conversationService.mapAccountAvatar(conversationParticipant.account),
+              }
+            }),
+             paging: response.paging 
+          })),
         );
       },
     };

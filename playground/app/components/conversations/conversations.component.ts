@@ -25,11 +25,11 @@ export class ConversationsComponent implements OnInit {
 
   public ngOnInit(): void {
 
-    setTimeout(() => {
-      // create web socket
-      this._websocketService
-        .setPort(9501)
-        .connect();
-    }, 2000);
+    // setTimeout(() => {
+    //   // create web socket
+    //   this._websocketService
+    //     .setPort(9501)
+    //     .connect();
+    // }, 2000);
   }
 }

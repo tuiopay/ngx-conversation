@@ -5,7 +5,7 @@
     <div mat-dialog-title>Conversation Settings</div>
     <mat-dialog-content *fsSkeletonForm="conversation">
       <ng-container *ngIf="hasAdminRole">
-        <mat-tab-group fsTabs [(selectedName)]="tab">
+        <mat-tab-group fsTabs [(selected)]="tab">
           <mat-tab label="Settings" name="settings">
             <ng-template matTabContent>
               <mat-form-field class="full-width">

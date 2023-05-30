@@ -9,7 +9,7 @@ import { FsFile } from '@firestitch/file';
 import { list } from '@firestitch/common';
 
 import { forkJoin, Observable, of, Subject, throwError } from 'rxjs';
-import { finalize, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { filter, finalize, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
 import { Account, Conversation, ConversationConfig } from '../../types';
@@ -200,6 +200,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           // handle typing updates
           this.conversationService.onTypingNotice(this.conversation.id)
             .pipe(
+              filter((response) => !!response),
               takeUntil(this._destroy$),
             )
             .subscribe((message) => {

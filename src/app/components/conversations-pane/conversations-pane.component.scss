@@ -1,20 +1,29 @@
 :host ::ng-deep {
   table {
-    table-layout: fixed;
-  }
+    table-layout: fixed;  
 
-  .fs-list-table {
-    .fs-list-row {
-      &:hover td {
-        background-color: transparent !important;
+    tbody {
+      .fs-list-row {
+        &:hover td {
+          background-color: transparent !important;
+        }
+
+        cursor: pointer;
       }
 
-      cursor: pointer;
+      tr.fs-list-row td {
+        border: none !important;
+      }
+
+      tr.fs-list-row td {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+      }
     }
   }
 
-  .fs-list tr td {
-    border: none !important;
+  mat-tab-header {
+    margin-bottom: 10px;
   }
 
   .col-converstaion {

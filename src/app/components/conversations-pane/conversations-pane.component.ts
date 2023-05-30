@@ -66,6 +66,11 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
     this.listComponent.reload();
   }
 
+  public tabChange(tab): void {
+    this.tab = tab;
+    this.reload();
+  }
+
   public ngOnInit(): void {
     timer(15000, 15000)
       .pipe(

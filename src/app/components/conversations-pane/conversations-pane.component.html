@@ -12,9 +12,11 @@
     </ng-template>
   </fs-list-column>
   <ng-container fs-list-content>
-    <mat-tab-group 
-        [(selectedName)]="tab"
-        (selectedNameChange)="reload()">
+    <mat-tab-group
+        fsTabs
+        [mobileSticky]="false"
+        [selected]="tab"
+        (selectedChange)="tabChange($event)">
       <mat-tab name="account">
         <ng-template mat-tab-label>
           Inbox 

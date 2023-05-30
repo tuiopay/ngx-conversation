@@ -38,6 +38,7 @@ import {
 } from './components';
 import { AutofocusDirective, ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
 import { FsFilterModule } from '@firestitch/filter';
+import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
 
 
 @NgModule({
@@ -91,6 +92,8 @@ import { FsFilterModule } from '@firestitch/filter';
     AutofocusDirective,
     ConversationHeaderDirective,
     ConversationsPaneComponent,
+    ConversationBadgeNamePipe,
+    ConversationNamePipe,
   ],
   exports: [
     ConversationsComponent,

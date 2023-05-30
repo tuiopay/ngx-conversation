@@ -53,32 +53,57 @@
 
 <ng-template #conversationTemplate let-conversation="conversation">
   <div class="converstaion">
-    <div class="conversation-participant">
-      <ng-container *ngIf="conversation.lastConversationItem">
+    <div 
+          class="conversation-participant"
+          [ngClass]="{ 'conversation-participant-multiple': conversation.recentConversationParticipants.length > 1 }">
+      <ng-container *ngIf="conversation.recentConversationParticipants.length > 1">
+        <ng-container 
+          [ngTemplateOutlet]="participantsMutiple" 
+          [ngTemplateOutletContext]="{ 
+            accountTop: conversation.recentConversationParticipants[0],
+            accountBottom: conversation.recentConversationParticipants[1],
+            conversationParticipantCount: conversation.conversationParticipantCount
+          }">
+        </ng-container>
+        <ng-template 
+            #participantsMutiple 
+            let-accountTop="accountTop" 
+            let-accountBottom="accountBottom"
+            let-conversationParticipantCount="conversationParticipantCount">
+          <div [matTooltip]="conversationParticipantCount | conversationBadgeName:accountTop:accountBottom">
+            <app-conversation-participant 
+              class="top"
+              [showBadge]="true"
+              [size]="30"
+              [conversationParticipant]="accountTop">
+            </app-conversation-participant> 
+            <app-conversation-participant 
+              class="bottom"
+              [showBadge]="true"
+              [size]="30"
+              [conversationParticipant]="accountBottom">
+            </app-conversation-participant> 
+          </div>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="conversation.recentConversationParticipants.length === 1">
         <app-conversation-participant 
           [showBadge]="true"
           [showTooltip]="true"
           [size]="40"
-          [conversationParticipant]="conversation.lastConversationItem.conversationParticipant">
-        </app-conversation-participant>        
+          [conversationParticipant]="conversation.recentConversationParticipants[0]">
+        </app-conversation-participant>   
       </ng-container>
     </div>
     <div>
       <div class="name">
-        <ng-container *ngIf="conversation.name">
-          <a>{{conversation.name}}</a>
-        </ng-container>
-        <mat-icon
-          [matTooltip]="conversation.conversationParticipantCount === 1 ? '1 Participant' : conversation.conversationParticipantCount + ' Participants'"
-          class="count">
-          people
-        </mat-icon>
+        <a>{{conversation | conversationName}}</a>
       </div>  
       <div class="last-conversation-item" *ngIf="conversation.lastConversationItem">
         <div class="summary">
           <ng-container *ngIf="conversation.lastConversationItem.message; else lastFile">
             <div class="message">
-              {{conversation.lastConversationItem.message}}
+              {{conversation.lastConversationItem.conversationParticipant.account.firstName}}: {{conversation.lastConversationItem.message}}
             </div>
           </ng-container>
           <ng-template #lastFile>

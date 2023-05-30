@@ -9,5 +9,7 @@ export type Account = {
   email?: string;
   guid?: string;
   state?: string;
-  image?: any;
+  avatar?: {
+    tiny?: string;
+  };
 }

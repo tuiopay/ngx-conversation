@@ -72,20 +72,19 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    timer(15000, 15000)
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        if (!this._conversationService.hasWebSocketConnection()) {
-          if (this.listComponent.list.paging.page === 1) {
-            this.reload();
-          }
-        }
+    // timer(15000, 15000)
+    //   .pipe(
+    //     takeUntil(this._destroy$),
+    //   )
+    //   .subscribe(() => {
+    //     if (!this._conversationService.hasWebSocketConnection()) {
+    //       if (this.listComponent.list.paging.page === 1) {
+    //         this.reload();
+    //       }
+    //     }
         
-        this.loadStats();
-      });
-
+    //     this.loadStats();
+    //   });
 
     this.loadStats();
     this.listConfig = {
@@ -161,7 +160,11 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
           ...query,
           lastConversationItems: true,
           lastConversationItemConversationParticipants: true,
-          lastConversationItemConversationParticipantsAccounts: true,
+          lastConversationItemConversationParticipantAccounts: true,
+          lastConversationItemConversationParticipantAccountAvatars: true,
+          recentConversationParticipants: true,
+          recentConversationParticipantAccounts: true,
+          recentConversationParticipantAccountAvatars: true,
           unreads: true,
           accountConversationRoles: true,
           conversationParticipantCounts: true,

@@ -5,7 +5,7 @@
     [matTooltipDisabled]="!showTooltip"
     *ngIf="showBadge"
     color="#ccc"       
-    [image]="image">
+    [image]="account.avatar?.tiny">
   </fs-badge>
   <span class="name" *ngIf="showName">{{name}}</span>
 </div>

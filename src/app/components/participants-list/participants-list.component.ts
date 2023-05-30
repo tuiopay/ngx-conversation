@@ -134,7 +134,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
             .map((conversationParticipant) => {
               return {
                 ...conversationParticipant,
-                accountAvatar: this.conversationService.mapAccountAvatar(conversationParticipant.account),
+                account: this.conversationService.mapAccount(conversationParticipant.account),
               }
             }),
              paging: response.paging 

@@ -175,6 +175,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           conversationParticipantLimit: 3,
           conversationParticipantOrder: 'read_date,desc',
           conversationParticipantAccounts: true,
+          conversationParticipantAccountAvatars: true,
         }),
         conversationParticipants: this.conversationConfig
         .conversationParticipantsGet(conversation, {
@@ -216,9 +217,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
           // handle new messages
           this.conversationService.onMessageNotice(this.conversation.id)
-          .pipe(
-            takeUntil(this._destroy$),
-          ) 
+            .pipe(
+              takeUntil(this._destroy$),
+            ) 
             .subscribe(() => {
               this.conversationItems.reload();
             });

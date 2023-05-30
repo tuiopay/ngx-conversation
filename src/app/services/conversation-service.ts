@@ -4,7 +4,7 @@ import { RequestConfig } from '@firestitch/api';
 import { EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 
-import { ConversationConfig, Conversation, ConversationParticipant } from '../types';
+import { ConversationConfig, Conversation, ConversationParticipant, Account } from '../types';
 
 
 @Injectable()
@@ -124,13 +124,13 @@ export class ConversationService {
     }
   }
 
-  public mapAccountAvatar(account) {
-    return this._conversationConfig.mapAccountAvatar ? this._conversationConfig.mapAccountAvatar(account) : null;
+  public mapAccount(account): Account {
+    return this._conversationConfig.mapAccount ? this._conversationConfig.mapAccount(account) : account;
   }
 
   public onUnreadNotice(accountId: number): Observable<any> {
     if (!this.conversationConfig.websocketService()) {
-      return of(null);
+      return of();
     }
     
     return this.conversationConfig.websocketService().routeObservable(`account/${accountId}/unreadconversations`);
@@ -138,7 +138,7 @@ export class ConversationService {
 
   public onMessageNotice(conversationId: number): Observable<any> {
     if (this.conversationConfig.websocketService()) {
-      return of(null);
+      return of();
     } 
 
     return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/message`);
@@ -146,7 +146,7 @@ export class ConversationService {
 
   public onTypingNotice(conversationId: number): Observable<any> {
     if (this.conversationConfig.websocketService()) {
-      return of(null);
+      return of();
     }
 
     return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/typing`);

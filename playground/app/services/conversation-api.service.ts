@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { FsApi } from '@firestitch/api';
+import { FsGalleryItem } from '@firestitch/gallery';
 import { FsWebSocket } from '@firestitch/web-socket';
 import { Observable, of } from 'rxjs';
 
@@ -114,6 +115,17 @@ export class ConversationsApiService {
     websocketService: () => {
       return null;
       return this._websocketService;
+    },
+
+    mapGalleryItem(conversationItemFile): FsGalleryItem {
+      return {
+        name: conversationItemFile.file.filename,
+        preview: conversationItemFile.file.preview?.small,
+        url: conversationItemFile.file.preview?.small,
+        index: conversationItemFile.id,
+        data: conversationItemFile,
+        extension: conversationItemFile.file.extension,
+      };
     },
 
     leaveConversation: {

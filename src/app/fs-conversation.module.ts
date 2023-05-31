@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { FsFormModule } from '@firestitch/form';
+import { FsLinkModule } from '@firestitch/link';
 import { FsDialogModule } from '@firestitch/dialog';
 import { FsFileModule } from '@firestitch/file';
 import { FsBadgeModule } from '@firestitch/badge';
@@ -60,6 +61,7 @@ import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
     FsDateModule,
     FsListModule,
     FsFileModule,
+    FsLinkModule,
     FsFilterModule,
     FsMenuModule,
     FsGalleryModule,

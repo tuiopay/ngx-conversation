@@ -5,4 +5,5 @@ export enum ConversationItemType {
   End = 'end',
   ParticipantAdd = 'participantAdded',
   ParticipantRemoved = 'participantRemoved',
+  Notice = 'notice',
 }

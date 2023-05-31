@@ -31,6 +31,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   @Input() public conversation: Conversation;
 
   @Output() public conversationClose = new EventEmitter();
+  @Output() public conversationChange = new EventEmitter();
 
   @ViewChild(ConversationItemsComponent)
   public conversationItems: ConversationItemsComponent;
@@ -76,6 +77,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
       .pipe(
         tap(() => {
           this._message.success('Saved Changes');
+          this.conversationChange.emit();
         }),
       );
   }
@@ -137,6 +139,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           this.message = '';
           this.files = [];
           this._cdRef.markForCheck();
+          this.conversationChange.emit();
         }),
       );
   };
@@ -171,11 +174,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
       conversation: this._conversationService
         .conversationGet(conversation.id, {
           conversationParticipantCounts: true,
-          conversationParticipants: true,
-          conversationParticipantLimit: 3,
-          conversationParticipantOrder: 'read_date,desc',
-          conversationParticipantAccounts: true,
-          conversationParticipantAccountAvatars: true,
+          recentConversationParticipants: true,
+          recentConversationParticipantAccounts: true,
+          recentConversationParticipantAccountAvatars: true,
         }),
         conversationParticipants: this.conversationConfig
         .conversationParticipantsGet(conversation, {

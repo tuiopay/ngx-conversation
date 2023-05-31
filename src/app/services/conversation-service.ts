@@ -1,10 +1,11 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { RequestConfig } from '@firestitch/api';
 
-import { EMPTY, forkJoin, Observable, of } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { forkJoin, Observable, of } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 
 import { ConversationConfig, Conversation, ConversationParticipant, Account } from '../types';
+import { FsGalleryItem } from '@firestitch/gallery';
 
 
 @Injectable()
@@ -128,6 +129,10 @@ export class ConversationService {
     return this._conversationConfig.mapAccount ? this._conversationConfig.mapAccount(account) : account;
   }
 
+  public mapGalleryItem(conversationItemFile): FsGalleryItem {
+    return this._conversationConfig.mapGalleryItem ? this._conversationConfig.mapGalleryItem(conversationItemFile) : conversationItemFile;
+  }
+
   public onUnreadNotice(accountId: number): Observable<any> {
     if (!this.conversationConfig.websocketService()) {
       return of();
@@ -137,7 +142,7 @@ export class ConversationService {
   }
 
   public onMessageNotice(conversationId: number): Observable<any> {
-    if (this.conversationConfig.websocketService()) {
+    if (!this.conversationConfig.websocketService()) {
       return of();
     } 
 
@@ -145,7 +150,7 @@ export class ConversationService {
   }
 
   public onTypingNotice(conversationId: number): Observable<any> {
-    if (this.conversationConfig.websocketService()) {
+    if (!this.conversationConfig.websocketService()) {
       return of();
     }
 

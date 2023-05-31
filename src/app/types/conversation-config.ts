@@ -3,6 +3,7 @@ import { RequestConfig } from '@firestitch/api';
 import { Observable } from 'rxjs';
 
 import { Conversation, ConversationItem, ConversationParticipant, ConversationItemMessage, Account } from '../types'
+import { FsGalleryItem } from '@firestitch/gallery';
 
 
 export type ConversationConfig = {
@@ -31,6 +32,7 @@ export type ConversationConfig = {
 
   websocketService?: () => any;
   mapAccount?: (account) => Account;
+  mapGalleryItem?: (data) => FsGalleryItem;
 
   leaveConversation?: {
     show?: () => Observable<boolean> | boolean,

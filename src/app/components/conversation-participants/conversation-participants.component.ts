@@ -2,6 +2,7 @@ import {
   Component,
   ChangeDetectionStrategy,
   Input,
+  OnInit,
 } from '@angular/core';
 
 import { ConversationParticipant } from '../../types';
@@ -13,7 +14,7 @@ import { ConversationParticipant } from '../../types';
   styleUrls: ['./conversation-participants.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationParticipantsComponent {
+export class ConversationParticipantsComponent implements OnInit {
 
   @Input()
   public conversationParticipants: ConversationParticipant[] = [];
@@ -23,5 +24,11 @@ export class ConversationParticipantsComponent {
 
   @Input()
   public count = 0;
+
+  public others = 0;
+
+  public ngOnInit(): void {
+    this.others = this.count - this.conversationParticipants.length;
+  }
 
 }

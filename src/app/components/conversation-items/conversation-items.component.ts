@@ -58,7 +58,6 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        // if no socket connection fall pack to polling
         if (!this.conversationService.hasWebSocketConnection()) {
           this.load();
           this._cdRef.markForCheck();
@@ -114,14 +113,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
                   fetch: (query): Observable<FsGalleryItem[]> => {
                     return of(conversationItem.conversationItemFiles
                       .map((conversationItemFile) => {
-                        return {
-                          name: conversationItemFile.file.name,
-                          preview: conversationItemFile.file.preview?.small,
-                          url: conversationItemFile.file.preview?.actual,
-                          index: conversationItemFile.id,
-                          data: conversationItemFile,
-                          extension: conversationItemFile.file.extension,
-                        };
+                        return this.conversationService.mapGalleryItem(conversationItemFile);
                       }));
                   },
                 } as FsGalleryConfig,
@@ -139,7 +131,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
         const lastConversationItem = this.conversationItems[0];
         if (lastConversationItem && lastConversationItem !== this.lastConversationItem) {
           this.conversationService.conversationConfig.conversationRead(this.conversation, lastConversationItem)
-          .subscribe();
+            .subscribe();
         }
 
         this.lastConversationItem = lastConversationItem;

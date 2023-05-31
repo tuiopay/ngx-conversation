@@ -61,7 +61,7 @@
                 [matTooltip]="'Deleted'"
                 [matTooltipDisabled]="conversationItem.state === ConversationItemState.Active"
                 *ngIf="conversationItem.message">
-              <span [innerHTML]="conversationItem.message"></span>
+              <span fsLink [openWindow]="true" [innerHTML]="conversationItem.message"></span>
             </div>
             <fs-gallery
                 [config]="conversationItem.galleryConfig"
@@ -98,6 +98,9 @@
           </div>
         </div>
       </div>
+    </ng-container>
+    <ng-container *ngIf="conversationItem.type === ConversationItemType.Notice">
+      <div class="message">{{conversationItem.message}}</div>
     </ng-container>
     <ng-container *ngIf="
         conversationItem.type === ConversationItemType.ParticipantAdd || 

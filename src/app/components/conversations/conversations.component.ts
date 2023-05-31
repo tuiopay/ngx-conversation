@@ -9,6 +9,7 @@ import { Account, Conversation, ConversationConfig } from '../../types';
 import { ConversationService } from '../../services';
 import { ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective } from '../../directives';
 import { ConversationComponent } from '../conversation/conversation.component';
+import { ConversationsPaneComponent } from '../conversations-pane';
 
 
 @Component({
@@ -28,6 +29,9 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
 
   @ContentChild(ConversationColumnDirective, { read: TemplateRef })
   public conversationColumnTemplate: TemplateRef<any>;
+
+  @ViewChild(ConversationsPaneComponent)
+  public conversationsPane: ConversationsPaneComponent;
 
   public conversation: Conversation;
 
@@ -64,6 +68,13 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
   public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  public conversationChange(): void {
+    if(this.conversationsPane) {
+      this.conversationsPane.loadStats();
+      this.conversationsPane.reload();
+    }
   }
 
   public conversationOpen(conversation: Conversation): void {

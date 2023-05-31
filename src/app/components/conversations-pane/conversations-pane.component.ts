@@ -9,7 +9,7 @@ import { FsListComponent, FsListConfig } from '@firestitch/list';
 import { FsMessage } from '@firestitch/message';
 import { format } from '@firestitch/date';
 
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { delay, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { Subject, timer } from 'rxjs';
 
 import { ConversationCreateComponent } from '../conversation-create';
@@ -71,22 +71,31 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
     this.reload();
   }
 
-  public ngOnInit(): void {
-    // timer(15000, 15000)
-    //   .pipe(
-    //     takeUntil(this._destroy$),
-    //   )
-    //   .subscribe(() => {
-    //     if (!this._conversationService.hasWebSocketConnection()) {
-    //       if (this.listComponent.list.paging.page === 1) {
-    //         this.reload();
-    //       }
-    //     }
-        
-    //     this.loadStats();
-    //   });
+  public initStatsReload(): void {
+    timer(0, 30000)
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this.loadStats();
+      });
+  }
 
-    this.loadStats();
+  public initConverstationsReload(): void {
+    timer(30000, 30000)
+      .pipe(
+        filter(() => !this._conversationService.hasWebSocketConnection() && this.listComponent.list.paging.page === 1),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this.reload();
+      });
+  }
+
+  public ngOnInit(): void {
+    this.initStatsReload();
+    this.initConverstationsReload();
+
     this.listConfig = {
       status: false,
       loadMore: true,
@@ -188,9 +197,6 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
 
         return this.conversationConfig.conversationsGet(query)
           .pipe(
-            tap(() => {
-              this.loadStats();
-            }),
             map((response) => {
               return {
                 data: response.conversations

@@ -13,7 +13,8 @@
         <app-conversation 
           [account]="account"
           [conversation]="conversation"
-          (conversationClose)="conversation = null">
+          (conversationClose)="conversation = null"
+          (conversationChange)="conversationChange()">
         </app-conversation>
       </ng-container>
     </div>

@@ -6,5 +6,5 @@
     [size]="size"
     [conversationParticipant]="conversationParticipant">
   </app-conversation-participant>
-  <span *ngIf="conversationParticipants.length < count" class="more" [matTooltip]="count + ' Participants'">{{count}}</span>
+  <span *ngIf="others" class="more">and {{others}} {{others === 1 ? 'other' : 'others'}}</span>
 </div>

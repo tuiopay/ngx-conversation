@@ -8,6 +8,7 @@ export type Conversation = {
   id?: number;
   activityDate?: Date;
   conversationParticipants?: ConversationParticipant[];
+  recentConversationParticipants?: ConversationParticipant[];
   createDate?: Date;
   creatorConversationParticipantId?: number;
   guid?: string;

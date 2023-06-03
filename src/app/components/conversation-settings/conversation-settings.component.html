@@ -45,7 +45,7 @@
           </mat-tab>
         </mat-tab-group>
       </ng-container>
-      <ng-container *ngIf="!hasAdminRole">
+      <ng-container *ngIf="conversation.name">
         <fs-label-field>
           <fs-label>Name</fs-label>
           {{conversation.name}}
@@ -55,11 +55,22 @@
     <mat-dialog-actions>
       <ng-container [ngSwitch]="tab">
         <ng-container *ngSwitchCase="'settings'">
-          <button
-              mat-button
-              color="primary">
-            Save
-          </button>
+          <ng-container *ngIf="hasAdminRole">
+            <button
+                mat-button
+                color="primary">
+              Save
+            </button>
+          </ng-container>
+          <ng-container *ngIf="!hasAdminRole">
+            <button
+                mat-button
+                type="button"
+                color="primary"
+                mat-dialog-close>
+              Done
+            </button>
+          </ng-container>
           <button 
               *ngIf="joined && showLeaveConverstation"
               mat-button
@@ -68,19 +79,21 @@
               type="button">
               Leave Conversation
           </button>
-          <button
-              mat-button
-              type="button"
-              [mat-dialog-close]="undefined">
-            Cancel
-          </button>
+          <ng-container *ngIf="hasAdminRole">
+            <button
+                mat-button
+                type="button"
+                mat-dialog-close>
+              Cancel
+            </button>
+          </ng-container>
         </ng-container>
         <ng-container *ngSwitchCase="'participants'">
           <button
               mat-button
               type="button"
               color="primary"
-              [mat-dialog-close]="undefined">
+              mat-dialog-close>
             Done
           </button>
         </ng-container>

@@ -25,6 +25,7 @@ import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsChipModule } from '@firestitch/chip';
 import { FsTabsModule } from '@firestitch/tabs';
 import { FsPopoverModule } from '@firestitch/popover';
+import { FsHtmlRendererModule } from '@firestitch/html-editor';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 
 import {
@@ -70,6 +71,7 @@ import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
     FsSkeletonModule,
     FsBadgeModule,
     FsTabsModule,
+    FsHtmlRendererModule,
     FsPopoverModule,
     FsAutocompleteChipsModule,
   ],

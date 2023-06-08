@@ -100,7 +100,9 @@
       </div>
     </ng-container>
     <ng-container *ngIf="conversationItem.type === ConversationItemType.Notice">
-      <div class="message">{{conversationItem.message}}</div>
+      <div class="message">
+        <fs-html-renderer [html]="conversationItem.message"></fs-html-renderer>
+      </div>
     </ng-container>
     <ng-container *ngIf="
         conversationItem.type === ConversationItemType.ParticipantAdd || 

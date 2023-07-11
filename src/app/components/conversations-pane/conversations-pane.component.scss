@@ -45,6 +45,8 @@
   }
 
   .col-converstaion {
+    overflow: hidden;
+
     .converstaion-row {
       display: flex;
       align-items: center;
@@ -53,7 +55,6 @@
     .converstaion {
       display: flex;
       flex-grow: 1;
-      min-width: 0;
       align-items: center;
 
       .conversation-participant {
@@ -116,7 +117,7 @@
         }
       }
 
-      .message {        
+      .message {
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;

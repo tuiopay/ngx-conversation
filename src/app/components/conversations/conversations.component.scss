@@ -36,6 +36,20 @@
       visibility: hidden;
     }
   }
+
+  .fs-list {
+    display: inline;
+
+    .fs-list-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .fs-list-table-container {
+      overflow: auto;
+    }
+  }
 }
 
 mat-tab-group .unread {

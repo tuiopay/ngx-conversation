@@ -69,5 +69,7 @@ form {
   .join-conversation {
     text-align: center;
     padding-top: 20px;
+    position: sticky;
+    bottom: 10px;
   }
 }

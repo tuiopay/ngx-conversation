@@ -70,8 +70,6 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
     };
   }
 
-
-
   public save = (): Observable<any> => {
     return of(true)
       .pipe(

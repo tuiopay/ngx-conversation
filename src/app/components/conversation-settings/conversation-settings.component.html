@@ -43,12 +43,12 @@
           </mat-tab>
         </mat-tab-group>
       </ng-container>
-      <ng-container *ngIf="conversation.name && tab === 'settings'">
+      <!-- <ng-container *ngIf="conversation.name && tab === 'settings'">
         <fs-label-field>
           <fs-label>Name</fs-label>
           {{conversation.name}}
         </fs-label-field>
-      </ng-container>
+      </ng-container> -->
     </mat-dialog-content>
     <mat-dialog-actions>
       <ng-container [ngSwitch]="tab">

@@ -2,6 +2,7 @@ import {
   Component, OnInit, OnDestroy,
   ChangeDetectionStrategy, ChangeDetectorRef, Inject,
 } from '@angular/core';
+import { ControlContainer, NgForm } from '@angular/forms';
 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -9,9 +10,9 @@ import { index } from '@firestitch/common';
 import { FsMessage } from '@firestitch/message';
 
 import { Observable, of, Subject } from 'rxjs';
-import { catchError, filter, ignoreElements, map, switchMap, tap } from 'rxjs/operators';
+import { filter, switchMap, tap } from 'rxjs/operators';
 
-import { ConversationParticipantType, ConversationState } from '../../enums';
+import { ConversationState } from '../../enums';
 import { ConversationStates } from '../../consts';
 import { Account, Conversation } from '../../types';
 import { ConversationService } from '../../services';
@@ -22,6 +23,7 @@ import { hasAdminRole } from '../../helpers';
   templateUrl: './conversation-settings.component.html',
   styleUrls: ['./conversation-settings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
 export class ConversationSettingsComponent implements OnInit, OnDestroy {
 
@@ -64,7 +66,6 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
     this.ConversationStates = ConversationStates
       .filter((conversationState) => conversationState.value !== ConversationState.Deleted);
     this._conversationService = this._data.conversationService;
-    console.log(this._conversationService);
     this.conversation = {
       ...this._data.conversation,
     };

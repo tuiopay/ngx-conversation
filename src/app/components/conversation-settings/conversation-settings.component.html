@@ -1,36 +1,39 @@
 <form fsForm [submit]="save">
   <fs-dialog>
-    <div mat-dialog-title>Conversation Settings</div>
+    <div mat-dialog-title>Settings</div>
     <mat-dialog-content *fsSkeletonForm="conversation">
       <ng-container *ngIf="hasAdminRole">
         <mat-tab-group fsTabs [(selected)]="tab">
           <mat-tab label="Settings" name="settings">
             <ng-template matTabContent>
-              <mat-form-field class="full-width">
-                <input
-                  matInput
-                  required
-                  placeholder="Name"
-                  [(ngModel)]="conversation.name"
-                  name="name">
-              </mat-form-field> 
-              <mat-form-field class="full-width">
-                <mat-select
-                  [(ngModel)]="conversation.state"
-                  placeholder="Status"
-                  name="conversation.state">
-                    <mat-option
-                      *ngFor="let item of ConversationStates"
-                      [value]="item.value">
+                <ng-container *ngIf="!conversationService.conversationSettingTemplate">
+                  <mat-form-field class="full-width">
+                    <input
+                      matInput
+                      required
+                      placeholder="Name"
+                      [(ngModel)]="conversation.name"
+                      name="name">
+                  </mat-form-field> 
+                  <mat-form-field class="full-width">
+                    <mat-select
+                        [(ngModel)]="conversation.state"
+                        placeholder="Status"
+                        name="conversation.state">
+                      <mat-option
+                          *ngFor="let item of ConversationStates"
+                          [value]="item.value">
                         {{ item.name }}
-                    </mat-option>
-                </mat-select>
-              </mat-form-field>  
-
-              <ng-container 
-                [ngTemplateOutlet]="conversationService.conversationSettingTemplate"
-                [ngTemplateOutletContext]="{ conversation: conversation }">
-              </ng-container>
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>  
+                </ng-container>
+                <ng-container *ngIf="conversationService.conversationSettingTemplate">
+                  <ng-container 
+                    [ngTemplateOutlet]="conversationService.conversationSettingTemplate"
+                    [ngTemplateOutletContext]="{ conversation: conversation }">
+                  </ng-container>
+                </ng-container>
             </ng-template>
           </mat-tab>
           <mat-tab label="Participants" name="participants">
@@ -43,12 +46,6 @@
           </mat-tab>
         </mat-tab-group>
       </ng-container>
-      <!-- <ng-container *ngIf="conversation.name && tab === 'settings'">
-        <fs-label-field>
-          <fs-label>Name</fs-label>
-          {{conversation.name}}
-        </fs-label-field>
-      </ng-container> -->
     </mat-dialog-content>
     <mat-dialog-actions>
       <ng-container [ngSwitch]="tab">
@@ -75,7 +72,7 @@
               (click)="leave()"
               color="warn" 
               type="button">
-              Leave Conversation
+            Leave Conversation
           </button>
           <ng-container *ngIf="hasAdminRole">
             <button

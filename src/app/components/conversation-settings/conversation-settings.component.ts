@@ -47,7 +47,7 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
     private _dialog: MatDialog,
     private _cdRef: ChangeDetectorRef,
     private _message: FsMessage,
-  ) { }
+  ) {}
 
   public get conversationService(): ConversationService {
     return this._conversationService;

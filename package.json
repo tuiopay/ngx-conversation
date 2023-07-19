@@ -1,7 +1,7 @@
 {
   "name": "@firestitch/conversation",
   "title": "Conversation",
-  "version": "12.5.21",
+  "version": "12.5.22",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-conversation"
@@ -97,7 +97,7 @@
     "rxjs": "^6.5.3",
     "typescript": "4.3.5",
     "zone.js": "~0.11.4",
-    "@firestitch/component-tools": "^12.0.6"
+    "@firestitch/component-tools": "^12.0.14"
   },
   "engines": {
     "node": ">=10.0.0"

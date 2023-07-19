@@ -94,6 +94,7 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
 
   public settingsOpen(tab = 'settings'): void {
     this._dialog.open(ConversationSettingsComponent, {
+      autoFocus: false,
       data: {
         conversation: this.conversation,
         conversationService: this.conversationService,
@@ -111,7 +112,6 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
           ...this.conversation,
           ...conversation,
         };
-
         this.conversationChange.emit();
       });
   }

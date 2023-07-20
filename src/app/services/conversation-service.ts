@@ -20,6 +20,7 @@ export class ConversationService {
     tooltip?: string,
     beforeStart?: (conversation: Conversation) => Observable<Conversation>,
     afterStart?: (conversation: Conversation) => Observable<Conversation>,
+    afterOpen?: (conversation: Conversation) => Observable<Conversation>,
   } = {
     disabled: false,
     show: true,
@@ -28,6 +29,11 @@ export class ConversationService {
 
   public leaveConverstation: {
     show?: boolean,
+  };
+
+  public openConversation: {
+    beforeOpen?: (conversation: Conversation) => Observable<Conversation>,
+    afterOpen?: (conversation: Conversation) => Observable<Conversation>,
   };
 
   private _conversationConfig: ConversationConfig;
@@ -70,6 +76,7 @@ export class ConversationService {
     const leaveConversationShow = leaveConversation.show ? leaveConversation.show() : undefined;
 
     const startConversation = this.conversationConfig.startConversation || {};
+    const openConversation = this.conversationConfig.openConversation || {};
     const startConversationShow = startConversation.show ? startConversation.show() : undefined;
     const startConversationDisabled = startConversation.disabled ? startConversation.disabled() : undefined;
     const startConversationTooltip = startConversation.tooltip ? startConversation.tooltip() : undefined;
@@ -96,13 +103,19 @@ export class ConversationService {
             show: config.startConversationShow ?? true,
             disabled: config.startConversationDisabled ?? false,
             tooltip: config.startConversationTooltip,
-            beforeStart: startConversation.beforeStart instanceof Observable ? startConversation.beforeStart : (conversation) => of(conversation),
-            afterStart: startConversation.afterStart instanceof Observable ? startConversation.afterStart : (conversation) => of(conversation),            
+            beforeStart: startConversation.beforeStart ? startConversation.beforeStart : (conversation) => of(conversation),
+            afterStart: startConversation.afterStart ? startConversation.afterStart : (conversation) => of(conversation),   
+            afterOpen: startConversation.afterOpen ? startConversation.afterOpen : (conversation) => of(conversation),           
           };
 
           this.leaveConverstation = {
             show: config.leaveConversationShow,
           }
+
+          this.openConversation = {
+            beforeOpen: openConversation.beforeOpen ? openConversation.beforeOpen : (conversation) => of(conversation),
+            afterOpen: openConversation.afterOpen ? openConversation.afterOpen : (conversation) => of(conversation),            
+          };
         }),
       )
       .pipe(

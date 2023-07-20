@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FsConversationsComponent } from '@firestitch/conversation';
 import { FsWebSocket } from '@firestitch/web-socket';
 import { accountData} from 'playground/app/data';
 import { ConversationsApiService } from 'playground/app/services';
+import { of } from 'rxjs';
+
 import { ConversationConfig } from 'src/app/types';
 
 
@@ -12,6 +15,9 @@ import { ConversationConfig } from 'src/app/types';
 })
 export class ConversationsComponent implements OnInit {
 
+  @ViewChild(FsConversationsComponent)
+  public conversations: FsConversationsComponent;
+
   public account = accountData
 
   public conversationConfig: ConversationConfig;
@@ -20,7 +26,18 @@ export class ConversationsComponent implements OnInit {
     private _conversationsService: ConversationsApiService,
     private _websocketService: FsWebSocket,
   ) {
-    this.conversationConfig = this._conversationsService.conversationConfig;
+    this.conversationConfig = {
+      ...this._conversationsService.conversationConfig,
+      startConversation: {
+        ...this._conversationsService.conversationConfig.startConversation,
+        afterOpen: (conversation) => {
+          const conversationPane = this.conversations.conversationPane;
+          conversationPane.openSettings();
+
+          return of(conversation);
+        }
+      }
+    };
   }
 
   public ngOnInit(): void {

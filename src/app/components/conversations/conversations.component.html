@@ -5,6 +5,7 @@
     <div class="conversations-pane">
       <app-conversations-pane 
         [account]="account"
+        (conversationStarted)="conversationStarted($event)"
         (conversationOpen)="conversationOpen($event)">
       </app-conversations-pane>
     </div>
@@ -14,6 +15,8 @@
           [account]="account"
           [conversation]="conversation"
           (conversationClose)="conversation = null"
+          (conversationOpen)="conversationOpened.emit()"
+          (conversationOpened)="conversationOpened.emit($event)"
           (conversationChange)="conversationChange()">
         </app-conversation-pane>
       </ng-container>

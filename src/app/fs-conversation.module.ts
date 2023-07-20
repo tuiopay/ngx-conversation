@@ -30,7 +30,7 @@ import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 
 import {
   ConversationPaneComponent, ConversationCreateComponent, ConversationParticipantComponent, ConversationParticipantsComponent,
-  ConversationsComponent, ConversationSettingsComponent, ConversationStateComponent, ParticipantsListComponent,
+  FsConversationsComponent, ConversationSettingsComponent, ConversationStateComponent, ParticipantsListComponent,
   ParticipantsAddComponent,
   ConversationHeaderComponent,
   ConversationItemsComponent,
@@ -77,7 +77,7 @@ import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
   ],
   declarations: [
     ConversationPaneComponent,
-    ConversationsComponent,
+    FsConversationsComponent,
     ConversationCreateComponent,
     ConversationStateComponent,
     ConversationSettingsComponent,
@@ -100,7 +100,7 @@ import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
     ConversationNamePipe,
   ],
   exports: [
-    ConversationsComponent,
+    FsConversationsComponent,
     ConversationSettingsDirective,
     ConversationColumnDirective,
     ConversationHeaderDirective,

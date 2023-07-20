@@ -89,7 +89,7 @@ export class ConversationSettingsComponent implements OnInit, OnDestroy {
       )
       .pipe(
         tap(() => {
-          this._dialogRef.close();
+          this._dialogRef.close(this.conversation);
           this._message.success('Saved Changes');
         }),
       );

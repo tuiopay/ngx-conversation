@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, TemplateRef, Input, Output, EventEmitter,
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, TemplateRef, Input, Output, EventEmitter, OnChanges, SimpleChanges,
 } from '@angular/core';
 
 import { FsMessage } from '@firestitch/message';
@@ -27,12 +27,14 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./conversation-pane.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationPaneComponent implements OnInit, OnDestroy {
+export class ConversationPaneComponent implements OnDestroy, OnChanges {
 
   @Input() public account: Account;
   @Input() public conversation: Conversation;
 
   @Output() public conversationClose = new EventEmitter();
+  @Output() public conversationOpen = new EventEmitter();
+  @Output() public conversationOpened = new EventEmitter();
   @Output() public conversationChange = new EventEmitter();
 
   @ViewChild(ConversationItemsComponent)
@@ -71,8 +73,10 @@ export class ConversationPaneComponent implements OnInit, OnDestroy {
     return this._conversationService.conversationConfig;
   }
 
-  public ngOnInit(): void {
-    this.loadConversation(this.conversation);
+  public ngOnChanges(changes: SimpleChanges): void {
+    if(changes.conversation) {
+      this.loadConversation(this.conversation);
+    }
   }
 
   public saveConversation(conversation): Observable<any> {
@@ -196,6 +200,7 @@ export class ConversationPaneComponent implements OnInit, OnDestroy {
   }
 
   public loadConversation(conversation: Conversation) {
+    this.inited = false;
     this.loadConversation$(conversation)
       .pipe(
         tap(() => {
@@ -203,7 +208,8 @@ export class ConversationPaneComponent implements OnInit, OnDestroy {
           this._cdRef.markForCheck();
 
           // handle typing updates
-          this.conversationService.onTypingNotice(this.conversation.id)
+          this.conversationService
+            .onTypingNotice(this.conversation.id)
             .pipe(
               filter((response) => !!response),
               takeUntil(this._destroy$),
@@ -220,7 +226,8 @@ export class ConversationPaneComponent implements OnInit, OnDestroy {
             });
 
           // handle new messages
-          this.conversationService.onMessageNotice(this.conversation.id)
+          this.conversationService
+            .onMessageNotice(this.conversation.id)
             .pipe(
               takeUntil(this._destroy$),
             ) 
@@ -228,8 +235,11 @@ export class ConversationPaneComponent implements OnInit, OnDestroy {
               this.conversationItems.reload();
             });
         }),
+        switchMap(() => this.conversationService.openConversation.afterOpen(this.conversation)),
       )
-        .subscribe();
+        .subscribe(() =>{
+          this.conversationOpened.emit(this.conversation);
+        });
   }
 
   public openSettings(options: { tab?: string} = { tab: 'settings' }): void {
@@ -252,6 +262,7 @@ export class ConversationPaneComponent implements OnInit, OnDestroy {
           ...this.conversation,
           ...conversation,
         };
+        this._cdRef.markForCheck();
         this.conversationChange.emit();
       });
   }

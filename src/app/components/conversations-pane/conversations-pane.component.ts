@@ -33,6 +33,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
   @Input() public account;
 
   @Output() public conversationOpen = new EventEmitter<Conversation>();
+  @Output() public conversationStarted = new EventEmitter<Conversation>();
 
   @ViewChild(FsListComponent)
   public listComponent: FsListComponent;
@@ -272,7 +273,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
       .subscribe((conversation) => {
         this._message.success('Saved Changes');
         this.reload();
-        this.conversationOpen.emit(conversation);
+        this.conversationStarted.emit(conversation);
       });
   }
 

@@ -38,11 +38,17 @@ export type ConversationConfig = {
     show?: () => Observable<boolean> | boolean,
   },
 
+  openConversation?: {
+    afterOpen?: (conversation: Conversation) => Observable<Conversation>;
+    beforeOpen?: (conversation: Conversation) => Observable<Conversation>;
+  }
+
   startConversation?: {
     disabled?: () => Observable<boolean> | boolean,
     tooltip?: () => Observable<string> | string,
     show?: () => Observable<boolean> | boolean,
     afterStart?: (conversation: Conversation) => Observable<Conversation>;
     beforeStart?: (conversation: Conversation) => Observable<Conversation>;
+    afterOpen?: (conversation: Conversation) => Observable<Conversation>;
   }
 }

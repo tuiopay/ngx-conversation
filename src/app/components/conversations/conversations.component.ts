@@ -1,15 +1,16 @@
 import {
   Component, OnInit, 
-  ChangeDetectionStrategy, OnDestroy, Input, ChangeDetectorRef, TemplateRef, ContentChild, AfterContentInit, ViewChild,
+  ChangeDetectionStrategy, OnDestroy, Input, ChangeDetectorRef, TemplateRef, ContentChild, AfterContentInit, ViewChild, Output, EventEmitter,
 } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { Account, Conversation, ConversationConfig } from '../../types';
 import { ConversationService } from '../../services';
 import { ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective } from '../../directives';
 import { ConversationsPaneComponent } from '../conversations-pane';
 import { ConversationPaneComponent } from '../conversation-pane';
+import { switchMap, take, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { ConversationPaneComponent } from '../conversation-pane';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ConversationService],
 })
-export class ConversationsComponent implements OnInit, OnDestroy, AfterContentInit, OnInit {
+export class FsConversationsComponent implements OnInit, OnDestroy, AfterContentInit, OnInit {
 
   @ContentChild(ConversationHeaderDirective, { read: TemplateRef })
   public conversationHeadingTemplate: TemplateRef<any>;
@@ -38,6 +39,8 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
 
   @Input() public config: ConversationConfig;
   @Input() public account: Account;
+
+  @Output() public conversationOpened = new EventEmitter();
 
   public conversation: Conversation;
 
@@ -80,16 +83,31 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
     }
   }
 
+  public conversationStarted(conversation: Conversation): void {
+    this._conversationOpen(conversation)
+      .pipe(
+        take(1),
+        switchMap(() => this.conversationOpened.asObservable()),
+        switchMap(() => this.conversationService.startConversation.afterOpen(conversation)),
+      )
+      .subscribe();
+  }
+  
   public conversationOpen(conversation: Conversation): void {
     if(this.conversation?.id !== conversation.id) {
-      this.conversation = null;
-      this._cdRef.markForCheck();
-
-      setTimeout(() => {
-        this.conversation = conversation;
-        this._cdRef.markForCheck();
-      });
+      this._conversationOpen(conversation)
+        .subscribe();
     }
+  }
+  
+  private _conversationOpen(conversation: Conversation): Observable<any> {
+    return this.conversationService.openConversation.beforeOpen(conversation)
+      .pipe(
+        tap(() => {
+          this.conversation = conversation;
+          this._cdRef.markForCheck();
+        }),        
+      );
   }
 
 }

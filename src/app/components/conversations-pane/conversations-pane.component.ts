@@ -9,8 +9,8 @@ import { FsListComponent, FsListConfig } from '@firestitch/list';
 import { FsMessage } from '@firestitch/message';
 import { format } from '@firestitch/date';
 
-import { delay, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { Subject, timer } from 'rxjs';
+import { delay, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { Subject, of, timer } from 'rxjs';
 
 import { ConversationCreateComponent } from '../conversation-create';
 import { ConversationConfig, Conversation } from '../../types';
@@ -215,13 +215,13 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
     this._conversationService.onUnreadNotice(this.account.id)
     .subscribe(() => {
       if (this.listComponent) {
-        this.listComponent.reload();
+        this.reload();
       }
     });
   }
 
   public conversationParticipantsChange(): void {
-    this.listComponent.reload();
+    this.reload();
   }
 
   public loadStats(): void {
@@ -262,14 +262,17 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
       name: format(new Date()),
     };
 
-    this.conversationConfig.conversationSave(conversation)
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe((response) => {
+    of(conversation)
+    .pipe(
+      switchMap((conversation) => this.conversationService.startConversation.beforeStart(conversation)),
+      switchMap((conversation) => this.conversationConfig.conversationSave(conversation)),
+      switchMap((conversation) => this.conversationService.startConversation.afterStart(conversation)),
+      takeUntil(this._destroy$),
+    )
+      .subscribe((conversation) => {
         this._message.success('Saved Changes');
-        this.listComponent.reload();
-        this.conversationOpen.emit(response);
+        this.reload();
+        this.conversationOpen.emit(conversation);
       });
   }
 

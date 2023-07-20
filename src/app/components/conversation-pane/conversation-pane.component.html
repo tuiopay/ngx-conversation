@@ -3,9 +3,8 @@
     <app-conversation-header
       [conversationService]="conversationService"
       [conversation]="conversation"
-      [joined]="joined"
-      [account]="account"
       (filterChanged)="filterChanged($event)"
+      (openSettings)="openSettings({ tab: $event })"
       (conversationClose)="conversationClose.emit()"
       (conversationChange)="conversationReload()">
     </app-conversation-header>

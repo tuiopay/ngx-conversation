@@ -6,7 +6,7 @@ export * from './conversation-settings';
 export * from './conversation-state';
 export * from './conversation-header';
 export * from './conversation-items';
-export * from './conversation';
+export * from './conversation-pane';
 export * from './conversations';
 export * from './participants-list';
 export * from './participants-add';

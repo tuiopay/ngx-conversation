@@ -9,13 +9,11 @@ import { FilterConfig, ItemType } from '@firestitch/filter';
 import { list } from '@firestitch/common';
 
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
-import { Account, Conversation } from '../../types';
+import { Conversation } from '../../types';
 import { ConversationService } from '../../services';
 import { ParticipantsAddComponent } from '../participants-add';
-import { ConversationSettingsComponent } from '../conversation-settings';
 import { ConversationItemState } from '../../enums';
 import { hasAdminRole } from '../../helpers';
 
@@ -29,13 +27,12 @@ import { hasAdminRole } from '../../helpers';
 export class ConversationHeaderComponent implements OnDestroy, OnInit {
 
   @Input() public conversation: Conversation;
-  @Input() public joined: boolean;
   @Input() public conversationService: ConversationService;
-  @Input() public account: Account;
 
   @Output() public conversationChange = new EventEmitter<Conversation>();
   @Output() public conversationClose = new EventEmitter<Conversation>();
   @Output() public filterChanged = new EventEmitter<{ query: any, sort: any }>();
+  @Output() public openSettings = new EventEmitter<string>();
 
   public ConversationStates = ConversationStates;
   public conversationStates = list(ConversationStates, 'name', 'value');
@@ -90,30 +87,6 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
     .subscribe(() => {
       this.conversationChange.emit();
     });
-  }
-
-  public settingsOpen(tab = 'settings'): void {
-    this._dialog.open(ConversationSettingsComponent, {
-      autoFocus: false,
-      data: {
-        conversation: this.conversation,
-        conversationService: this.conversationService,
-        joined: this.joined,
-        account: this.account,
-        tab,
-      },
-    })
-      .afterClosed()
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe((conversation) => {
-        this.conversation = {
-          ...this.conversation,
-          ...conversation,
-        };
-        this.conversationChange.emit();
-      });
   }
 
   public ngOnDestroy(): void {

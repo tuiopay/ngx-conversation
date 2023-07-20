@@ -10,12 +10,12 @@
     </div>
     <div class="conversation-pane">
       <ng-container *ngIf="conversation">
-        <app-conversation 
+        <app-conversation-pane
           [account]="account"
           [conversation]="conversation"
           (conversationClose)="conversation = null"
           (conversationChange)="conversationChange()">
-        </app-conversation>
+        </app-conversation-pane>
       </ng-container>
     </div>
   </ng-container>

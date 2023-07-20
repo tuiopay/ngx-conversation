@@ -29,7 +29,7 @@ import { FsHtmlRendererModule } from '@firestitch/html-editor';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 
 import {
-  ConversationComponent, ConversationCreateComponent, ConversationParticipantComponent, ConversationParticipantsComponent,
+  ConversationPaneComponent, ConversationCreateComponent, ConversationParticipantComponent, ConversationParticipantsComponent,
   ConversationsComponent, ConversationSettingsComponent, ConversationStateComponent, ParticipantsListComponent,
   ParticipantsAddComponent,
   ConversationHeaderComponent,
@@ -76,7 +76,7 @@ import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
     FsAutocompleteChipsModule,
   ],
   declarations: [
-    ConversationComponent,
+    ConversationPaneComponent,
     ConversationsComponent,
     ConversationCreateComponent,
     ConversationStateComponent,

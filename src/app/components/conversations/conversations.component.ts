@@ -8,8 +8,8 @@ import { Subject } from 'rxjs';
 import { Account, Conversation, ConversationConfig } from '../../types';
 import { ConversationService } from '../../services';
 import { ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective } from '../../directives';
-import { ConversationComponent } from '../conversation/conversation.component';
 import { ConversationsPaneComponent } from '../conversations-pane';
+import { ConversationPaneComponent } from '../conversation-pane';
 
 
 @Component({
@@ -30,13 +30,16 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
   @ContentChild(ConversationColumnDirective, { read: TemplateRef })
   public conversationColumnTemplate: TemplateRef<any>;
 
+  @ViewChild(ConversationPaneComponent)
+  public conversationPane: ConversationPaneComponent;
+
   @ViewChild(ConversationsPaneComponent)
   public conversationsPane: ConversationsPaneComponent;
 
-  public conversation: Conversation;
-
   @Input() public config: ConversationConfig;
   @Input() public account: Account;
+
+  public conversation: Conversation;
 
   private _destroy$ = new Subject<void>();
 
@@ -81,6 +84,7 @@ export class ConversationsComponent implements OnInit, OnDestroy, AfterContentIn
     if(this.conversation?.id !== conversation.id) {
       this.conversation = null;
       this._cdRef.markForCheck();
+
       setTimeout(() => {
         this.conversation = conversation;
         this._cdRef.markForCheck();

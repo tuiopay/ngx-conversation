@@ -14,7 +14,13 @@ export class ConversationService {
   public conversationSettingTemplate: TemplateRef<any>;
   public conversationHeadingTemplate: TemplateRef<any>;
   public inited = false;
-  public startConversation = {
+  public startConversation: {
+    disabled?: boolean,
+    show?: boolean,
+    tooltip?: string,
+    beforeStart?: (conversation: Conversation) => Observable<Conversation>,
+    afterStart?: (conversation: Conversation) => Observable<Conversation>,
+  } = {
     disabled: false,
     show: true,
     tooltip: '',
@@ -60,12 +66,13 @@ export class ConversationService {
   }
 
   public initStartConversation(): Observable<any> {
-    const startConversation = this.conversationConfig.startConversation || {};
     const leaveConversation = this.conversationConfig.leaveConversation || {};
+    const leaveConversationShow = leaveConversation.show ? leaveConversation.show() : undefined;
+
+    const startConversation = this.conversationConfig.startConversation || {};
     const startConversationShow = startConversation.show ? startConversation.show() : undefined;
     const startConversationDisabled = startConversation.disabled ? startConversation.disabled() : undefined;
     const startConversationTooltip = startConversation.tooltip ? startConversation.tooltip() : undefined;
-    const leaveConversationShow = leaveConversation.show ? leaveConversation.show() : undefined;
 
     const configs$: {
       startConversationShow?: Observable<boolean>,
@@ -89,7 +96,10 @@ export class ConversationService {
             show: config.startConversationShow ?? true,
             disabled: config.startConversationDisabled ?? false,
             tooltip: config.startConversationTooltip,
+            beforeStart: startConversation.beforeStart instanceof Observable ? startConversation.beforeStart : (conversation) => of(conversation),
+            afterStart: startConversation.afterStart instanceof Observable ? startConversation.afterStart : (conversation) => of(conversation),            
           };
+
           this.leaveConverstation = {
             show: config.leaveConversationShow,
           }

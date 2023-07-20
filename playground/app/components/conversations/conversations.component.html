@@ -2,18 +2,5 @@
   <fs-conversations 
       [account]="account"
       [config]="conversationConfig">
-    <ng-template fsConversationSettings let-conversation="conversation">
-      <fs-label-field>
-        <fs-label>Targeting Settings</fs-label>
-        <mat-checkbox
-            [(ngModel)]="conversation.addAllParents"
-            name="addAllParents">
-          Add all organization parents
-        </mat-checkbox>
-      </fs-label-field>
-    </ng-template>
-    <ng-template fsConversationColumn let-conversation="conversation" let-template="template">
-      <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{ conversation: conversation }"></ng-container>
-    </ng-template>
   </fs-conversations>
 </div>

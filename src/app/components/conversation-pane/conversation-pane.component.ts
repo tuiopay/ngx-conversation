@@ -9,7 +9,7 @@ import { FsFile } from '@firestitch/file';
 import { list } from '@firestitch/common';
 
 import { forkJoin, Observable, of, Subject, throwError } from 'rxjs';
-import { filter, finalize, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
 import { Account, Conversation, ConversationConfig } from '../../types';
@@ -17,15 +17,17 @@ import { ConversationItemType, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
 import { ConversationItemsComponent } from '../conversation-items';
 import { MatInput } from '@angular/material/input';
+import { ConversationSettingsComponent } from '../conversation-settings';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
-  selector: 'app-conversation',
-  templateUrl: './conversation.component.html',
-  styleUrls: ['./conversation.component.scss'],
+  selector: 'app-conversation-pane',
+  templateUrl: './conversation-pane.component.html',
+  styleUrls: ['./conversation-pane.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationComponent implements OnInit, OnDestroy {
+export class ConversationPaneComponent implements OnInit, OnDestroy {
 
   @Input() public account: Account;
   @Input() public conversation: Conversation;
@@ -58,6 +60,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     private _cdRef: ChangeDetectorRef,
     private _message: FsMessage,
     private _conversationService: ConversationService,
+    private _dialog: MatDialog,
   ) { }
 
   public get conversationService(): ConversationService {
@@ -227,6 +230,30 @@ export class ConversationComponent implements OnInit, OnDestroy {
         }),
       )
         .subscribe();
+  }
+
+  public openSettings(options: { tab?: string} = { tab: 'settings' }): void {
+    this._dialog.open(ConversationSettingsComponent, {
+      autoFocus: false,
+      data: {
+        conversation: this.conversation,
+        conversationService: this.conversationService,
+        joined: this.joined,
+        account: this.account,
+        tab: options?.tab || 'settings',
+      },
+    })
+      .afterClosed()
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe((conversation) => {
+        this.conversation = {
+          ...this.conversation,
+          ...conversation,
+        };
+        this.conversationChange.emit();
+      });
   }
 
   private _updateTypingState() {

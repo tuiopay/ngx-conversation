@@ -2,7 +2,6 @@ import {
   Component, OnInit, OnDestroy,
   ChangeDetectionStrategy, ChangeDetectorRef, Inject,
 } from '@angular/core';
-import { ControlContainer, NgForm } from '@angular/forms';
 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -23,7 +22,6 @@ import { hasAdminRole } from '../../helpers';
   templateUrl: './conversation-settings.component.html',
   styleUrls: ['./conversation-settings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
 export class ConversationSettingsComponent implements OnInit, OnDestroy {
 

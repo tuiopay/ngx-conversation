@@ -95,7 +95,7 @@
         </app-conversation-participant>   
       </ng-container>
     </div>
-    <div>
+    <div [ngClass]="{ 'participant-multiple-info': conversation.recentConversationParticipants.length > 1 }">
       <div class="name">
         <a>{{conversation | conversationName}}</a>
       </div>  

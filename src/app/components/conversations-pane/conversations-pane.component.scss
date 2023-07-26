@@ -57,6 +57,12 @@
       flex-grow: 1;
       align-items: center;
 
+      .participant-multiple-info {
+        display: flex;
+        flex-direction: column;
+        min-height: 28px;
+      }
+
       .conversation-participant {
         width: 40px;
         margin-right: 10px;

@@ -14,7 +14,7 @@
         <app-conversation-pane
           [account]="account"
           [conversation]="conversation"
-          (conversationClose)="conversation = null"
+          (conversationClose)="conversationClose()"
           (conversationOpen)="conversationOpened.emit()"
           (conversationOpened)="conversationOpened.emit($event)"
           (conversationChange)="conversationChange()">

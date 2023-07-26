@@ -36,7 +36,8 @@ export class ConversationsComponent implements OnInit {
 
           return of(conversation);
         }
-      }
+      },
+      converstationsReloadInterval: 10000,
     };
   }
 

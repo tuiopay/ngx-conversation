@@ -1,5 +1,5 @@
-<form fsForm [submit]="messageSend" #messageForm>
-  <ng-container *ngIf="inited">
+<form fsForm [submit]="messageSend" #messageForm [ngClass]="{ inited: inited}">
+  <ng-container *ngIf="conversation">
     <app-conversation-header
       [conversationService]="conversationService"
       [conversation]="conversation"

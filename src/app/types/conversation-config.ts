@@ -33,6 +33,7 @@ export type ConversationConfig = {
   websocketService?: () => any;
   mapAccount?: (account) => Account;
   mapGalleryItem?: (data) => FsGalleryItem;
+  converstationsReloadInterval?: number;
 
   leaveConversation?: {
     show?: () => Observable<boolean> | boolean,

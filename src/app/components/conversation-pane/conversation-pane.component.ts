@@ -1,6 +1,6 @@
 import {
-  Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Inject, TemplateRef, Input, Output, EventEmitter, OnChanges, SimpleChanges,
+  Component, OnDestroy, Output, EventEmitter, OnChanges, SimpleChanges,
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Input, 
 } from '@angular/core';
 
 import { FsMessage } from '@firestitch/message';
@@ -177,6 +177,9 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
   }
 
   public loadConversation$(conversation: Conversation): Observable<{ conversation: Conversation, conversationParticipants: any }> {
+    this.inited = false;
+    this._cdRef.markForCheck();
+
     return forkJoin({
       conversation: this._conversationService
         .conversationGet(conversation.id, {
@@ -191,22 +194,30 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
         }),
       })
       .pipe(
+        switchMap((data) => {
+          this.conversation = null;
+          this._cdRef.markForCheck();
+
+          return new Observable<any>((observer) => {
+            setTimeout(() => {
+              observer.next(data);
+              observer.complete();
+            });
+          });
+        }),
         tap(({ conversation, conversationParticipants }) => {
           this.joined = conversationParticipants.conversationParticipants.length > 0;
           this.conversation = conversation;
+          this.inited = true;
           this._cdRef.markForCheck();
-        })
+        }),
       );
   }
 
-  public loadConversation(conversation: Conversation) {
-    this.inited = false;
+  public loadConversation(conversation: Conversation) {    
     this.loadConversation$(conversation)
       .pipe(
         tap(() => {
-          this.inited = true;
-          this._cdRef.markForCheck();
-
           // handle typing updates
           this.conversationService
             .onTypingNotice(this.conversation.id)

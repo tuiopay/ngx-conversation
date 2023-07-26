@@ -30,14 +30,15 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
   @Input() public conversationHeadingTemplate: TemplateRef<any>;
   @Input() public conversationSettingTemplate: TemplateRef<any>;
   @Input() public conversationColumnTemplate: TemplateRef<any>;
-  @Input() public account;
+  @Input() public account; 
 
   @Output() public conversationOpen = new EventEmitter<Conversation>();
   @Output() public conversationStarted = new EventEmitter<Conversation>();
 
   @ViewChild(FsListComponent)
   public listComponent: FsListComponent;
-
+  
+  public selectedConversation: Conversation;
   public listConfig: FsListConfig;
   public tab: 'account' | 'open' | 'closed' | string = 'account';
   public conversationsStats = {
@@ -47,6 +48,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
   };
 
   private _destroy$ = new Subject<void>();
+  private _converstationsReloadInterval;
 
   constructor(
     private _dialog: MatDialog,
@@ -67,13 +69,21 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
     this.listComponent.reload();
   }
 
+  public deselect(): void {
+    this.selectedConversation = null;
+    this.listComponent.getData()
+      .forEach((converstation) => {
+        this.listComponent.updateData(converstation, (row) => row.id === converstation.id);
+      });
+  }
+
   public tabChange(tab): void {
     this.tab = tab;
     this.reload();
   }
 
   public initStatsReload(): void {
-    timer(0, 30000)
+    timer(0, this._converstationsReloadInterval)
       .pipe(
         takeUntil(this._destroy$),
       )
@@ -83,7 +93,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
   }
 
   public initConverstationsReload(): void {
-    timer(30000, 30000)
+    timer(this._converstationsReloadInterval, this._converstationsReloadInterval)
       .pipe(
         filter(() => !this._conversationService.hasWebSocketConnection() && this.listComponent.list.paging.page === 1),
         takeUntil(this._destroy$),
@@ -94,6 +104,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    this._converstationsReloadInterval = (this.conversationConfig.converstationsReloadInterval || 30) * 1000;
     this.initStatsReload();
     this.initConverstationsReload();
 
@@ -110,6 +121,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
       ],
       rowEvents: {
         click: (event) => {
+          this.selectedConversation = event.row;
           this.conversationOpen.emit(event.row);
         },
       },

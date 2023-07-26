@@ -1,7 +1,7 @@
 <fs-list [config]="listConfig">
   <fs-list-column>
     <ng-template fs-list-cell let-row="row" class="col-converstaion">
-      <div class="converstaion-row">
+      <div class="converstaion-row" [ngClass]="{ selected: selectedConversation?.id === row.id }">
         <ng-container *ngIf="conversationColumnTemplate">
           <ng-container [ngTemplateOutlet]="conversationColumnTemplate" [ngTemplateOutletContext]="{ conversation: row, template: conversationTemplate }"></ng-container>
         </ng-container>

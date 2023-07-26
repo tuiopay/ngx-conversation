@@ -83,6 +83,11 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
     }
   }
 
+  public conversationClose(): void {
+    this.conversation = null;
+    this.conversationsPane.deselect();
+  }
+
   public conversationStarted(conversation: Conversation): void {
     this._conversationOpen(conversation)
       .pipe(

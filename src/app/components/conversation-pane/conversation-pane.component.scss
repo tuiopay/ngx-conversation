@@ -6,6 +6,10 @@ form {
   display: flex !important;
   flex-direction: column;
   height: 100%;
+
+  &:not(.inited) {
+    opacity: .5;
+  }
 }
 
 .conversation-name {

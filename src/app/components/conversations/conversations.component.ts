@@ -92,7 +92,12 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
     this._conversationOpen(conversation)
       .pipe(
         take(1),
-        switchMap(() => this.conversationOpened.asObservable()),
+        switchMap(() => {
+          return this.conversationOpened.asObservable()
+            .pipe(
+              take(1),
+            );
+        }),
         switchMap(() => this.conversationService.startConversation.afterOpen(conversation)),
       )
       .subscribe();

@@ -21,7 +21,6 @@ import { ItemType } from '@firestitch/filter';
 export class ConversationReadParticipantsDialogComponent implements OnInit {
 
   public listConfig: FsListConfig;
-  private _conversationService: ConversationService;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: {
@@ -33,7 +32,7 @@ export class ConversationReadParticipantsDialogComponent implements OnInit {
   ) { }
 
   public get conversationService(): ConversationService {
-    return this._conversationService;
+    return this._data.conversationService;
   }
 
   public ngOnInit(): void {

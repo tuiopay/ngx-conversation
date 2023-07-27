@@ -28,11 +28,11 @@
     <a 
         *ngIf="hasAdminRole; else conversationParticipants"
         class="participants"
-        (click)="openSettings.emit('participants')">
+        (click)="settingsClicked('participants')">
       <ng-container *ngTemplateOutlet="conversationParticipants"></ng-container>
     </a>     
     <a 
-        (click)="openSettings.emit()"
+        (click)="settingsClicked()"
         class="name">
       {{conversation.name}}
     </a>
@@ -46,9 +46,10 @@
       [config]="filterConf">
     </fs-filter>
     <button
+        *ngIf="hasAdminRole"
         type="button"
         tabindex="-1"
-        (click)="openSettings.emit()"
+        (click)="settingsClicked()"
         mat-icon-button>
       <mat-icon>settings</mat-icon>
     </button>  

@@ -42,7 +42,7 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
 
   constructor(
     private _dialog: MatDialog,
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this.filterConf = {
@@ -70,6 +70,14 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
         },
       ],
     };
+  }
+
+  public settingsClicked(tab: string = null): void {
+    if (!this.hasAdminRole) {
+      return;
+    }
+
+    this.openSettings.emit(tab);
   }
 
   public get hasAdminRole(): boolean {

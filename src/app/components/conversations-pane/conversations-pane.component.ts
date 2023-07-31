@@ -285,6 +285,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
       .subscribe((conversation) => {
         this._message.success('Saved Changes');
         this.reload();
+        this.selectedConversation = conversation;
         this.conversationStarted.emit(conversation);
       });
   }

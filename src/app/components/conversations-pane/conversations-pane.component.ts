@@ -26,11 +26,11 @@ import { ItemType } from '@firestitch/filter';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConversationsPaneComponent implements OnInit, OnDestroy {
-  
+
   @Input() public conversationHeadingTemplate: TemplateRef<any>;
   @Input() public conversationSettingTemplate: TemplateRef<any>;
   @Input() public conversationColumnTemplate: TemplateRef<any>;
-  @Input() public account; 
+  @Input() public account;
 
   @Output() public conversationOpen = new EventEmitter<Conversation>();
   @Output() public conversationStarted = new EventEmitter<Conversation>();
@@ -40,7 +40,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
 
   @ViewChild('list', { read: ElementRef })
   public listEl: ElementRef;
-  
+
   public selectedConversation: Conversation;
   public listConfig: FsListConfig;
   public tab: 'account' | 'open' | 'closed' | string = 'account';
@@ -116,7 +116,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
       loadMore: true,
       queryParam: false,
       paging: {
-        limit: 30, 
+        limit: 30,
         strategy: PaginationStrategy.Offset,
       },
       filters: [
@@ -147,6 +147,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
           click: () => {
             this.conversationStart();
           },
+          tooltip: this._conversationService.startConversation.tooltip,
         }
       ],
       rowActions: [

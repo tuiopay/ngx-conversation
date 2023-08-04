@@ -16,7 +16,7 @@ import { ConversationConfig, Conversation, ConversationItem,
 })
 export class ConversationsApiService {
 
-  private _url = 'https://cure.local.firestitch.com/api/';
+  private _url = 'https://cure.dev.firestitch.com/api/';
 
   public constructor(
     private _api: FsApi,

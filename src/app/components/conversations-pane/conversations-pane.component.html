@@ -99,7 +99,7 @@
       <div class="name">
         <a>{{conversation | conversationName}}</a>
       </div>  
-      <div class="last-conversation-item" *ngIf="conversation.lastConversationItem">
+      <div class="last-conversation-item small" *ngIf="conversation.lastConversationItem">
         <div class="summary">
           <ng-container *ngIf="conversation.lastConversationItem.message; else lastFile">
             <div class="message">
@@ -110,7 +110,7 @@
             <ng-container *ngIf="conversation.lastConversationItem.lastConversationItemFile">
               <div class="file">
                 <mat-icon>insert_drive_file</mat-icon>
-                {{conversation.lastConversationItem.lastConversationItemFile.name}}
+                {{conversation.lastConversationItem.lastConversationItemFile.filename}}
               </div>
             </ng-container>
           </ng-template>

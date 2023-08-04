@@ -46,7 +46,7 @@ const routes: Routes = [
     FsFormModule.forRoot(),
     FsApiModule.forRoot(),
     FsTabsModule.forRoot(),
-    FsPopoverModule.forRoot(),
+    FsPopoverModule,
     FsFileModule.forRoot(),
     FsMessageModule.forRoot(),
     FsGalleryModule.forRoot(),

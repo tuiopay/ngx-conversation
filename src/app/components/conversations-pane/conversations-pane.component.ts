@@ -1,11 +1,11 @@
 import {
   Component, OnInit, ViewChild,
-  ChangeDetectionStrategy, OnDestroy, Input, ChangeDetectorRef, TemplateRef, Output, EventEmitter,
+  ChangeDetectionStrategy, OnDestroy, Input, ChangeDetectorRef, TemplateRef, Output, EventEmitter, ElementRef,
 } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { FsListComponent, FsListConfig } from '@firestitch/list';
+import { FsListComponent, FsListConfig, PaginationStrategy } from '@firestitch/list';
 import { FsMessage } from '@firestitch/message';
 import { format } from '@firestitch/date';
 
@@ -37,6 +37,9 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
 
   @ViewChild(FsListComponent)
   public listComponent: FsListComponent;
+
+  @ViewChild('list', { read: ElementRef })
+  public listEl: ElementRef;
   
   public selectedConversation: Conversation;
   public listConfig: FsListConfig;
@@ -112,6 +115,10 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
       status: false,
       loadMore: true,
       queryParam: false,
+      paging: {
+        limit: 30, 
+        strategy: PaginationStrategy.Offset,
+      },
       filters: [
         {
           name: 'keyword',
@@ -220,17 +227,26 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
                 }), paging: response.paging
               };
             }),
+            tap((response) => {
+              setTimeout(() => {
+                const converstaion: any = response.data[0];
+                if(converstaion) {
+                  const el = this.listEl.nativeElement?.querySelector(`tbody tr .converstaion-row[data="converstaion-row-${converstaion.id}"]`);
+                  el?.scrollIntoView({ behavior: 'smooth' });
+                }
+              });
+            }),
           );
       },
     };
 
     // when notified that user has conversation updates then reload stuff
     this._conversationService.onUnreadNotice(this.account.id)
-    .subscribe(() => {
-      if (this.listComponent) {
-        this.reload();
-      }
-    });
+      .subscribe(() => {
+        if (this.listComponent) {
+          this.reload();
+        }
+      });
   }
 
   public conversationParticipantsChange(): void {

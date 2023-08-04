@@ -1,7 +1,7 @@
-<fs-list [config]="listConfig">
+<fs-list [config]="listConfig" #list>
   <fs-list-column>
     <ng-template fs-list-cell let-row="row" class="col-converstaion">
-      <div class="converstaion-row" [ngClass]="{ selected: selectedConversation?.id === row.id }">
+      <div class="converstaion-row" [ngClass]="{ selected: selectedConversation?.id === row.id }" [attr.data]="'converstaion-row-' + row.id">
         <ng-container *ngIf="conversationColumnTemplate">
           <ng-container [ngTemplateOutlet]="conversationColumnTemplate" [ngTemplateOutletContext]="{ conversation: row, template: conversationTemplate }"></ng-container>
         </ng-container>
@@ -109,7 +109,6 @@
           <ng-template #lastFile>
             <ng-container *ngIf="conversation.lastConversationItem.lastConversationItemFile">
               <div class="file">
-                <mat-icon>insert_drive_file</mat-icon>
                 {{conversation.lastConversationItem.lastConversationItemFile.filename}}
               </div>
             </ng-container>

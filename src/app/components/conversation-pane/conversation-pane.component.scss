@@ -44,6 +44,13 @@ form {
       white-space: nowrap;
       margin-left: 5px;
       margin-bottom: 10px;
+      align-items: center;
+
+      .spinner {
+        width: 36px;
+        display: flex;
+        justify-content: center;
+      }
     }
   }
 

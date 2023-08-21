@@ -41,6 +41,7 @@ import {
 import { AutofocusDirective, ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
 import { FsFilterModule } from '@firestitch/filter';
 import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
     MatInputModule,
     MatTabsModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
 
     FsFormModule,
     FsDialogModule,

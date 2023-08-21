@@ -121,7 +121,7 @@ export class ConversationsApiService {
       return {
         name: conversationItemFile.file.filename,
         preview: conversationItemFile.file.preview?.small,
-        url: conversationItemFile.file.preview?.small,
+        url: conversationItemFile.file.preview?.large,
         index: conversationItemFile.id,
         data: conversationItemFile,
         extension: conversationItemFile.file.extension,

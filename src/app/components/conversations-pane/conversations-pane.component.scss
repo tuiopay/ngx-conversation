@@ -1,7 +1,8 @@
 :host ::ng-deep {
-
   fs-list {
     table {
+      table-layout: fixed;
+
       .fs-list-header-container {
         position: sticky;
         top: 0;
@@ -74,16 +75,19 @@
       display: flex;
       flex-grow: 1;
       align-items: center;
+      min-width: 0;
 
       .participant-multiple-info {
         display: flex;
         flex-direction: column;
         min-height: 28px;
+        min-width: 0;
       }
 
       .conversation-participant {
         width: 40px;
         margin-right: 10px;
+        flex-shrink: 0;
 
         &.conversation-participant-multiple {
           position: relative;
@@ -124,9 +128,6 @@
     }
 
     .last-conversation-item {
-      display: flex;
-      min-width: 0;
-
       .file {
         display: flex;
         align-items: center;

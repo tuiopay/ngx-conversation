@@ -9,11 +9,11 @@ import { FsFile } from '@firestitch/file';
 import { list } from '@firestitch/common';
 
 import { forkJoin, Observable, of, Subject, throwError } from 'rxjs';
-import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { filter, finalize, mapTo, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
-import { Account, Conversation, ConversationConfig } from '../../types';
-import { ConversationItemType, ConversationState } from '../../enums';
+import { Account, Conversation, ConversationConfig, ConversationItem } from '../../types';
+import { ConversationItemState, ConversationItemType, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
 import { ConversationItemsComponent } from '../conversation-items';
 import { MatInput } from '@angular/material/input';
@@ -54,6 +54,7 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
   public conversationStates = list(ConversationStates, 'name', 'value');
   public joined = false;
   public inited = false;
+  public submitting = false;
   public typing = {state: 'none', name: '', accounts: []};
 
   private _destroy$ = new Subject();
@@ -96,19 +97,32 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
         conversationId: this.conversation.id,
         message: config.message,
         type: ConversationItemType.Message,
+        state: this.files.length ? ConversationItemState.Draft : ConversationItemState.Active,
       })
       .pipe(
         switchMap((conversationItem) => {
-          return this.files.length ?
-            forkJoin(
-              this.files.map((fsFile: FsFile) => {
+          return forkJoin(
+            [
+              of(true),
+              ...this.files.map((fsFile: FsFile) => {
                 return this._conversationService.conversationConfig.conversationItemFilePost(
                   conversationItem,
                   fsFile.file
                 );
               }),
-            )
-            : of(true);
+            ])
+            .pipe(
+              mapTo(conversationItem),
+            );
+        }),
+        switchMap((conversationItem: ConversationItem) => {
+          return this.files.length ? 
+            this._conversationService
+            .conversationConfig.conversationItemSave({
+              id: conversationItem.id,
+              conversationId: this.conversation.id,
+              state: ConversationItemState.Active,
+            }) : of(conversationItem);
         }),
         tap(() => {
           this.conversationItems.load();
@@ -138,16 +152,23 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
   public messageSend = () => {
     return of(this.message.trim())
       .pipe(
+        tap(() => {
+          this.submitting = true;
+          this._cdRef.markForCheck();
+        }), 
         switchMap((message) => !this.files.length && message.length === 0 ? throwError(false) : of(message)),
         switchMap((message) => this.conversationItemCreate({ message })),
         tap(() => {
           this.conversationService.sendMessageNotice(this.conversation.id, this.account.id);
-
           this.message = '';
           this.files = [];
           this._cdRef.markForCheck();
           this.conversationChange.emit();
         }),
+        finalize(() => {
+          this.submitting = false;
+          this._cdRef.markForCheck();
+        })
       );
   };
 

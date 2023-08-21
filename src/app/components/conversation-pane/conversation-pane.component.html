@@ -44,7 +44,9 @@
               [autofocus]="true"
               cdkTextareaAutosize
               [(ngModel)]="message"
-              [disabled]="conversation.state === ConversationState.Closed" name="message" placeholder="Type a message"
+              [disabled]="conversation.state === ConversationState.Closed || submitting" 
+              name="message" 
+              placeholder="Type a message"
               (keypress)="typingStart()">
             </textarea>
           </mat-form-field>

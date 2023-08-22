@@ -127,7 +127,11 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
         this.autoload = true;
 
         // if participants added/removed trigger a conversation reload
-        if(conversationItems.some((conversationItem) => { [ConversationItemType.ParticipantAdd,ConversationItemType.ParticipantRemoved].indexOf(conversationItem.type)})) {
+        if(this.conversationItems.length > 0
+          && conversationItems.some((conversationItem) => {
+            return [ConversationItemType.ParticipantAdd,ConversationItemType.ParticipantRemoved].indexOf(conversationItem.type) !== -1
+          })
+        ) {
           this.conversationChange.emit(this.conversation);
         }
 

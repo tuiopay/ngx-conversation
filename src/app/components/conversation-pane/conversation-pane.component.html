@@ -14,7 +14,8 @@
           [account]="account"
           [conversationService]="conversationService"
           [conversation]="conversation"
-          [sessionConversationParticipant]="sessionConversationParticipant">
+          [sessionConversationParticipant]="sessionConversationParticipant"
+          (conversationChange)="conversationReload()">
         </app-conversation-items>
 
         <div class="typing" *ngIf="typing.state==='single'">{{typing.name}} is typing..</div>
@@ -44,8 +45,8 @@
               [autofocus]="true"
               cdkTextareaAutosize
               [(ngModel)]="message"
-              [disabled]="conversation.state === ConversationState.Closed || submitting" 
-              name="message" 
+              [disabled]="conversation.state === ConversationState.Closed || submitting"
+              name="message"
               placeholder="Type a message"
               (keypress)="typingStart()">
             </textarea>
@@ -74,7 +75,7 @@
                 imageQuality=".8">
               <a
                   mat-icon-button
-                  [disabled]="conversation.state === ConversationState.Closed || submitting" 
+                  [disabled]="conversation.state === ConversationState.Closed || submitting"
                   type="button"
                   color="basic">
                 <mat-icon>attach_file</mat-icon>
@@ -84,10 +85,10 @@
         </div>
 
         <fs-file-previews [previewWidth]="100" [previewHeight]="100" [files]="files">
-          <ng-template 
-              fs-file-preview-action 
-              placement="top-right" 
-              action="remove" 
+          <ng-template
+              fs-file-preview-action
+              placement="top-right"
+              action="remove"
               tooltip="Remove">
             <mat-icon>close</mat-icon>
           </ng-template>

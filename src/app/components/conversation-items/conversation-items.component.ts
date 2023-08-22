@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef, Input,
+  ChangeDetectionStrategy, ChangeDetectorRef, Input, EventEmitter, Output,
 } from '@angular/core';
 
 import { FsGalleryConfig, FsGalleryItem, GalleryLayout, GalleryThumbnailSize, MimeType } from '@firestitch/gallery';
@@ -29,6 +29,8 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   @Input() public query = {};
   @Input() public sessionConversationParticipant: ConversationParticipant;
   @Input() public conversationService: ConversationService;
+
+  @Output() public conversationChange = new EventEmitter();
 
   public autoload = true;
   public MimeType = MimeType;
@@ -123,6 +125,12 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
       )
       .subscribe((conversationItems) => {
         this.autoload = true;
+
+        // if participants added/removed trigger a conversation reload
+        if(conversationItems.some((conversationItem) => { [ConversationItemType.ParticipantAdd,ConversationItemType.ParticipantRemoved].indexOf(conversationItem.type)})) {
+          this.conversationChange.emit(this.conversation);
+        }
+
         this.conversationItems = [
           ...conversationItems,
           ...this.conversationItems,

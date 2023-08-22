@@ -1,6 +1,6 @@
 import {
   Component, OnDestroy, Output, EventEmitter, OnChanges, SimpleChanges,
-  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Input, 
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Input,
 } from '@angular/core';
 
 import { FsMessage } from '@firestitch/message';
@@ -116,7 +116,7 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
             );
         }),
         switchMap((conversationItem: ConversationItem) => {
-          return this.files.length ? 
+          return this.files.length ?
             this._conversationService
             .conversationConfig.conversationItemSave({
               id: conversationItem.id,
@@ -155,7 +155,7 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
         tap(() => {
           this.submitting = true;
           this._cdRef.markForCheck();
-        }), 
+        }),
         switchMap((message) => !this.files.length && message.length === 0 ? throwError(false) : of(message)),
         switchMap((message) => this.conversationItemCreate({ message })),
         tap(() => {
@@ -198,8 +198,6 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
   }
 
   public loadConversation$(conversation: Conversation): Observable<{ conversation: Conversation, conversationParticipants: any }> {
-    this.inited = false;
-    this._cdRef.markForCheck();
 
     return forkJoin({
       conversation: this._conversationService
@@ -209,7 +207,7 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
           recentConversationParticipantAccounts: true,
           recentConversationParticipantAccountAvatars: true,
         }),
-        conversationParticipants: this.conversationConfig
+      conversationParticipants: this.conversationConfig
         .conversationParticipantsGet(conversation, {
           accountId: this.account.id,
         }),
@@ -229,13 +227,16 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
         tap(({ conversation, conversationParticipants }) => {
           this.joined = conversationParticipants.conversationParticipants.length > 0;
           this.conversation = conversation;
-          this.inited = true;
+
           this._cdRef.markForCheck();
         }),
       );
   }
 
-  public loadConversation(conversation: Conversation) {    
+  public loadConversation(conversation: Conversation) {
+    this.inited = false;
+    this._cdRef.markForCheck();
+
     this.loadConversation$(conversation)
       .pipe(
         tap(() => {
@@ -262,12 +263,15 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
             .onMessageNotice(this.conversation.id)
             .pipe(
               takeUntil(this._destroy$),
-            ) 
+            )
             .subscribe(() => {
               this.conversationItems.reload();
             });
         }),
         switchMap(() => this.conversationService.openConversation.afterOpen(this.conversation)),
+        finalize(() => {
+          this.inited = true;
+        })
       )
         .subscribe(() =>{
           this.conversationOpened.emit(this.conversation);

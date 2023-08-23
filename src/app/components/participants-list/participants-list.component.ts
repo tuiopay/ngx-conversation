@@ -100,6 +100,10 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
 
               return this.conversationService.conversationConfig
                 .conversationParticipantBulk(this.conversation, data)
+                .pipe(tap(() => {
+                  this.conversationService.sendMessageNotice(this.conversation.id);
+                }));
+
             }),
             tap(() => {
               this.reload();
@@ -129,7 +133,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
 
         return this.conversationService.conversationConfig.conversationParticipantsGet(this.conversation, query)
         .pipe(
-          map((response) => ({ 
+          map((response) => ({
             data: response.conversationParticipants
             .map((conversationParticipant) => {
               return {
@@ -137,7 +141,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
                 account: this.conversationService.mapAccount(conversationParticipant.account),
               }
             }),
-             paging: response.paging 
+             paging: response.paging
           })),
         );
       },

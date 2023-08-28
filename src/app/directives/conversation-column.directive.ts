@@ -2,8 +2,8 @@ import { Directive } from '@angular/core';
 
 
 @Directive({
-  selector: '[fsConversationColumn]',
+  selector: '[fsConversationsConversation]',
 })
-export class ConversationColumnDirective {
+export class ConversationsConversationDirective {
 
 }

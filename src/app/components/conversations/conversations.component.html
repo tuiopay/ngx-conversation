@@ -5,6 +5,7 @@
     <div class="conversations-pane">
       <app-conversations-pane 
         [account]="account"
+        [conversationsConversationTemplate]="conversationsConversationTemplate"
         (conversationStarted)="conversationStarted($event)"
         (conversationOpen)="conversationOpen($event)">
       </app-conversations-pane>

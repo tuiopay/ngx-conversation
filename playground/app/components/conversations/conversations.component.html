@@ -2,5 +2,9 @@
   <fs-conversations 
       [account]="account"
       [config]="conversationConfig">
+      <ng-template fsConversationsConversation let-conversation="conversation" let-template="template">
+        <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{ conversation: conversation }">
+        </ng-container>
+      </ng-template>
   </fs-conversations>
 </div>

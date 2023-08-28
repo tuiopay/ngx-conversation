@@ -7,7 +7,7 @@ import { Observable, Subject } from 'rxjs';
 
 import { Account, Conversation, ConversationConfig } from '../../types';
 import { ConversationService } from '../../services';
-import { ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective } from '../../directives';
+import { ConversationsConversationDirective, ConversationHeaderDirective, ConversationSettingsDirective } from '../../directives';
 import { ConversationsPaneComponent } from '../conversations-pane';
 import { ConversationPaneComponent } from '../conversation-pane';
 import { switchMap, take, tap } from 'rxjs/operators';
@@ -28,8 +28,8 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
   @ContentChild(ConversationSettingsDirective, { read: TemplateRef })
   public conversationSettingTemplate: TemplateRef<any>;
 
-  @ContentChild(ConversationColumnDirective, { read: TemplateRef })
-  public conversationColumnTemplate: TemplateRef<any>;
+  @ContentChild(ConversationsConversationDirective, { read: TemplateRef })
+  public conversationsConversationTemplate: TemplateRef<any>;
 
   @ViewChild(ConversationPaneComponent)
   public conversationPane: ConversationPaneComponent;

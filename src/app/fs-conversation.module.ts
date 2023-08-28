@@ -38,7 +38,7 @@ import {
   ConversationReadParticipantsDialogComponent,
   ConversationsPaneComponent,
 } from './components';
-import { AutofocusDirective, ConversationColumnDirective, ConversationHeaderDirective, ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
+import { AutofocusDirective, ConversationsConversationDirective, ConversationHeaderDirective, ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
 import { FsFilterModule } from '@firestitch/filter';
 import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -94,7 +94,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ConversationSettingsDirective,
     ConversationReadParticipantsPopoverComponent,
     ConversationReadParticipantsDialogComponent,
-    ConversationColumnDirective,
+    ConversationsConversationDirective,
     AutofocusDirective,
     ConversationHeaderDirective,
     ConversationsPaneComponent,
@@ -104,7 +104,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   exports: [
     FsConversationsComponent,
     ConversationSettingsDirective,
-    ConversationColumnDirective,
+    ConversationsConversationDirective,
     ConversationHeaderDirective,
   ],
 })

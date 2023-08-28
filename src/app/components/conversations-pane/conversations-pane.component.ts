@@ -29,7 +29,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
 
   @Input() public conversationHeadingTemplate: TemplateRef<any>;
   @Input() public conversationSettingTemplate: TemplateRef<any>;
-  @Input() public conversationColumnTemplate: TemplateRef<any>;
+  @Input() public conversationsConversationTemplate: TemplateRef<any>;
   @Input() public account;
 
   @Output() public conversationOpen = new EventEmitter<Conversation>();

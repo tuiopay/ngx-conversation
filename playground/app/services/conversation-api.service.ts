@@ -3,22 +3,26 @@ import { Injectable } from '@angular/core';
 import { FsApi } from '@firestitch/api';
 import { FsGalleryItem } from '@firestitch/gallery';
 import { FsWebSocket } from '@firestitch/web-socket';
-import { Observable, of } from 'rxjs';
 
+import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ConversationConfig, Conversation, ConversationItem,
-  ConversationItemMessage, ConversationParticipant } from 'src/app/types';
+import {
+  Conversation,
+  ConversationConfig,
+  ConversationItem,
+  ConversationItemMessage, ConversationParticipant,
+} from 'src/app/types';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConversationsApiService {
 
   private _url = 'https://cure.dev.firestitch.com/api/';
 
-  public constructor(
+  constructor(
     private _api: FsApi,
     private _websocketService: FsWebSocket,
   ) {
@@ -49,10 +53,10 @@ export class ConversationsApiService {
     },
     conversationSave: (conversation: Conversation) => {
       const data: any = conversation;
-      if(!data.environmentId) {
+      if (!data.environmentId) {
         data.environmentId = 12;
       }
-      
+
       return this.save('conversations', data)
         .pipe(
           map((response) => response.conversation),
@@ -117,7 +121,7 @@ export class ConversationsApiService {
       return this._websocketService;
     },
 
-    mapGalleryItem(conversationItemFile): FsGalleryItem {
+    mapGalleryItem(conversationItem, conversationItemFile): FsGalleryItem {
       return {
         name: conversationItemFile.file.filename,
         preview: conversationItemFile.file.preview?.small,
@@ -131,7 +135,7 @@ export class ConversationsApiService {
     leaveConversation: {
       show: () => true,
     },
-    
+
     startConversation: {
       show: () => {
         return of(true);
@@ -141,8 +145,8 @@ export class ConversationsApiService {
       },
       tooltip: () => {
         return of('This is a tooltip');
-      }
-    }
-  }
+      },
+    },
+  };
 
 }

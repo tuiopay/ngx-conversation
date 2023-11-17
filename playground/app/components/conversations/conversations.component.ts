@@ -1,28 +1,31 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+
 import { FsConversationsComponent } from '@firestitch/conversation';
 import { FsWebSocket } from '@firestitch/web-socket';
-import { accountData} from 'playground/app/data';
-import { ConversationsApiService } from 'playground/app/services';
+
 import { of } from 'rxjs';
 
+import { accountData } from 'playground/app/data';
+import { ConversationsApiService } from 'playground/app/services';
 import { ConversationConfig } from 'src/app/types';
 
 
 @Component({
   selector: 'app-conversations',
   templateUrl: './conversations.component.html',
-  styleUrls: ['./conversations.component.scss']
+  styleUrls: ['./conversations.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationsComponent implements OnInit {
+export class ConversationsComponent {
 
   @ViewChild(FsConversationsComponent)
   public conversations: FsConversationsComponent;
 
-  public account = accountData
+  public account = accountData;
 
   public conversationConfig: ConversationConfig;
 
-  public constructor(
+  constructor(
     private _conversationsService: ConversationsApiService,
     private _websocketService: FsWebSocket,
   ) {
@@ -35,19 +38,9 @@ export class ConversationsComponent implements OnInit {
           conversationPane.openSettings();
 
           return of(conversation);
-        }
+        },
       },
       converstationsReloadInterval: 10000,
     };
-  }
-
-  public ngOnInit(): void {
-
-    // setTimeout(() => {
-    //   // create web socket
-    //   this._websocketService
-    //     .setPort(9501)
-    //     .connect();
-    // }, 2000);
   }
 }

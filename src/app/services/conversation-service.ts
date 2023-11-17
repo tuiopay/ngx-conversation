@@ -4,8 +4,8 @@ import { RequestConfig } from '@firestitch/api';
 import { forkJoin, Observable, of } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 
-import { ConversationConfig, Conversation, ConversationParticipant, Account } from '../types';
 import { FsGalleryItem } from '@firestitch/gallery';
+import { Account, Conversation, ConversationConfig, ConversationItem, ConversationItemFile, ConversationParticipant } from '../types';
 
 
 @Injectable()
@@ -22,10 +22,10 @@ export class ConversationService {
     afterStart?: (conversation: Conversation) => Observable<Conversation>,
     afterOpen?: (conversation: Conversation) => Observable<Conversation>,
   } = {
-    disabled: false,
-    show: true,
-    tooltip: '',
-  };
+      disabled: false,
+      show: true,
+      tooltip: '',
+    };
 
   public leaveConverstation: {
     show?: boolean,
@@ -104,8 +104,8 @@ export class ConversationService {
             disabled: config.startConversationDisabled ?? false,
             tooltip: config.startConversationTooltip,
             beforeStart: startConversation.beforeStart ? startConversation.beforeStart : (conversation) => of(conversation),
-            afterStart: startConversation.afterStart ? startConversation.afterStart : (conversation) => of(conversation),   
-            afterOpen: startConversation.afterOpen ? startConversation.afterOpen : (conversation) => of(conversation),           
+            afterStart: startConversation.afterStart ? startConversation.afterStart : (conversation) => of(conversation),
+            afterOpen: startConversation.afterOpen ? startConversation.afterOpen : (conversation) => of(conversation),
           };
 
           this.leaveConverstation = {
@@ -114,7 +114,7 @@ export class ConversationService {
 
           this.openConversation = {
             beforeOpen: openConversation.beforeOpen ? openConversation.beforeOpen : (conversation) => of(conversation),
-            afterOpen: openConversation.afterOpen ? openConversation.afterOpen : (conversation) => of(conversation),            
+            afterOpen: openConversation.afterOpen ? openConversation.afterOpen : (conversation) => of(conversation),
           };
         }),
       )
@@ -129,7 +129,7 @@ export class ConversationService {
 
   public sendMessageNotice(conversationId: number, accountId: number = null): void {
     if (this.hasWebSocketConnection()) {
-      if(accountId)
+      if (accountId)
         this.sendTypingStopNotice(conversationId, accountId);
 
       this.conversationConfig.websocketService().send(`conversation/${conversationId}/message`);
@@ -138,13 +138,13 @@ export class ConversationService {
 
   public sendTypingStartNotice(conversationId: number, accountId: number) {
     if (this.hasWebSocketConnection()) {
-      this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, {isTyping: true})
+      this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, { isTyping: true })
     }
   }
 
   public sendTypingStopNotice(conversationId: number, accountId: number): void {
     if (this.hasWebSocketConnection()) {
-      this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, {isTyping: false})
+      this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, { isTyping: false })
     }
   }
 
@@ -152,22 +152,22 @@ export class ConversationService {
     return this._conversationConfig.mapAccount ? this._conversationConfig.mapAccount(account) : account;
   }
 
-  public mapGalleryItem(conversationItemFile): FsGalleryItem {
-    return this._conversationConfig.mapGalleryItem ? this._conversationConfig.mapGalleryItem(conversationItemFile) : conversationItemFile;
+  public mapGalleryItem(conversationItem: ConversationItem, conversationItemFile: ConversationItemFile): FsGalleryItem {
+    return this._conversationConfig.mapGalleryItem ? this._conversationConfig.mapGalleryItem(conversationItem, conversationItemFile) : {};
   }
 
   public onUnreadNotice(accountId: number): Observable<any> {
     if (!this.conversationConfig.websocketService()) {
       return of();
     }
-    
+
     return this.conversationConfig.websocketService().routeObservable(`account/${accountId}/unreadconversations`);
   }
 
   public onMessageNotice(conversationId: number): Observable<any> {
     if (!this.conversationConfig.websocketService()) {
       return of();
-    } 
+    }
 
     return this.conversationConfig.websocketService().routeObservable(`conversation/${conversationId}/message`);
   }

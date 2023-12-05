@@ -42,7 +42,7 @@
             <textarea
               matInput
               (keydown)="messageKeydown($event)"
-              [autofocus]="true"
+              [fsAutofocus]="true"
               cdkTextareaAutosize
               [(ngModel)]="message"
               [disabled]="conversation.state === ConversationState.Closed || submitting"

@@ -1,47 +1,55 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { FsFormModule } from '@firestitch/form';
-import { FsLinkModule } from '@firestitch/link';
+import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
+import { FsBadgeModule } from '@firestitch/badge';
+import { FsChipModule } from '@firestitch/chip';
+import { FsCommonModule } from '@firestitch/common';
+import { FsDateModule } from '@firestitch/date';
 import { FsDialogModule } from '@firestitch/dialog';
 import { FsFileModule } from '@firestitch/file';
-import { FsBadgeModule } from '@firestitch/badge';
-import { FsDateModule } from '@firestitch/date';
+import { FsFilterModule } from '@firestitch/filter';
+import { FsFormModule } from '@firestitch/form';
+import { FsGalleryModule } from '@firestitch/gallery';
+import { FsHtmlRendererModule } from '@firestitch/html-editor';
+import { FsLabelModule } from '@firestitch/label';
+import { FsLinkModule } from '@firestitch/link';
 import { FsListModule } from '@firestitch/list';
 import { FsMenuModule } from '@firestitch/menu';
-import { FsGalleryModule } from '@firestitch/gallery';
-import { FsLabelModule } from '@firestitch/label';
-import { FsSkeletonModule } from '@firestitch/skeleton';
-import { FsChipModule } from '@firestitch/chip';
-import { FsTabsModule } from '@firestitch/tabs';
 import { FsPopoverModule } from '@firestitch/popover';
-import { FsHtmlRendererModule } from '@firestitch/html-editor';
-import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
+import { FsSkeletonModule } from '@firestitch/skeleton';
+import { FsTabsModule } from '@firestitch/tabs';
 
 import {
-  ConversationPaneComponent, ConversationCreateComponent, ConversationParticipantComponent, ConversationParticipantsComponent,
-  FsConversationsComponent, ConversationSettingsComponent, ConversationStateComponent, ParticipantsListComponent,
-  ParticipantsAddComponent,
+  ConversationCreateComponent,
   ConversationHeaderComponent,
   ConversationItemsComponent,
-  ConversationReadParticipantsPopoverComponent,
+  ConversationPaneComponent,
+  ConversationParticipantComponent, ConversationParticipantsComponent,
   ConversationReadParticipantsDialogComponent,
+  ConversationReadParticipantsPopoverComponent,
+  ConversationSettingsComponent, ConversationStateComponent,
   ConversationsPaneComponent,
+  FsConversationsComponent,
+  ParticipantsAddComponent,
+  ParticipantsListComponent,
 } from './components';
-import { AutofocusDirective, ConversationsConversationDirective, ConversationHeaderDirective, ConversationSettingsDirective, ScrollIntoViewDirective } from './directives';
-import { FsFilterModule } from '@firestitch/filter';
+import {
+  ConversationHeaderDirective, ConversationSettingsDirective,
+  ConversationsConversationDirective, ScrollIntoViewDirective
+} from './directives';
 import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -60,6 +68,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatProgressSpinnerModule,
 
     FsFormModule,
+    FsCommonModule,
     FsDialogModule,
     FsDateModule,
     FsListModule,
@@ -95,7 +104,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ConversationReadParticipantsPopoverComponent,
     ConversationReadParticipantsDialogComponent,
     ConversationsConversationDirective,
-    AutofocusDirective,
     ConversationHeaderDirective,
     ConversationsPaneComponent,
     ConversationBadgeNamePipe,
@@ -108,4 +116,4 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ConversationHeaderDirective,
   ],
 })
-export class FsConversationModule {}
+export class FsConversationModule { }

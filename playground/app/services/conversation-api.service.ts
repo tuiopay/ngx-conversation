@@ -20,30 +20,6 @@ import {
 })
 export class ConversationsApiService {
 
-  private _url = 'https://cure.dev.firestitch.com/api/';
-
-  constructor(
-    private _api: FsApi,
-    private _websocketService: FsWebSocket,
-  ) {
-  }
-
-  public save(url, data) {
-    return data.id ? this._api.put(`${this._url}${url}/${data.id}`, data) : this._api.post(`${this._url}${url}`, data);
-  }
-
-  public delete(url, data) {
-    return this._api.delete(`${this._url}${url}/${data.id}`, {});
-  }
-
-  public get(url, data = {}) {
-    return this._api.get(`${this._url}${url}`, data);
-  }
-
-  public post(url, data) {
-    return this._api.post(`${this._url}${url}`, data);
-  }
-
   public conversationConfig: ConversationConfig = {
     conversationsGet: (query?: any) => {
       return this._api.get(`${this._url}conversations`, query);
@@ -149,4 +125,27 @@ export class ConversationsApiService {
     },
   };
 
+  private _url = 'https://cure.dev.firestitch.com/api/';
+
+  constructor(
+    private _api: FsApi,
+    private _websocketService: FsWebSocket,
+  ) {
+  }
+
+  public save(url, data) {
+    return data.id ? this._api.put(`${this._url}${url}/${data.id}`, data) : this._api.post(`${this._url}${url}`, data);
+  }
+
+  public delete(url, data) {
+    return this._api.delete(`${this._url}${url}/${data.id}`, {});
+  }
+
+  public get(url, data = {}) {
+    return this._api.get(`${this._url}${url}`, data);
+  }
+
+  public post(url, data) {
+    return this._api.post(`${this._url}${url}`, data);
+  }
 }

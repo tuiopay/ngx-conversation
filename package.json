@@ -1,7 +1,7 @@
 {
   "name": "@firestitch/conversation",
   "title": "Conversation",
-  "version": "12.7.2",
+  "version": "12.7.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-conversation"
@@ -41,8 +41,7 @@
     "@angular/platform-browser": "^12.2.15",
     "@angular/platform-browser-dynamic": "^12.2.15",
     "@angular/router": "^12.2.15",
-    "@compodoc/compodoc": "^1.1.10",
-    "@firestitch/api": "^12.2.0",
+    "@firestitch/api": "^12.3.10",
     "@firestitch/autocomplete": "^12.0.0",
     "@firestitch/autocomplete-chips": "^12.0.0",
     "@firestitch/badge": "^12.0.0",
@@ -55,12 +54,13 @@
     "@firestitch/datepicker": "^12.0.1",
     "@firestitch/dialog": "^12.0.1",
     "@firestitch/drawer": "^12.0.0",
+    "@firestitch/pdf-viewer": "^12.0.0",
     "@firestitch/example": "^12.0.0",
     "@firestitch/exif-js": "^2.3.0",
     "@firestitch/file": "^12.2.6",
     "@firestitch/filter": "^12.11.0",
     "@firestitch/form": "^12.0.1",
-    "@firestitch/gallery": "^12.9.11",
+    "@firestitch/gallery": "^12.11.2",
     "@firestitch/html-editor": "^12.5.5",
     "@firestitch/iframe": "^12.0.0",
     "@firestitch/label": "^12.0.0",

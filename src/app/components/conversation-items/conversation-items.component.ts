@@ -8,14 +8,19 @@ import {
   Output,
 } from '@angular/core';
 
-import { FsGalleryConfig, FsGalleryItem, GalleryLayout, GalleryThumbnailSize, MimeType } from '@firestitch/gallery';
+import { MatDialog } from '@angular/material/dialog';
+
+import {
+  FsGalleryConfig, FsGalleryItem, GalleryLayout, GalleryThumbnailSize, MimeType, ThumbnailScale,
+} from '@firestitch/gallery';
 import { FsPrompt } from '@firestitch/prompt';
 
 import { Observable, of, Subject, timer } from 'rxjs';
 import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
-import { MatDialog } from '@angular/material/dialog';
-import { ConversationItemState, ConversationItemType, ConversationRole, ConversationState } from '../../enums';
+import {
+  ConversationItemState, ConversationItemType, ConversationRole, ConversationState,
+} from '../../enums';
 import { ConversationService } from '../../services';
 import { Account, Conversation, ConversationItem, ConversationParticipant } from '../../types';
 import { ConversationReadParticipantsDialogComponent } from '../conversation-read-participants-dialog';
@@ -44,8 +49,8 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   public lastConversationItem: ConversationItem;
   public ConversationItemState = ConversationItemState;
   public conversationItems: (ConversationItem & {
-    canDelete?: boolean,
-    galleryConfig?: FsGalleryConfig,
+    canDelete?: boolean;
+    galleryConfig?: FsGalleryConfig;
   })[] = [];
 
   private _destroy$ = new Subject();
@@ -113,14 +118,16 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
                     heightScale: 0.7,
                     width: 200,
                     size: GalleryThumbnailSize.Cover,
+                    scale: ThumbnailScale.None,
                   },
                   layout: GalleryLayout.Flow,
                   toolbar: false,
                   zoom: false,
-                  fetch: (query): Observable<FsGalleryItem[]> => {
+                  fetch: (): Observable<FsGalleryItem[]> => {
                     return of(conversationItem.conversationItemFiles
                       .map((conversationItemFile) => {
-                        return this.conversationService.mapGalleryItem(conversationItem, conversationItemFile);
+                        return this.conversationService
+                          .mapGalleryItem(conversationItem, conversationItemFile);
                       }));
                   },
                 } as FsGalleryConfig,
@@ -134,7 +141,8 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
         // if participants added/removed trigger a conversation reload
         if (this.conversationItems.length > 0
           && conversationItems.some((conversationItem) => {
-            return [ConversationItemType.ParticipantAdd, ConversationItemType.ParticipantRemoved].indexOf(conversationItem.type) !== -1
+            return [ConversationItemType.ParticipantAdd, ConversationItemType.ParticipantRemoved]
+              .indexOf(conversationItem.type) !== -1;
           })
         ) {
           this.conversationChange.emit(this.conversation);
@@ -147,7 +155,8 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
 
         const lastConversationItem = this.conversationItems[0];
         if (lastConversationItem && lastConversationItem !== this.lastConversationItem) {
-          this.conversationService.conversationConfig.conversationRead(this.conversation, lastConversationItem)
+          this.conversationService.conversationConfig
+            .conversationRead(this.conversation, lastConversationItem)
             .subscribe();
         }
 
@@ -187,11 +196,12 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
     })
       .pipe(
         switchMap(() => {
-          return this.conversationService.conversationConfig.conversationItemDelete(conversationItem)
+          return this.conversationService
+            .conversationConfig.conversationItemDelete(conversationItem)
             .pipe(
               tap(() => {
                 this.conversationService.sendMessageNotice(this.conversation.id, this.account.id);
-              })
+              }),
             );
         }),
         takeUntil(this._destroy$),
@@ -204,7 +214,8 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   }
 
   public fileDownload(conversationItem, fileItem): void {
-    this.conversationService.conversationConfig.conversationItemFileDownload(conversationItem, fileItem.id);
+    this.conversationService.conversationConfig
+      .conversationItemFileDownload(conversationItem, fileItem.id);
   }
 
   public filesDownload(conversationItem: ConversationItem): void {
@@ -212,7 +223,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
       .forEach((conversationItemFile) => {
         this.conversationService.conversationConfig.conversationItemFileDownload(
           conversationItem,
-          conversationItemFile.id
+          conversationItemFile.id,
         );
       });
   }

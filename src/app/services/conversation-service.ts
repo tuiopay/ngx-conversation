@@ -1,10 +1,11 @@
 import { Injectable, TemplateRef } from '@angular/core';
+
 import { RequestConfig } from '@firestitch/api';
+import { FsGalleryItem } from '@firestitch/gallery';
 
 import { forkJoin, Observable, of } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 
-import { FsGalleryItem } from '@firestitch/gallery';
 import { Account, Conversation, ConversationConfig, ConversationItem, ConversationItemFile, ConversationParticipant } from '../types';
 
 
@@ -15,12 +16,12 @@ export class ConversationService {
   public conversationHeadingTemplate: TemplateRef<any>;
   public inited = false;
   public startConversation: {
-    disabled?: boolean,
-    show?: boolean,
-    tooltip?: string,
-    beforeStart?: (conversation: Conversation) => Observable<Conversation>,
-    afterStart?: (conversation: Conversation) => Observable<Conversation>,
-    afterOpen?: (conversation: Conversation) => Observable<Conversation>,
+    disabled?: boolean;
+    show?: boolean;
+    tooltip?: string;
+    beforeStart?: (conversation: Conversation) => Observable<Conversation>;
+    afterStart?: (conversation: Conversation) => Observable<Conversation>;
+    afterOpen?: (conversation: Conversation) => Observable<Conversation>;
   } = {
       disabled: false,
       show: true,
@@ -28,12 +29,12 @@ export class ConversationService {
     };
 
   public leaveConverstation: {
-    show?: boolean,
+    show?: boolean;
   };
 
   public openConversation: {
-    beforeOpen?: (conversation: Conversation) => Observable<Conversation>,
-    afterOpen?: (conversation: Conversation) => Observable<Conversation>,
+    beforeOpen?: (conversation: Conversation) => Observable<Conversation>;
+    afterOpen?: (conversation: Conversation) => Observable<Conversation>;
   };
 
   private _conversationConfig: ConversationConfig;
@@ -61,7 +62,7 @@ export class ConversationService {
   public conversationParticipantGet(
     conversation: Conversation,
     query?: any,
-    config?: RequestConfig
+    config?: RequestConfig,
   ): Observable<ConversationParticipant> {
     return this.conversationConfig.conversationParticipantsGet(conversation, {
       ...query,
@@ -82,11 +83,11 @@ export class ConversationService {
     const startConversationTooltip = startConversation.tooltip ? startConversation.tooltip() : undefined;
 
     const configs$: {
-      startConversationShow?: Observable<boolean>,
-      startConversationDisabled?: Observable<boolean>,
-      startConversationTooltip?: Observable<string>,
-      leaveConversationShow?: Observable<boolean>,
-      dummy?: Observable<boolean>,
+      startConversationShow?: Observable<boolean>;
+      startConversationDisabled?: Observable<boolean>;
+      startConversationTooltip?: Observable<string>;
+      leaveConversationShow?: Observable<boolean>;
+      dummy?: Observable<boolean>;
     } = {
       startConversationShow: startConversationShow instanceof Observable ? startConversationShow : of(startConversationShow),
       startConversationDisabled: startConversationDisabled instanceof Observable ? startConversationDisabled : of(startConversationDisabled),
@@ -110,7 +111,7 @@ export class ConversationService {
 
           this.leaveConverstation = {
             show: config.leaveConversationShow,
-          }
+          };
 
           this.openConversation = {
             beforeOpen: openConversation.beforeOpen ? openConversation.beforeOpen : (conversation) => of(conversation),
@@ -129,8 +130,9 @@ export class ConversationService {
 
   public sendMessageNotice(conversationId: number, accountId: number = null): void {
     if (this.hasWebSocketConnection()) {
-      if (accountId)
+      if (accountId) {
         this.sendTypingStopNotice(conversationId, accountId);
+      }
 
       this.conversationConfig.websocketService().send(`conversation/${conversationId}/message`);
     }
@@ -138,13 +140,13 @@ export class ConversationService {
 
   public sendTypingStartNotice(conversationId: number, accountId: number) {
     if (this.hasWebSocketConnection()) {
-      this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, { isTyping: true })
+      this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, { isTyping: true });
     }
   }
 
   public sendTypingStopNotice(conversationId: number, accountId: number): void {
     if (this.hasWebSocketConnection()) {
-      this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, { isTyping: false })
+      this.conversationConfig.websocketService().send(`conversation/${conversationId}/typing`, { isTyping: false });
     }
   }
 

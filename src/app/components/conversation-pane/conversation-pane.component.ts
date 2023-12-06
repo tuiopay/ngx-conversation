@@ -18,7 +18,7 @@ import { FsFormDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
 
 import { forkJoin, Observable, of, Subject, throwError } from 'rxjs';
-import { filter, finalize, mapTo, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { delay, filter, finalize, mapTo, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { ConversationStates } from '../../consts';
 import { ConversationItemState, ConversationItemType, ConversationState } from '../../enums';
@@ -222,20 +222,14 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
         }),
     })
       .pipe(
-        switchMap((data) => {
+        tap(() => {
           this.conversation = null;
           this._cdRef.markForCheck();
-
-          return new Observable<any>((observer) => {
-            setTimeout(() => {
-              observer.next(data);
-              observer.complete();
-            });
-          });
         }),
-        tap(({ _conversation, conversationParticipants }) => {
-          this.joined = conversationParticipants.conversationParticipants.length > 0;
-          this.conversation = _conversation;
+        delay(10),
+        tap((response) => {
+          this.joined = response.conversationParticipants.conversationParticipants.length > 0;
+          this.conversation = response.conversation;
           this._cdRef.markForCheck();
         }),
       );

@@ -1,16 +1,26 @@
 import {
-  Component, OnInit, 
-  ChangeDetectionStrategy, OnDestroy, Input, ChangeDetectorRef, TemplateRef, ContentChild, AfterContentInit, ViewChild, Output, EventEmitter,
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ContentChild,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
 } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
-
-import { Account, Conversation, ConversationConfig } from '../../types';
-import { ConversationService } from '../../services';
-import { ConversationsConversationDirective, ConversationHeaderDirective, ConversationSettingsDirective } from '../../directives';
-import { ConversationsPaneComponent } from '../conversations-pane';
-import { ConversationPaneComponent } from '../conversation-pane';
 import { switchMap, take, tap } from 'rxjs/operators';
+
+import { ConversationHeaderDirective, ConversationSettingsDirective, ConversationsConversationDirective, ConversationsConversationNameDirective } from '../../directives';
+import { ConversationService } from '../../services';
+import { Account, Conversation, ConversationConfig } from '../../types';
+import { ConversationPaneComponent } from '../conversation-pane';
+import { ConversationsPaneComponent } from '../conversations-pane';
 
 
 @Component({
@@ -30,6 +40,9 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
 
   @ContentChild(ConversationsConversationDirective, { read: TemplateRef })
   public conversationsConversationTemplate: TemplateRef<any>;
+
+  @ContentChild(ConversationsConversationNameDirective, { read: TemplateRef })
+  public conversationsConversationNameTemplate: TemplateRef<any>;
 
   @ViewChild(ConversationPaneComponent)
   public conversationPane: ConversationPaneComponent;
@@ -61,7 +74,7 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
 
   public ngOnInit(): void {
     this._conversationService.conversationConfig = this.config;
-    
+
     this.conversationService.initStartConversation()
       .subscribe(() => this._cdRef.markForCheck());
   }
@@ -102,21 +115,21 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
       )
       .subscribe();
   }
-  
+
   public conversationOpen(conversation: Conversation): void {
     if(this.conversation?.id !== conversation.id) {
       this._conversationOpen(conversation)
         .subscribe();
     }
   }
-  
+
   private _conversationOpen(conversation: Conversation): Observable<any> {
     return this.conversationService.openConversation.beforeOpen(conversation)
       .pipe(
         tap(() => {
           this.conversation = conversation;
           this._cdRef.markForCheck();
-        }),        
+        }),
       );
   }
 

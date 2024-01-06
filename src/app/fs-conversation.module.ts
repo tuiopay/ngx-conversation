@@ -47,7 +47,7 @@ import {
 } from './components';
 import {
   ConversationHeaderDirective, ConversationSettingsDirective,
-  ConversationsConversationDirective, ScrollIntoViewDirective
+  ConversationsConversationDirective, ConversationsConversationNameDirective, ScrollIntoViewDirective,
 } from './directives';
 import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
 
@@ -103,6 +103,7 @@ import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
     ConversationSettingsDirective,
     ConversationReadParticipantsPopoverComponent,
     ConversationReadParticipantsDialogComponent,
+    ConversationsConversationNameDirective,
     ConversationsConversationDirective,
     ConversationHeaderDirective,
     ConversationsPaneComponent,
@@ -114,6 +115,7 @@ import { ConversationBadgeNamePipe, ConversationNamePipe } from './pipes';
     ConversationSettingsDirective,
     ConversationsConversationDirective,
     ConversationHeaderDirective,
+    ConversationsConversationNameDirective,
   ],
 })
 export class FsConversationModule { }

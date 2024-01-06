@@ -1,7 +1,10 @@
 <fs-list [config]="listConfig" #list>
   <fs-list-column>
     <ng-template fs-list-cell let-conversation="row" class="col-converstaion">
-      <div class="converstaion-row" [ngClass]="{ selected: selectedConversation?.id === conversation.id }" [attr.data]="'converstaion-row-' + conversation.id">
+      <div 
+          class="converstaion-row" 
+          [ngClass]="{ selected: selectedConversation?.id === conversation.id }" [attr.data]="'converstaion-row-' + conversation.id"
+          (click)="openConversation(conversation)">
         <div class="converstaion">
           <ng-container *ngIf="conversationsConversationTemplate">
             <ng-container [ngTemplateOutlet]="conversationsConversationTemplate" [ngTemplateOutletContext]="{ conversation: conversation, template: conversationTemplate }"></ng-container>
@@ -104,7 +107,13 @@
   </div>
   <div [ngClass]="{ 'participant-multiple-info': conversation.recentConversationParticipants.length > 1 }">
     <div class="name">
-      <a>{{conversation | conversationName}}</a>
+      <ng-container *ngIf="conversationsConversationNameTemplate; else conversationName">
+        <ng-container [ngTemplateOutlet]="conversationsConversationNameTemplate" [ngTemplateOutletContext]="{ conversation: conversation, template: conversationName }"></ng-container>
+      </ng-container>
+
+      <ng-template #conversationName>
+        <a>{{conversation | conversationName}}</a>
+      </ng-template>
     </div>  
     <div class="last-conversation-item small" *ngIf="conversation.lastConversationItem">
       <div class="summary">

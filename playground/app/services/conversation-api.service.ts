@@ -94,7 +94,7 @@ export class ConversationsApiService {
     },
     websocketService: () => {
       return null;
-      return this._websocketService;
+
     },
 
     mapGalleryItem(conversationItem, conversationItemFile): FsGalleryItem {
@@ -123,6 +123,16 @@ export class ConversationsApiService {
         return of('This is a tooltip');
       },
     },
+    conversationActions: [
+      {
+        label: 'Flag Conversation',
+        click: (conversation: Conversation & { flag: any }) => {
+          console.log('Conversation action click');
+          conversation.flag = !conversation.flag;
+        },
+        show: (conversation: Conversation) => true,
+      },
+    ],
   };
 
   private _url = 'https://cure.dev.firestitch.com/api/';

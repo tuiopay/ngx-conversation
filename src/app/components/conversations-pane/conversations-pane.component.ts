@@ -1,22 +1,31 @@
 import {
-  Component, OnInit, ViewChild,
-  ChangeDetectionStrategy, OnDestroy, Input, ChangeDetectorRef, TemplateRef, Output, EventEmitter, ElementRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
 } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
+import { format } from '@firestitch/date';
+import { ItemType } from '@firestitch/filter';
 import { FsListComponent, FsListConfig, PaginationStrategy } from '@firestitch/list';
 import { FsMessage } from '@firestitch/message';
-import { format } from '@firestitch/date';
 
-import { delay, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Subject, of, timer } from 'rxjs';
+import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
-import { ConversationCreateComponent } from '../conversation-create';
-import { ConversationConfig, Conversation } from '../../types';
 import { ConversationRole, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
-import { ItemType } from '@firestitch/filter';
+import { Conversation, ConversationConfig } from '../../types';
+import { ConversationCreateComponent } from '../conversation-create';
 
 
 @Component({
@@ -30,6 +39,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
   @Input() public conversationHeadingTemplate: TemplateRef<any>;
   @Input() public conversationSettingTemplate: TemplateRef<any>;
   @Input() public conversationsConversationTemplate: TemplateRef<any>;
+  @Input() public conversationsConversationNameTemplate: TemplateRef<any>;
   @Input() public account;
 
   @Output() public conversationOpen = new EventEmitter<Conversation>();
@@ -126,12 +136,6 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
           label: 'Search',
         },
       ],
-      rowEvents: {
-        click: (event) => {
-          this.selectedConversation = event.row;
-          this.conversationOpen.emit(event.row);
-        },
-      },
       noResults: {
         message: 'No conversations found',
       },
@@ -148,18 +152,19 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
             this.conversationStart();
           },
           tooltip: this._conversationService.startConversation.tooltip,
-        }
+        },
       ],
       rowActions: [
+        ...this.conversationConfig.conversationActions || [],
         {
           click: (conversation) => {
             return this.conversationConfig.conversationSave({
               id: conversation.id,
               state: ConversationState.Closed,
             })
-            .pipe(
-              tap(() => this.loadStats()),
-            );
+              .pipe(
+                tap(() => this.loadStats()),
+              );
           },
           show: (conversation) => {
             return conversation.accountConversationRoles
@@ -221,11 +226,11 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
             map((response) => {
               return {
                 data: response.conversations
-                .map((conversation) => {
-                  return {
-                    ...conversation,
-                  };
-                }), paging: response.paging
+                  .map((conversation) => {
+                    return {
+                      ...conversation,
+                    };
+                  }), paging: response.paging,
               };
             }),
             tap((response) => {
@@ -254,6 +259,11 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
     this.reload();
   }
 
+  public openConversation(conversation): void {
+    this.selectedConversation = conversation;
+    this.conversationOpen.emit(conversation);
+  }
+
   public loadStats(): void {
     const statsFilters: any = {
       account: true,
@@ -269,12 +279,10 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
   }
 
   public conversationCreate(conversation: Conversation = { id: null }): void {
-    const dialogRef = this._dialog.open(ConversationCreateComponent, {
+    this._dialog.open(ConversationCreateComponent, {
       autoFocus: true,
       data: { conversation },
-    });
-
-    dialogRef
+    })
       .afterClosed()
       .pipe(
         filter((response) => !!response),
@@ -293,17 +301,20 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
     };
 
     of(conversation)
-    .pipe(
-      switchMap((conversation) => this.conversationService.startConversation.beforeStart(conversation)),
-      switchMap((conversation) => this.conversationConfig.conversationSave(conversation)),
-      switchMap((conversation) => this.conversationService.startConversation.afterStart(conversation)),
-      takeUntil(this._destroy$),
-    )
-      .subscribe((conversation) => {
+      .pipe(
+        switchMap((_conversation) => this.conversationService
+          .startConversation.beforeStart(_conversation)),
+        switchMap((_conversation) => this.conversationConfig
+          .conversationSave(_conversation)),
+        switchMap((_conversation) => this.conversationService
+          .startConversation.afterStart(_conversation)),
+        takeUntil(this._destroy$),
+      )
+      .subscribe((_conversation) => {
         this._message.success('Saved Changes');
         this.reload();
-        this.selectedConversation = conversation;
-        this.conversationStarted.emit(conversation);
+        this.selectedConversation = _conversation;
+        this.conversationStarted.emit(_conversation);
       });
   }
 

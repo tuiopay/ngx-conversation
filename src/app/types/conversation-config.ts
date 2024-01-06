@@ -52,4 +52,12 @@ export interface ConversationConfig {
     beforeStart?: (conversation: Conversation) => Observable<Conversation>;
     afterOpen?: (conversation: Conversation) => Observable<Conversation>;
   };
+
+  conversationActions?: ConversationAction[];
+}
+
+export interface ConversationAction {
+  label?: string;
+  click?: (conversation: Conversation) => void;
+  show?: (conversation: Conversation) => boolean;
 }

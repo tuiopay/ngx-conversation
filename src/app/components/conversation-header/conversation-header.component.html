@@ -52,7 +52,18 @@
         (click)="settingsClicked()"
         mat-icon-button>
       <mat-icon>settings</mat-icon>
-    </button>  
+    </button> 
+    <ng-container *ngIf="conversationService.conversationConfig.conversationActions.length">
+      <fs-menu>
+        <ng-container *ngFor="let action of conversationService.conversationConfig.conversationActions">
+          <ng-template            
+              fs-menu-item
+              (click)="actionClick(action)">
+            {{action.label}}
+          </ng-template>
+        </ng-container>
+      </fs-menu>
+    </ng-container> 
   </div>
 </ng-template>
 

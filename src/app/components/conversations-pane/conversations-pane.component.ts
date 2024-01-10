@@ -121,6 +121,8 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
     this.initStatsReload();
     this.initConverstationsReload();
 
+    const conversationsFilters = this.conversationConfig.conversationsFilters || [];
+
     this.listConfig = {
       status: false,
       loadMore: true,
@@ -138,6 +140,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
           type: ItemType.Keyword,
           label: 'Search',
         },
+        ...conversationsFilters,
       ],
       noResults: {
         message: 'No conversations found',

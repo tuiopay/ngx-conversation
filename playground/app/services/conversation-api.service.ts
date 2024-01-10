@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { FsApi } from '@firestitch/api';
+import { ItemType } from '@firestitch/filter';
 import { FsGalleryItem } from '@firestitch/gallery';
 import { FsWebSocket } from '@firestitch/web-socket';
 
@@ -123,6 +124,13 @@ export class ConversationsApiService {
         return of('This is a tooltip');
       },
     },
+    conversationsFilters: [
+      {
+        type: ItemType.Checkbox,
+        label: 'Checkbox',
+        name: 'checkbox',
+      },
+    ],
     conversationActions: [
       {
         label: 'Flag Conversation',

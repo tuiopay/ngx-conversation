@@ -1,21 +1,26 @@
 import {
-  Component, OnDestroy,
-  ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit,
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
 } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { FilterConfig, ItemType } from '@firestitch/filter';
 import { list } from '@firestitch/common';
+import { FilterConfig, ItemType } from '@firestitch/filter';
 
 import { Subject } from 'rxjs';
 
 import { ConversationStates } from '../../consts';
-import { Conversation } from '../../types';
-import { ConversationService } from '../../services';
-import { ParticipantsAddComponent } from '../participants-add';
 import { ConversationItemState } from '../../enums';
 import { hasAdminRole } from '../../helpers';
+import { ConversationService } from '../../services';
+import { Conversation, ConversationAction } from '../../types';
+import { ParticipantsAddComponent } from '../participants-add';
 
 
 @Component({
@@ -31,7 +36,7 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
 
   @Output() public conversationChange = new EventEmitter<Conversation>();
   @Output() public conversationClose = new EventEmitter<Conversation>();
-  @Output() public filterChanged = new EventEmitter<{ query: any, sort: any }>();
+  @Output() public filterChanged = new EventEmitter<{ query: any; sort: any }>();
   @Output() public openSettings = new EventEmitter<string>();
 
   public ConversationStates = ConversationStates;
@@ -65,8 +70,9 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
           unchecked: ConversationItemState.Active,
           checked: [
             ConversationItemState.Deleted,
-            ConversationItemState.Active
-          ].join(','),
+            ConversationItemState.Active,
+          ]
+            .join(','),
         },
       ],
     };
@@ -84,6 +90,10 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
     return hasAdminRole(this.conversation);
   }
 
+  public actionClick(action: ConversationAction): void {
+    action.click(this.conversation);
+  }
+
   public participantAdd(): void {
     this._dialog.open(ParticipantsAddComponent, {
       data: {
@@ -91,10 +101,10 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
         conversationService: this.conversationService,
       },
     })
-    .afterClosed()
-    .subscribe(() => {
-      this.conversationChange.emit();
-    });
+      .afterClosed()
+      .subscribe(() => {
+        this.conversationChange.emit();
+      });
   }
 
   public ngOnDestroy(): void {

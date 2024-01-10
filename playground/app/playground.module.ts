@@ -1,30 +1,32 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { RouterModule, Routes } from '@angular/router';
 
-import { FsExampleModule } from '@firestitch/example';
-import { FsMessageModule } from '@firestitch/message';
-import { FsLabelModule } from '@firestitch/label';
-import { FsStoreModule } from '@firestitch/store';
-import { FsFileModule } from '@firestitch/file';
-import { FsGalleryModule } from '@firestitch/gallery';
-import { FsConversationModule } from '@firestitch/conversation';
+
 import { FsApiModule } from '@firestitch/api';
+import { FsConversationModule } from '@firestitch/conversation';
+import { FsExampleModule } from '@firestitch/example';
+import { FsFileModule } from '@firestitch/file';
+import { FsFilterModule } from '@firestitch/filter';
 import { FsFormModule } from '@firestitch/form';
+import { FsGalleryModule } from '@firestitch/gallery';
+import { FsLabelModule } from '@firestitch/label';
+import { FsMessageModule } from '@firestitch/message';
+import { FsPopoverModule } from '@firestitch/popover';
+import { FsStoreModule } from '@firestitch/store';
 import { FsTabsModule } from '@firestitch/tabs';
 
-import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragulaModule } from 'ng2-dragula';
+import { ToastrModule } from 'ngx-toastr';
 
-import { AppMaterialModule } from './material.module';
-import {
-  ExamplesComponent
-} from './components';
 import { AppComponent } from './app.component';
-import { ConversationsComponent } from './components';
-import { FsPopoverModule } from '@firestitch/popover';
+import {
+  ConversationsComponent,
+  ExamplesComponent,
+} from './components';
+import { AppMaterialModule } from './material.module';
 
 
 const routes: Routes = [
@@ -32,7 +34,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  bootstrap: [ AppComponent ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -52,6 +54,11 @@ const routes: Routes = [
     FsGalleryModule.forRoot(),
     ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot(routes),
+    FsFilterModule.forRoot({
+      case: 'camel',
+      queryParam: true,
+      chips: true,
+    }),
   ],
   declarations: [
     AppComponent,

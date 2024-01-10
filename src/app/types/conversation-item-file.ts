@@ -1,7 +1,7 @@
-export type ConversationItemFile = {
+export interface ConversationItemFile {
   id?: number;
   conversationItemId?: number;
-  file?: any,
+  file?: any;
   fileId?: number;
 }
 

@@ -23,10 +23,10 @@ export class ConversationService {
     afterStart?: (conversation: Conversation) => Observable<Conversation>;
     afterOpen?: (conversation: Conversation) => Observable<Conversation>;
   } = {
-      disabled: false,
-      show: true,
-      tooltip: '',
-    };
+    disabled: false,
+    show: true,
+    tooltip: '',
+  };
 
   public leaveConverstation: {
     show?: boolean;
@@ -46,6 +46,7 @@ export class ConversationService {
   public set conversationConfig(conversationConfig: ConversationConfig) {
     this._conversationConfig = {
       ...conversationConfig,
+      conversationActions: conversationConfig.conversationActions || [],
     };
   }
 

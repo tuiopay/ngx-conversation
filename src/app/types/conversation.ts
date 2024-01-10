@@ -1,10 +1,10 @@
 import { ConversationRole, ConversationState } from '../enums';
 
-import { ConversationParticipant } from './conversation-participant';
 import { ConversationItem } from './conversation-item';
+import { ConversationParticipant } from './conversation-participant';
 
 
-export type Conversation = {
+export interface Conversation {
   id?: number;
   activityDate?: Date;
   conversationParticipants?: ConversationParticipant[];

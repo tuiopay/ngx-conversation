@@ -2,7 +2,7 @@ import { ConversationParticipantType } from '../enums';
 
 import { Account } from './account';
 
-export type ConversationParticipant = {
+export interface ConversationParticipant {
   id?: number;
   state?: 'active' | 'deleted';
   type?: ConversationParticipantType;

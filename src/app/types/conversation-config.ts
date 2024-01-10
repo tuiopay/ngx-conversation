@@ -1,4 +1,5 @@
 import { RequestConfig } from '@firestitch/api';
+import { IFilterConfigItem } from '@firestitch/filter';
 import { FsGalleryItem } from '@firestitch/gallery';
 
 import { Observable } from 'rxjs';
@@ -54,6 +55,7 @@ export interface ConversationConfig {
   };
 
   conversationActions?: ConversationAction[];
+  conversationsFilters?: IFilterConfigItem[];
 }
 
 export interface ConversationAction {

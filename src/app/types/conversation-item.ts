@@ -3,7 +3,7 @@ import { ConversationItemState, ConversationItemType } from '../enums';
 import { ConversationParticipant } from './conversation-participant';
 
 
-export type ConversationItem = {
+export interface ConversationItem {
   id?: number;
   conversationId?: number;
   conversationParticipant?: ConversationParticipant;
@@ -12,7 +12,7 @@ export type ConversationItem = {
   guid?: string;
   objectId?: number;
   message?: string;
-  conversationItemFiles?: any[],
+  conversationItemFiles?: any[];
   state?: ConversationItemState;
   type?: ConversationItemType;
   conversationParticipantsAddedCount?: number;

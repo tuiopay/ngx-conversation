@@ -127,7 +127,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
       status: false,
       loadMore: true,
       queryParam: false,
-      rowClass: (row, options) => {
+      rowClass: (row) => {
         return this.selectedConversation?.id === row.id ? 'selected' : '';
       },
       paging: {

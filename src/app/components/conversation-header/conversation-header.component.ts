@@ -42,6 +42,7 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
   public ConversationStates = ConversationStates;
   public conversationStates = list(ConversationStates, 'name', 'value');
   public filterConf: FilterConfig;
+  public conversationActions = [];
 
   private _destroy$ = new Subject();
 
@@ -50,6 +51,12 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
   ) { }
 
   public ngOnInit(): void {
+    this.conversationActions = this.conversationService.conversationConfig
+      .conversationActions
+      .filter((conversationAction) => {
+        return !conversationAction.show || conversationAction.show(this.conversation);
+      });
+
     this.filterConf = {
       persist: false,
       inline: false,

@@ -36,6 +36,9 @@ import { ConversationSettingsComponent } from '../conversation-settings';
 })
 export class ConversationPaneComponent implements OnDestroy, OnChanges {
 
+  @ViewChild('messageInput', { read: MatInput })
+  public messageInput: MatInput;
+
   @Input() public account: Account;
   @Input() public conversation: Conversation;
 
@@ -172,10 +175,15 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
           this.files = [];
           this._cdRef.markForCheck();
           this.conversationChange.emit();
+          this.messageInput.focus();
         }),
         finalize(() => {
           this.submitting = false;
           this._cdRef.markForCheck();
+        }),
+        delay(100),
+        tap(() => {
+          this.messageInput.focus();
         }),
       );
   };
@@ -280,6 +288,10 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
       });
   }
 
+  public typingStart() {
+    this.conversationService.sendTypingStartNotice(this.conversation.id, this.account.id);
+  }
+
   public openSettings(options: { tab?: string } = { tab: 'settings' }): void {
     this._dialog.open(ConversationSettingsComponent, {
       autoFocus: false,
@@ -306,9 +318,10 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
   }
 
   private _updateTypingState() {
-    this.typing.accounts = this.typing.accounts.filter(function (el) {
-      return el != null;
-    });
+    this.typing.accounts = this.typing.accounts
+      .filter((account) => {
+        return !!account;
+      });
 
     if (this.typing.accounts.length === 0) {
       this.typing.state = 'none';
@@ -322,10 +335,6 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
     }
 
     this._cdRef.markForCheck();
-  }
-
-  public typingStart() {
-    this.conversationService.sendTypingStartNotice(this.conversation.id, this.account.id);
   }
 
 }

@@ -38,6 +38,7 @@
         <div class="message-actions">
           <mat-form-field floatLabel="never">
             <textarea
+              #messageInput
               matInput
               (keydown)="messageKeydown($event)"
               [fsAutofocus]="true"

@@ -55,7 +55,7 @@
     </button> 
     <ng-container *ngIf="conversationActions.length">
       <fs-menu>
-        <ng-container *ngFor="let action of conversationService.conversationConfig.conversationActions">
+        <ng-container *ngFor="let action of conversationActions">
           <ng-template            
               fs-menu-item
               (click)="actionClick(action)">

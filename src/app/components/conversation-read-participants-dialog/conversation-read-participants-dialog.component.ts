@@ -64,9 +64,13 @@ export class ConversationReadParticipantsDialogComponent implements OnInit {
           accountAvatars: true,
         };
 
-        return this._data.conversationService.conversationConfig.conversationParticipantsGet(conversation, query)
+        return this._data.conversationService
+          .conversationConfig.conversationParticipantsGet(conversation, query)
           .pipe(
-            map((response) => ({ data: response.conversationParticipants, paging: response.paging })),
+            map((response) => ({
+              data: response.conversationParticipants,
+              paging: response.paging,
+            })),
           );
       },
     };

@@ -1,12 +1,14 @@
 import {
-  Component,
   ChangeDetectionStrategy,
-  Input,
-  OnInit,
   ChangeDetectorRef,
+  Component,
+  Input,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
+
 import { FsPopoverRef } from '@firestitch/popover';
+
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -33,7 +35,7 @@ export class ConversationReadParticipantsPopoverComponent implements OnInit, OnD
 
   private _destroy$ = new Subject();
 
-  public constructor(
+  constructor(
     private _cdRef: ChangeDetectorRef,
   ) {}
 
@@ -53,18 +55,19 @@ export class ConversationReadParticipantsPopoverComponent implements OnInit, OnD
           notAccountId: this.account.id,
           notConversationParticipantId: this.conversationItem.conversationParticipantId,
           accounts: true,
-        })
+          accountAvatars: true,
+        }),
     })
-        .pipe(
-          takeUntil(this._destroy$),
-        )
-        .subscribe((response) => {
-          const conversationItem = response.readCount.conversationItems[0];
-          this.readCount = conversationItem?.conversationParticipantsReadCount;
-          this.conversationParticipants = response.conversationParticipants.conversationParticipants;
-          this._cdRef.markForCheck();
-          this.popover.show();
-        });
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe((response) => {
+        const conversationItem = response.readCount.conversationItems[0];
+        this.readCount = conversationItem?.conversationParticipantsReadCount;
+        this.conversationParticipants = response.conversationParticipants.conversationParticipants;
+        this._cdRef.markForCheck();
+        this.popover.show();
+      });
   }
 
   public ngOnDestroy(): void {

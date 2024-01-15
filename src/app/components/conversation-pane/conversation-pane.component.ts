@@ -167,7 +167,9 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
           this.submitting = true;
           this._cdRef.markForCheck();
         }),
-        switchMap((message) => !this.files.length && message.length === 0 ? throwError(false) : of(message)),
+        switchMap((message) =>
+          !this.files.length && message.length === 0 ?
+            throwError(false) : of(message)),
         switchMap((message) => this.conversationItemCreate({ message })),
         tap(() => {
           this.conversationService.sendMessageNotice(this.conversation.id, this.account.id);
@@ -260,7 +262,8 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
             .subscribe((message) => {
               if (message.data.isTyping) {
                 if (!this.typing.accounts.some((el) => el.id === message.data.accountId)) {
-                  this.typing.accounts.push({ id: message.data.accountId, name: message.data.accountName });
+                  this.typing.accounts
+                    .push({ id: message.data.accountId, name: message.data.accountName });
                 }
               } else {
                 this.typing.accounts = this.typing.accounts.filter((el) => el.id !== message.data.accountId);

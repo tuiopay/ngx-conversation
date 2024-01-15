@@ -5,7 +5,7 @@
       <fs-list-column title="Participant">
         <ng-template fs-list-cell let-row="row">
           <app-conversation-participant
-            [showBadge]="true"
+            [showBadge]="!!row.avatar"
             [showName]="true"
             [conversationParticipant]="row"
             [service]="conversationService">

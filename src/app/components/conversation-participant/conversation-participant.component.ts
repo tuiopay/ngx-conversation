@@ -1,9 +1,9 @@
 import {
-  Component,
   ChangeDetectionStrategy,
+  Component,
   Input,
-  Optional,
   OnInit,
+  Optional,
 } from '@angular/core';
 
 import { ConversationParticipantType } from '../../enums';
@@ -33,7 +33,7 @@ export class ConversationParticipantComponent implements OnInit {
   public get conversationService(): ConversationService {
     return this._conversationService || this.service;
   }
-  
+
   constructor(
     @Optional() private _conversationService: ConversationService,
   ) { }

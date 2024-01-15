@@ -1,16 +1,19 @@
 import {
-  Component, OnInit,
-  ChangeDetectionStrategy, Inject,
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
 } from '@angular/core';
 
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+import { ItemType } from '@firestitch/filter';
+import { FsListConfig } from '@firestitch/list';
+
 import { map } from 'rxjs/operators';
 
-import { Account, Conversation, ConversationItem } from '../../types';
 import { ConversationService } from '../../services';
-import { FsListConfig } from '@firestitch/list';
-import { ItemType } from '@firestitch/filter';
+import { Account, Conversation, ConversationItem } from '../../types';
 
 
 @Component({
@@ -24,10 +27,10 @@ export class ConversationReadParticipantsDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: {
-      conversation: Conversation,
-      conversationItem: ConversationItem,
-      conversationService: ConversationService,
-      account: Account,
+      conversation: Conversation;
+      conversationItem: ConversationItem;
+      conversationService: ConversationService;
+      account: Account;
     },
   ) { }
 
@@ -45,7 +48,7 @@ export class ConversationReadParticipantsDialogComponent implements OnInit {
           name: 'keyword',
           type: ItemType.Keyword,
           label: 'Search',
-        }
+        },
       ],
       status: true,
       fetch: (query) => {
@@ -58,7 +61,8 @@ export class ConversationReadParticipantsDialogComponent implements OnInit {
           maxReadConversationItemId: conversationItem.id,
           notConversationParticipantId: conversationItem.conversationParticipantId,
           accounts: true,
-        }
+          accountAvatars: true,
+        };
 
         return this._data.conversationService.conversationConfig.conversationParticipantsGet(conversation, query)
           .pipe(

@@ -60,6 +60,6 @@ export interface ConversationConfig {
 
 export interface ConversationAction {
   label?: string;
-  click?: (conversation: Conversation) => void;
+  click?: (conversation: Conversation) => Observable<Conversation>;
   show?: (conversation: Conversation) => boolean;
 }

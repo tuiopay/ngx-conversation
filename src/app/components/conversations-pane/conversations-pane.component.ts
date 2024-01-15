@@ -24,7 +24,7 @@ import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { ConversationRole, ConversationState } from '../../enums';
 import { ConversationService } from '../../services';
-import { Conversation, ConversationConfig } from '../../types';
+import { Conversation, ConversationAction, ConversationConfig } from '../../types';
 import { ConversationCreateComponent } from '../conversation-create';
 
 
@@ -161,7 +161,19 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
         },
       ],
       rowActions: [
-        ...this.conversationConfig.conversationActions || [],
+        ...(this.conversationConfig.conversationActions || [])
+          .map((conversationAction: ConversationAction)=> {
+            return {
+              ...conversationAction,
+              click: (conversation: Conversation) => {
+                conversationAction.click(conversation)
+                  .subscribe((response) => {
+                    this.listComponent
+                      .updateData(response, (row) => row.id === response.id);
+                  });
+              },
+            };
+          }),
         {
           click: (conversation) => {
             return this.conversationConfig.conversationSave({

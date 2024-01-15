@@ -137,6 +137,8 @@ export class ConversationsApiService {
         click: (conversation: Conversation & { flag: any }) => {
           console.log('Conversation action click');
           conversation.flag = !conversation.flag;
+
+          return of(conversation);
         },
         show: (conversation: Conversation) => true,
       },

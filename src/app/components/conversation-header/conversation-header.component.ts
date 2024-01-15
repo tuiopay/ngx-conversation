@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -48,15 +49,11 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
 
   constructor(
     private _dialog: MatDialog,
+    private _cdRef: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
-    this.conversationActions = this.conversationService.conversationConfig
-      .conversationActions
-      .filter((conversationAction) => {
-        return !conversationAction.show || conversationAction.show(this.conversation);
-      });
-
+    this.initConversationActions();
     this.filterConf = {
       persist: false,
       inline: false,
@@ -85,6 +82,14 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
     };
   }
 
+  public initConversationActions(): void {
+    this.conversationActions = this.conversationService.conversationConfig
+      .conversationActions
+      .filter((conversationAction) => {
+        return !conversationAction.show || conversationAction.show(this.conversation);
+      });
+  }
+
   public settingsClicked(tab: string = null): void {
     if (!this.hasAdminRole) {
       return;
@@ -98,7 +103,17 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
   }
 
   public actionClick(action: ConversationAction): void {
-    action.click(this.conversation);
+    action.click(this.conversation)
+      .subscribe((conversation) => {
+        this.conversation = {
+          ...this.conversation,
+          ...conversation,
+        };
+
+        this.conversationChange.emit(this.conversation);
+        this.initConversationActions();
+        this._cdRef.markForCheck();
+      });
   }
 
   public participantAdd(): void {

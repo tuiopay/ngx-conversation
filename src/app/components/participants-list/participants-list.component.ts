@@ -1,25 +1,24 @@
 import {
-  Component,
-  ViewChild,
-  Inject,
   ChangeDetectionStrategy,
-  OnInit,
-  OnDestroy,
+  Component,
   Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
 
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 import { FsListActionSelected, FsListComponent, FsListConfig } from '@firestitch/list';
+import { FsPrompt } from '@firestitch/prompt';
+import { SelectionActionType } from '@firestitch/selection';
 
 import { Subject, of } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 
-import { ParticipantsAddComponent } from '../participants-add';
-import { Conversation, ConversationParticipant } from '../../types';
 import { ConversationService } from '../../services';
-import { SelectionActionType } from '@firestitch/selection';
-import { FsPrompt } from '@firestitch/prompt';
+import { Conversation, ConversationParticipant } from '../../types';
+import { ParticipantsAddComponent } from '../participants-add';
 
 
 @Component({
@@ -54,6 +53,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.listConfig = {
       paging: false,
+      reload: false,
       actions: [
         {
           click: () => {
@@ -64,7 +64,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
                 conversationService: this.conversationService,
               },
             })
-            .afterClosed()
+              .afterClosed()
               .pipe(
                 filter((response) => !!response),
               )
@@ -85,30 +85,30 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
         ],
         actionSelected: (actionSelected: FsListActionSelected) => {
           return of(true)
-          .pipe(
-            switchMap(() => actionSelected.action.name === 'remove' ?
-              this._prompt.confirm({
-                title: 'Remove Participants',
-                template: 'Are you sure you want to remove these participants from this conversation?',
-              }) : of(true)),
-            switchMap(() => {
-              const data = {
-                action: actionSelected.action.name,
-                conversationParticipantIds: actionSelected.selected
-                  .map((conversationParticipant) => conversationParticipant.id),
-              };
+            .pipe(
+              switchMap(() => actionSelected.action.name === 'remove' ?
+                this._prompt.confirm({
+                  title: 'Remove Participants',
+                  template: 'Are you sure you want to remove these participants from this conversation?',
+                }) : of(true)),
+              switchMap(() => {
+                const data = {
+                  action: actionSelected.action.name,
+                  conversationParticipantIds: actionSelected.selected
+                    .map((conversationParticipant) => conversationParticipant.id),
+                };
 
-              return this.conversationService.conversationConfig
-                .conversationParticipantBulk(this.conversation, data)
-                .pipe(tap(() => {
-                  this.conversationService.sendMessageNotice(this.conversation.id);
-                }));
+                return this.conversationService.conversationConfig
+                  .conversationParticipantBulk(this.conversation, data)
+                  .pipe(tap(() => {
+                    this.conversationService.sendMessageNotice(this.conversation.id);
+                  }));
 
-            }),
-            tap(() => {
-              this.reload();
-            }),
-          );
+              }),
+              tap(() => {
+                this.reload();
+              }),
+            );
         },
         selectAll: false,
       },
@@ -117,7 +117,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
           click: (conversationParticipant) => {
             return this.conversationService.conversationConfig
               .conversationParticipantDelete(this.conversation, conversationParticipant)
-              .pipe(tap((conversationParticipant) => {
+              .pipe(tap(() => {
                 this.conversationService.sendMessageNotice(this.conversation.id);
               }));
           },
@@ -131,19 +131,20 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
           accounts: true,
         };
 
-        return this.conversationService.conversationConfig.conversationParticipantsGet(this.conversation, query)
-        .pipe(
-          map((response) => ({
-            data: response.conversationParticipants
-            .map((conversationParticipant) => {
-              return {
-                ...conversationParticipant,
-                account: this.conversationService.mapAccount(conversationParticipant.account),
-              }
-            }),
-             paging: response.paging
-          })),
-        );
+        return this.conversationService.conversationConfig
+          .conversationParticipantsGet(this.conversation, query)
+          .pipe(
+            map((response) => ({
+              data: response.conversationParticipants
+                .map((conversationParticipant) => {
+                  return {
+                    ...conversationParticipant,
+                    account: this.conversationService.mapAccount(conversationParticipant.account),
+                  };
+                }),
+              paging: response.paging,
+            })),
+          );
       },
     };
   }

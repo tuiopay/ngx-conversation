@@ -12,7 +12,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 
 import { list } from '@firestitch/common';
-import { FilterConfig, ItemType } from '@firestitch/filter';
+import { ButtonStyle, FilterConfig, ItemType } from '@firestitch/filter';
 
 import { Subject } from 'rxjs';
 
@@ -60,7 +60,7 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
       chips: false,
       queryParam: false,
       button: {
-        style: 'icon',
+        style: ButtonStyle.Icon,
         label: '',
       },
       change: (query, sort) => {

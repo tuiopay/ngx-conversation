@@ -93,6 +93,7 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
     if(this.conversationsPane) {
       this.conversationsPane.loadStats();
       this.conversationsPane.reload();
+      this.conversationsPane.scrollTop();
     }
   }
 

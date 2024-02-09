@@ -91,13 +91,16 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
       });
   }
 
-  public tabChange(tab): void {
-    this.tab = tab;
+  public scrollTop(): void {
     this._el.nativeElement
       .querySelector('.fs-list-table-container')
       .scrollTo(0,0);
+  }
 
+  public tabChange(tab): void {
+    this.tab = tab;
     this.reload();
+    this.scrollTop();
   }
 
   public initStatsReload(): void {
@@ -256,6 +259,15 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
                   }), paging: response.paging,
               };
             }),
+            // tap((response) => {
+            //   setTimeout(() => {
+            //     const converstaion: any = response.data[0];
+            //     if(converstaion) {
+            //       const el = this.listEl.nativeElement?.querySelector(`tbody tr .converstaion-row[data="converstaion-row-${converstaion.id}"]`);
+            //       el?.scrollIntoView({ behavior: 'smooth' });
+            //     }
+            //   });
+            // }),
           );
       },
     };

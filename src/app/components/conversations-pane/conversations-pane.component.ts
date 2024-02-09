@@ -68,6 +68,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
     private _message: FsMessage,
     private _conversationService: ConversationService,
     private _cdRef: ChangeDetectorRef,
+    private _el: ElementRef,
   ) {}
 
   public get conversationConfig(): ConversationConfig {
@@ -92,6 +93,10 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
 
   public tabChange(tab): void {
     this.tab = tab;
+    this._el.nativeElement
+      .querySelector('.fs-list-table-container')
+      .scrollTo(0,0);
+
     this.reload();
   }
 
@@ -250,15 +255,6 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
                     };
                   }), paging: response.paging,
               };
-            }),
-            tap((response) => {
-              setTimeout(() => {
-                const converstaion: any = response.data[0];
-                if(converstaion) {
-                  const el = this.listEl.nativeElement?.querySelector(`tbody tr .converstaion-row[data="converstaion-row-${converstaion.id}"]`);
-                  el?.scrollIntoView({ behavior: 'smooth' });
-                }
-              });
             }),
           );
       },

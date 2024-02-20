@@ -19,7 +19,6 @@ import { FsTabsModule } from '@firestitch/tabs';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragulaModule } from 'ng2-dragula';
-import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import {
@@ -52,7 +51,6 @@ const routes: Routes = [
     FsFileModule.forRoot(),
     FsMessageModule.forRoot(),
     FsGalleryModule.forRoot(),
-    ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot(routes),
     FsFilterModule.forRoot({
       case: 'camel',

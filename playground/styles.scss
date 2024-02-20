@@ -1,22 +1,9 @@
-@use '~@firestitch/style/styles' as fs-style;
 @use '@angular/material' as mat;
-
 @import '~@firestitch/component-tools/assets/playground.scss';
 @import '~@firestitch/message/styles';
 @import "~@firestitch/drawer/styles";
-@import "~@firestitch/chip/styles";
-@import "~@firestitch/file/styles";
-@import '~@firestitch/form/styles';
-@import '~@firestitch/dialog/styles';
-@import '~@firestitch/selection/styles';
-@import '../src/app/styles.scss';
+@import "~@firestitch/form/styles";
+@import "~@firestitch/dialog/styles";
+@import '../src/app/styles';
 
-@include fs-style.core();
-@include fs-drawer($mat-blue);
-@include fs-file(mat.$blue-palette);
-@include fs-form($app-theme);
-@include fs-selection(mat.$blue-palette);
-
-small {
-  font-size: 10px;
-}
+@include fs-drawer(mat.$blue-palette);

@@ -21,7 +21,7 @@
         <div class="typing" *ngIf="typing.state==='multiple'">People are typing..</div>
         <div class="typing" *ngIf="typing.state==='none'">&nbsp;</div>
       </div>
-      <ng-container *ngIf="!joined">
+      <ng-container *ngIf="inited && !joined">
         <div class="join-conversation">
           <button
               mat-raised-button

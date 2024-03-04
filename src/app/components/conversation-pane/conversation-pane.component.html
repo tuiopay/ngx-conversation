@@ -36,7 +36,7 @@
     <ng-container *ngIf="joined">
       <div class="message-send-container">
         <div class="message-actions">
-          <mat-form-field floatLabel="never">
+          <mat-form-field  class="form-field-padless">
             <textarea
               #messageInput
               matInput
@@ -44,9 +44,9 @@
               [fsAutofocus]="true"
               cdkTextareaAutosize
               [(ngModel)]="message"
+              [placeholder]="'Type a message'"
               [disabled]="conversation.state === ConversationState.Closed || submitting"
               name="message"
-              placeholder="Type a message"
               (keypress)="typingStart()">
             </textarea>
           </mat-form-field>

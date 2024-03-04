@@ -8,17 +8,17 @@
             <ng-template matTabContent>
               <ng-container *ngIf="!conversationService.conversationSettingTemplate">
                 <mat-form-field class="full-width">
+                  <mat-label>Name</mat-label>
                   <input
                     matInput
                     required
-                    placeholder="Name"
                     [(ngModel)]="conversation.name"
                     name="name">
                 </mat-form-field> 
                 <mat-form-field class="full-width">
+                  <mat-label>Status</mat-label>
                   <mat-select
                       [(ngModel)]="conversation.state"
-                      placeholder="Status"
                       name="conversation.state">
                     <mat-option
                         *ngFor="let item of ConversationStates"

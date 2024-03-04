@@ -20,6 +20,7 @@ import { FsTabsModule } from '@firestitch/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragulaModule } from 'ng2-dragula';
 
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { AppComponent } from './app.component';
 import {
   ConversationsComponent,
@@ -63,6 +64,12 @@ const routes: Routes = [
     ExamplesComponent,
     ConversationsComponent,
   ],
+  providers: [
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'outline', floatLabel: 'auto' },
+    },
+  ]
 })
 export class PlaygroundModule {
 }

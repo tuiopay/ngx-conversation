@@ -32,7 +32,7 @@ form {
   
   .message-actions {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     width: 100%;
 
     mat-form-field {
@@ -43,7 +43,6 @@ form {
       display: flex;
       white-space: nowrap;
       margin-left: 5px;
-      margin-bottom: 10px;
       align-items: center;
 
       .spinner {

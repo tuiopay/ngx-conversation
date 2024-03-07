@@ -209,6 +209,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         conversationItem.state = ConversationState.Deleted;
         this.reload();
+        this.conversationChange.emit();
         this._cdRef.markForCheck();
       });
   }

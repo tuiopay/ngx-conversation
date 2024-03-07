@@ -240,6 +240,7 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
         tap((response) => {
           this.joined = response.conversationParticipants.conversationParticipants.length > 0;
           this.conversation = response.conversation;
+          this.conversationChange.emit();
           this._cdRef.markForCheck();
         }),
       );

@@ -7,14 +7,16 @@
           <mat-tab label="General" name="settings">
             <ng-template matTabContent>
               <ng-container *ngIf="!conversationService.conversationSettingTemplate">
-                <mat-form-field class="full-width">
-                  <mat-label>Name</mat-label>
-                  <input
-                    matInput
-                    required
-                    [(ngModel)]="conversation.name"
-                    name="name">
-                </mat-form-field> 
+                <ng-container *ngIf="conversationService.conversationConfig.conversationSettings.name.show">
+                  <mat-form-field class="full-width">
+                    <mat-label>Name</mat-label>
+                    <input
+                      matInput
+                      [required]="conversationService.conversationConfig.conversationSettings.name.required"
+                      [(ngModel)]="conversation.name"
+                      name="name">
+                  </mat-form-field> 
+                </ng-container>
                 <mat-form-field class="full-width">
                   <mat-label>Status</mat-label>
                   <mat-select

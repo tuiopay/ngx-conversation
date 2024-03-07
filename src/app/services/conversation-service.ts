@@ -44,9 +44,19 @@ export class ConversationService {
   }
 
   public set conversationConfig(conversationConfig: ConversationConfig) {
+    const conversationSettings = conversationConfig.conversationSettings || {};
+
     this._conversationConfig = {
       ...conversationConfig,
       conversationActions: conversationConfig.conversationActions || [],
+      conversationSettings: {
+        ...conversationSettings,
+        name: {
+          show: true,
+          required: false,
+          ...(conversationSettings.name || {}),
+        }
+      },
     };
   }
 

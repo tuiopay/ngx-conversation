@@ -56,6 +56,12 @@ export interface ConversationConfig {
 
   conversationActions?: ConversationAction[];
   conversationsFilters?: IFilterConfigItem[];
+  conversationSettings?: {
+    name?: {
+      required?: boolean;
+      show?: boolean;
+    }
+  }
 }
 
 export interface ConversationAction {

@@ -129,6 +129,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
         query = {
           ...query,
           accounts: true,
+          accountAvatars: true,
         };
 
         return this.conversationService.conversationConfig

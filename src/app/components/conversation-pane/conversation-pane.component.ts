@@ -229,6 +229,8 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
       conversationParticipants: this.conversationConfig
         .conversationParticipantsGet(conversation, {
           accountId: this.account.id,
+          accounts: true,
+          accountAvatars: true,
         }),
     })
       .pipe(

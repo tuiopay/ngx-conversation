@@ -16,6 +16,7 @@ import { SelectionActionType } from '@firestitch/selection';
 import { Subject, of } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 
+import { FsMessage } from '@firestitch/message';
 import { ConversationService } from '../../services';
 import { Conversation, ConversationParticipant } from '../../types';
 import { ParticipantsAddComponent } from '../participants-add';
@@ -44,6 +45,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
   constructor(
     private _dialog: MatDialog,
     private _prompt: FsPrompt,
+    private _message: FsMessage,
   ) { }
 
   public reload(): void {
@@ -115,11 +117,14 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
       rowActions: [
         {
           click: (conversationParticipant) => {
-            return this.conversationService.conversationConfig
+            this.conversationService.conversationConfig
               .conversationParticipantDelete(this.conversation, conversationParticipant)
               .pipe(tap(() => {
                 this.conversationService.sendMessageNotice(this.conversation.id);
               }));
+          },
+          show: (data) => {
+            return this._list.getData().length > 1;
           },
           remove: true,
           label: 'Remove',

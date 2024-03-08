@@ -1,10 +1,11 @@
 <div class="participants">
-  <app-conversation-participant
-    *ngFor="let conversationParticipant of conversationParticipants"
-    [showTooltip]="true"
-    [showBadge]="true"
-    [size]="size"
-    [conversationParticipant]="conversationParticipant">
-  </app-conversation-participant>
+  <ng-container *ngFor="let conversationParticipant of conversationParticipants">
+    <app-conversation-participant    
+      [showTooltip]="true"
+      [showBadge]="true"
+      [size]="size"
+      [conversationParticipant]="conversationParticipant">
+    </app-conversation-participant>
+  </ng-container>
   <span *ngIf="others" class="more">and {{others}} {{others === 1 ? 'other' : 'others'}}</span>
 </div>

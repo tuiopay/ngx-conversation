@@ -117,7 +117,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
       rowActions: [
         {
           click: (conversationParticipant) => {
-            this.conversationService.conversationConfig
+            return this.conversationService.conversationConfig
               .conversationParticipantDelete(this.conversation, conversationParticipant)
               .pipe(tap(() => {
                 this.conversationService.sendMessageNotice(this.conversation.id);

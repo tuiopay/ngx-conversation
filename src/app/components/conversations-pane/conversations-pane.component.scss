@@ -49,6 +49,12 @@
         }
       }
     }
+
+    &:not(.has-tabs) {
+      .fs-list-table-container {
+        margin-top: 15px;
+      } 
+    }
   }
 
   mat-tab-header {

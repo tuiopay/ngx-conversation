@@ -31,6 +31,7 @@ export class ConversationsComponent {
   ) {
     this.conversationConfig = {
       ...this._conversationsService.conversationConfig,
+      tabs: false,
       startConversation: {
         ...this._conversationsService.conversationConfig.startConversation,
         afterOpen: (conversation) => {

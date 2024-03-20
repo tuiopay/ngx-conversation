@@ -53,7 +53,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
 
   public selectedConversation: Conversation;
   public listConfig: FsListConfig;
-  public tab: 'account' | 'open' | 'closed' | string = 'account';
+  public tab: 'account' | 'open' | 'closed' | string;
   public conversationsStats = {
     account: { count: 0, unread: 0 },
     open: { count: 0, unread: 0 },
@@ -130,6 +130,14 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
     this.initConverstationsReload();
 
     const conversationsFilters = this.conversationConfig.conversationsFilters || [];
+
+    if(this.conversationService.tabs.account) {
+      this.tab = 'account';
+    } else if(this.conversationService.tabs.open) {
+      this.tab = 'open';
+    } else if(this.conversationService.tabs.closed) {
+      this.tab = 'closed';
+    }
 
     this.listConfig = {
       status: false,

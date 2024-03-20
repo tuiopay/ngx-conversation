@@ -61,7 +61,13 @@ export interface ConversationConfig {
       required?: boolean;
       show?: boolean;
     }
-  }
+  };
+
+  tabs?: {
+    account?: boolean;
+    open?: boolean;
+    closed?: boolean; 
+  } | boolean
 }
 
 export interface ConversationAction {

@@ -28,6 +28,12 @@ export class ConversationService {
     tooltip: '',
   };
 
+  public tabs: {
+    account?: boolean;
+    open?: boolean;
+    closed?: boolean; 
+  };
+
   public leaveConverstation: {
     show?: boolean;
   };
@@ -45,7 +51,20 @@ export class ConversationService {
 
   public set conversationConfig(conversationConfig: ConversationConfig) {
     const conversationSettings = conversationConfig.conversationSettings || {};
-
+    if(conversationConfig.tabs === false) {
+      this.tabs = {
+        account: false,
+        open: false,
+        closed: false,
+      };
+    } else { 
+      this.tabs = conversationConfig.tabs === undefined ? {
+        account: true,
+        open: true,
+        closed: true,
+      } : conversationConfig.tabs as any;
+    } 
+    
     this._conversationConfig = {
       ...conversationConfig,
       conversationActions: conversationConfig.conversationActions || [],

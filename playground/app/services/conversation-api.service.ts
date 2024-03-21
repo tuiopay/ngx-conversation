@@ -91,7 +91,7 @@ export class ConversationsApiService {
       return this.post(`conversations/${conversation.id}/participants/bulk`, data);
     },
     accountsGet: (conversation: Conversation, query?: any) => {
-      return this.get('accounts', query);
+      return this.get(`conversations/${conversation.id}/accounts`, query);
     },
     websocketService: () => {
       return null;
@@ -146,6 +146,7 @@ export class ConversationsApiService {
   };
 
   private _url = 'https://cure.firestitch.dev/api/';
+  //private _url = 'https://cure.local.firestitch.com/api/';
 
   constructor(
     private _api: FsApi,

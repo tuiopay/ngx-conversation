@@ -1,10 +1,10 @@
-import { Component, Inject, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
 
-import { forkJoin, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { ConversationService } from '../../services';
@@ -45,7 +45,8 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
   }
 
   public save = () => {
-    return this._conversationService.conversationConfig.conversationParticipantAdd(this.conversation,
+    return this._conversationService.conversationConfig
+      .conversationParticipantAdd(this.conversation,
         {
           accountIds: this.accounts.map((account) => account.id),
         })
@@ -65,7 +66,6 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
       {
         keyword,
         avatars: true,
-        notConversationId: this.conversation.id,
         limit: 30,
       })
       .pipe(

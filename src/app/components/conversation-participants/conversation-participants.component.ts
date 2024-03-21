@@ -1,6 +1,6 @@
 import {
-  Component,
   ChangeDetectionStrategy,
+  Component,
   Input,
   OnInit,
 } from '@angular/core';
@@ -26,11 +26,9 @@ export class ConversationParticipantsComponent implements OnInit {
     return this._conversationParticipants;
   }
 
-  @Input()
-  public size = 24;
+  @Input() public size = 24;
 
-  @Input()
-  public count = 0;
+  @Input() public count = 0;
 
   public others = 0;
 

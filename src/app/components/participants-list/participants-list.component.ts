@@ -122,6 +122,7 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
               .pipe(tap(() => {
                 this.conversationService.sendMessageNotice(this.conversation.id);
                 this._list.list.actions.updateDisabledState();
+                this._updateSelectionVisibility(this._list.getData());
               }));
           },
           show: () => {
@@ -141,16 +142,21 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
         return this.conversationService.conversationConfig
           .conversationParticipantsGet(this.conversation, query)
           .pipe(
-            map((response) => ({
-              data: response.conversationParticipants
-                .map((conversationParticipant) => {
-                  return {
-                    ...conversationParticipant,
-                    account: this.conversationService.mapAccount(conversationParticipant.account),
-                  };
-                }),
-              paging: response.paging,
-            })),
+            map((response) => {
+              return {
+                data: response.conversationParticipants
+                  .map((conversationParticipant) => {
+                    return {
+                      ...conversationParticipant,
+                      account: this.conversationService.mapAccount(conversationParticipant.account),
+                    };
+                  }),
+                paging: response.paging,
+              };
+            }),
+            tap((response) => {
+              this._updateSelectionVisibility(response.data);
+            }),
           );
       },
     };
@@ -159,6 +165,14 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  private _updateSelectionVisibility(data): void {
+    if (data?.length > 1) {
+      this._list.enableSelection();
+    } else {
+      this._list.disableSelection();
+    }
   }
 
 }

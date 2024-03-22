@@ -1,0 +1,83 @@
+:host {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  min-width: 0;
+}
+
+.conversation-participant {
+  width: 40px;
+  margin-right: 10px;
+  flex-shrink: 0;
+
+  &.conversation-participant-multiple {
+    position: relative;
+
+    app-conversation-participant {
+      position: absolute;
+
+      &.bottom {
+        top: -10px;
+        z-index: 1;
+        border: 2px solid #fff;
+        border-radius: 100%;
+      }
+
+      &.top {
+        bottom: -10px;
+        right: 0
+      }
+    }
+  }
+}
+
+.participant-multiple-info {
+  display: flex;
+  flex-direction: column;
+  // min-height: 28px;
+  min-width: 0;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+
+  a {
+    font-weight: bold;
+  }
+
+  .count {
+    margin-left: 2px;
+    display: flex;
+    transform: scale(.7);
+    color: #656565;
+  }
+}
+
+.last-conversation-item {
+  .file {
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      transform: scale(.6);
+      width: 18px;
+      height: 18px;
+      margin-right: 2px;
+      color: #656565;
+      display: block;
+    }
+  }
+
+  .message {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 94%;
+  }
+
+  .file + .create-date {
+    margin-top: 3px;
+  }
+}

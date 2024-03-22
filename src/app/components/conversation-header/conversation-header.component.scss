@@ -44,3 +44,11 @@
     display: flex;
   }
 }
+
+app-conversation-list-participants {
+  ::ng-deep {
+    .name a {
+      font-weight: 500 !important;
+    }
+  }
+}

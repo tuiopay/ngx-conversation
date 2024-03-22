@@ -19,5 +19,6 @@ export interface ConversationItem {
   conversationParticipantsRemovedCount?: number;
   conversationParticipantsReadCount?: number;
   lastConversationItemParticipantAddRemove?: any;
+  lastConversationItemFile?: any;
 }
 

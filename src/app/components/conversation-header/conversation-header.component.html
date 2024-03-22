@@ -31,11 +31,11 @@
         (click)="settingsClicked('participants')">
       <ng-container *ngTemplateOutlet="conversationParticipants"></ng-container>
     </a>     
-    <a 
+    <!-- <a 
         (click)="settingsClicked()"
         class="name">
       {{conversation.name}}
-    </a>
+    </a> -->
   </div>  
 </ng-template>
 
@@ -68,8 +68,14 @@
 </ng-template>
 
 <ng-template #conversationParticipants>
-  <app-conversation-participants
+  <!-- <app-conversation-participants
     [conversationParticipants]="conversation.recentConversationParticipants"
     [count]="conversation.conversationParticipantCount">
-  </app-conversation-participants>     
+  </app-conversation-participants>      -->
+
+  <app-conversation-list-participants
+    [conversation]="conversation"
+    [hideLastConversationItemInfo]="true"
+    [size]="24">
+  </app-conversation-list-participants>
 </ng-template>

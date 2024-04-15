@@ -8,6 +8,7 @@
         [conversationsConversationTemplate]="conversationsConversationTemplate"
         [conversationsConversationNameTemplate]="conversationsConversationNameTemplate"
         (conversationStarted)="conversationStarted($event)"
+        (conversationClose)="conversationClose($event)"
         (conversationOpen)="conversationOpen($event)">
       </app-conversations-pane>
     </div>

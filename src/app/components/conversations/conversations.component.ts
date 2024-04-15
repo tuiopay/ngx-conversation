@@ -97,9 +97,13 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
     }
   }
 
-  public conversationClose(): void {
+  public conversationClose(reload = false): void {
     this.conversation = null;
     this.conversationsPane.deselect();
+
+    if (reload) {
+      this.conversationsPane.reload();
+    }
   }
 
   public conversationStarted(conversation: Conversation): void {
@@ -118,6 +122,14 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
   }
 
   public conversationOpen(conversation: Conversation): void {
+    // if (!conversation) {
+    //   this.conversation = conversation;
+    //   this.conversationsPane.reload();
+    //   this._cdRef.markForCheck();
+
+    //   return;
+    // }
+
     if(this.conversation?.id !== conversation.id) {
       this._conversationOpen(conversation)
         .subscribe();

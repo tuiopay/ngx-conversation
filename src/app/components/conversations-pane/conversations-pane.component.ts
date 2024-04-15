@@ -43,6 +43,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
   @Input() public account;
 
   @Output() public conversationOpen = new EventEmitter<Conversation>();
+  @Output() public conversationClose = new EventEmitter<boolean>();
   @Output() public conversationStarted = new EventEmitter<Conversation>();
 
   @ViewChild(FsListComponent)
@@ -212,7 +213,14 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
         },
         {
           click: (data) => {
-            return this.conversationConfig.conversationDelete(data);
+            return this.conversationConfig.conversationDelete(data)
+              .pipe(
+                tap(() => {
+                  if (this.selectedConversation?.id === data.id) {
+                    this.conversationClose.emit(true);
+                  }
+                }),
+              );
           },
           show: (conversation) => {
             return conversation.accountConversationRoles.indexOf(ConversationRole.Admin) !== -1;

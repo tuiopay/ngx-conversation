@@ -198,7 +198,12 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
               state: ConversationState.Closed,
             })
               .pipe(
-                tap(() => this.loadStats()),
+                tap(() => {
+                  this.loadStats();
+                  if (this.selectedConversation?.id === conversation.id) {
+                    this.conversationClose.emit(true);
+                  }
+                }),
               );
           },
           show: (conversation) => {

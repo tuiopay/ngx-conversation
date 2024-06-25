@@ -17,10 +17,6 @@ $messageContainerSideMargin: 34px;
       margin-top: 0;
     }
 
-    fs-menu.item-menu {
-      visibility: hidden;
-    }
-
     &:hover fs-menu.item-menu {
       visibility: visible;
     }
@@ -214,6 +210,22 @@ $messageContainerSideMargin: 34px;
       .message-container {
         .message {
           background-color: #e3e3e3;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep {
+  fs-conversations .container-pane:not(.mobile) {
+    .items {
+      .item {    
+        fs-menu.item-menu {
+          visibility: hidden;
+        }
+
+        &:hover fs-menu.item-menu {
+          visibility: visible;
         }
       }
     }

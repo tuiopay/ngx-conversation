@@ -1,6 +1,6 @@
 <div 
     class="container-pane" 
-    [ngClass]="{ 'conversation-open': !!conversation }">
+    [ngClass]="{ 'conversation-open': !!conversation, mobile: mobile }">
   <ng-container *ngIf="conversationService.inited">
     <div class="conversations-pane">
       <app-conversations-pane 

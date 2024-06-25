@@ -13,6 +13,7 @@ import {
   ViewChild,
 } from '@angular/core';
 
+import { getCurrentDevice } from '@firestitch/device';
 import { Observable, Subject } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 
@@ -56,6 +57,7 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
   @Output() public conversationOpened = new EventEmitter();
 
   public conversation: Conversation;
+  public mobile = false;
 
   private _destroy$ = new Subject<void>();
 
@@ -74,6 +76,7 @@ export class FsConversationsComponent implements OnInit, OnDestroy, AfterContent
 
   public ngOnInit(): void {
     this._conversationService.conversationConfig = this.config;
+    this.mobile = getCurrentDevice().mobile;
 
     this.conversationService.initStartConversation()
       .subscribe(() => this._cdRef.markForCheck());

@@ -54,7 +54,9 @@ form {
   }
 
   fs-file-previews {
-    margin-bottom: 10px;
+    margin-top: 0;
+    overflow-x: auto;
+    white-space: nowrap;    
   }
 }
 

@@ -2,17 +2,19 @@
   <fs-dialog>
     <h1 mat-dialog-title>Add Participants</h1>
     <div mat-dialog-content>
-      <fs-autocomplete-chips
-          [fetch]="accountsFetch"
-          [(ngModel)]="accounts"
-          [required]="true"
-          placeholder="Accounts"
-          chipImage="account.avatar.tiny"
-          name="conversationParticipants">
-        <ng-template fsAutocompleteObject let-account="object">
-          {{account.name}}
-        </ng-template>
-      </fs-autocomplete-chips>   
+      <div class="content">
+        <fs-autocomplete-chips
+            [fetch]="accountsFetch"
+            [(ngModel)]="accounts"
+            [required]="true"
+            placeholder="Accounts"
+            chipImage="account.avatar.tiny"
+            name="conversationParticipants">
+          <ng-template fsAutocompleteObject let-account="object">
+            {{account.name}}
+          </ng-template>
+        </fs-autocomplete-chips>   
+      </div>
     </div>
     <div mat-dialog-actions>
       <button

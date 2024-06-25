@@ -1,5 +1,10 @@
-:host ::ng-deep {
-  .mat-dialog-content {
-    width: 500px;
+.content {
+  width: 500px;
+}
+
+
+@media (max-width: 500px) {
+  .content {
+    width: initial;
   }
 }

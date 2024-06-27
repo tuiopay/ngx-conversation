@@ -4,7 +4,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnDestroy, Output,
+  OnDestroy, OnInit, Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
 
 import { list } from '@firestitch/common';
+import { currentDeviceMobile } from '@firestitch/device';
 import { FsFile } from '@firestitch/file';
 import { FsFormDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
@@ -34,7 +35,7 @@ import { ConversationSettingsComponent } from '../conversation-settings';
   styleUrls: ['./conversation-pane.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationPaneComponent implements OnDestroy, OnChanges {
+export class ConversationPaneComponent implements OnDestroy, OnChanges, OnInit {
 
   @ViewChild('messageInput', { read: MatInput })
   public messageInput: MatInput;
@@ -64,6 +65,7 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
   public conversationStates = list(ConversationStates, 'name', 'value');
   public joined = false;
   public inited = false;
+  public mobile = false;
   public submitting = false;
   public typing = { state: 'none', name: '', accounts: [] };
 
@@ -75,6 +77,10 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges {
     private _conversationService: ConversationService,
     private _dialog: MatDialog,
   ) { }
+
+  public ngOnInit(): void {
+    this.mobile = currentDeviceMobile();
+  }
 
   public get conversationService(): ConversationService {
     return this._conversationService;

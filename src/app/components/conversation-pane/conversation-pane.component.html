@@ -41,7 +41,7 @@
               #messageInput
               matInput
               (keydown)="messageKeydown($event)"
-              [fsAutofocus]="true"
+              [fsAutofocus]="!mobile"
               cdkTextareaAutosize
               [(ngModel)]="message"
               [placeholder]="'Type a message'"

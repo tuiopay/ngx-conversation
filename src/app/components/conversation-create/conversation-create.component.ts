@@ -1,13 +1,15 @@
-import { Component, Inject, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit,
+} from '@angular/core';
 
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
 
-import { Subject, of } from 'rxjs';
-import { switchMap, takeUntil, tap } from 'rxjs/operators';
-import { ConversationConfig, Conversation } from '../../types';
+import { Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
+import { Conversation, ConversationConfig } from '../../types';
 
 
 @Component({

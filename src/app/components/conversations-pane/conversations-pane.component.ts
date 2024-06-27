@@ -141,7 +141,6 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
     }
 
     this.listConfig = {
-      status: false,
       loadMore: true,
       queryParam: false,
       rowClass: (row) => {
@@ -237,7 +236,18 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
           label: 'Delete',
         },
       ],
+      sort: { value: 'recentMessage', direction: 'desc' },
+      sorts: [
+        { name: 'Recent message', value: 'recentMessage', direction: 'desc' },
+        { name: 'Activity', value: 'activityDate', direction: 'desc' },
+      ],
       fetch: (query) => {
+        let order = 'unread,desc';
+
+        if(query.order) {
+          order += `;${query.order}`;
+        }
+
         query = {
           ...query,
           lastConversationItems: true,
@@ -251,7 +261,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
           accountConversationRoles: true,
           conversationParticipantCounts: true,
           lastConversationItemFiles: true,
-          order: 'unread,desc;activityDate,desc',
+          order,
         };
 
         switch (this.tab) {

@@ -1,3 +1,5 @@
+@use '@firestitch/style/styles' as fs-style;
+
 :host ::ng-deep {
   fs-list {
     table {
@@ -46,6 +48,14 @@
             border: none !important;
             padding: 0px !important;
           }
+        }
+      }
+    }
+        
+    .filter-status-container {
+      @media (max-width: fs-style.$break-small) {
+        & {
+          display: none;
         }
       }
     }

@@ -8,13 +8,14 @@
       (conversationClose)="conversationClose.emit()"
       (conversationChange)="conversationReload()">
     </app-conversation-header>
-    <div class="conversation-container">
+    <div class="conversation-container" #conversationContainer>
       <div class="conversation">
         <app-conversation-items
           [account]="account"
           [conversationService]="conversationService"
           [conversation]="conversation"
           [sessionConversationParticipant]="sessionConversationParticipant"
+          (conversationInitialLoad)="conversationInitialLoad()"
           (conversationChange)="conversationReload()">
         </app-conversation-items>
         <div class="typing" *ngIf="typing.state==='single'">{{typing.name}} is typing..</div>

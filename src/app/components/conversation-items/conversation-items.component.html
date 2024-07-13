@@ -1,4 +1,4 @@
-<div class="items">
+<div class="items" [ngClass]="{ initialized: initialized }">
   <div
       *ngFor="let conversationItem of conversationItems; let index = index; trackBy: trackByconversationItem"
       [class]="'item item-type-' + conversationItem.type"
@@ -6,7 +6,6 @@
         'active-account': conversationItem.conversationParticipant?.id === sessionConversationParticipant?.id,
         'deleted': conversationItem.state === ConversationItemState.Deleted
       }">
-    <div scrollIntoView *ngIf="index === 0"></div>
     <div class="info" *ngIf="conversationItem.type === ConversationItemType.Message">
       <ng-container *ngIf="conversationItem.conversationParticipant?.id !== sessionConversationParticipant?.id">
         <app-conversation-participant

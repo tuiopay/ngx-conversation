@@ -16,7 +16,7 @@ import {
 import { FsPrompt } from '@firestitch/prompt';
 
 import { Observable, of, Subject, timer } from 'rxjs';
-import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { delay, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import {
   ConversationItemState, ConversationItemType, ConversationRole, ConversationState,
@@ -41,8 +41,10 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   @Input() public conversationService: ConversationService;
 
   @Output() public conversationChange = new EventEmitter();
+  @Output() public conversationInitialLoad = new EventEmitter();
 
   public autoload = true;
+  public initialized = false;
   public MimeType = MimeType;
   public conversationParticipants: ConversationParticipant[] = [];
   public ConversationItemType = ConversationItemType;
@@ -62,7 +64,15 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.load();
+    this.load$()
+      .pipe(
+        delay(0),
+      )
+      .subscribe(() => {
+        this.initialized = true;
+        this._cdRef.markForCheck();
+        this.conversationInitialLoad.emit();
+      });
 
     timer(0, 5000)
       .pipe(
@@ -83,11 +93,26 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
     this.load();
   }
 
-  public load(): void {
+  public load(): void { 
+    this.load$()
+      .subscribe();
+
+    // tap((response) => {
+    //   setTimeout(() => {
+    //     const converstaion: any = response.data[0];
+    //     if(converstaion) {
+    //       const el = this.listEl.nativeElement?.querySelector(`tbody tr .converstaion-row[data="converstaion-row-${converstaion.id}"]`);
+    //       el?.scrollIntoView({ behavior: 'smooth' });
+    //     }
+    //   });
+    // }),
+  }
+
+  public load$(): Observable<any> {
     this.autoload = false;
     const maxConversationItemId = this.conversationItems[0]?.id;
 
-    this.conversationService.conversationConfig
+    return this.conversationService.conversationConfig
       .conversationItemsGet(this.conversation, {
         ...this.query,
         conversationParticipants: true,
@@ -134,35 +159,35 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
               };
             });
         }),
-      )
-      .subscribe((conversationItems) => {
-        this.autoload = true;
+        tap((conversationItems) => {
+          this.autoload = true;
 
-        // if participants added/removed trigger a conversation reload
-        if (this.conversationItems.length > 0
-          && conversationItems.some((conversationItem) => {
-            return [ConversationItemType.ParticipantAdd, ConversationItemType.ParticipantRemoved]
-              .indexOf(conversationItem.type) !== -1;
-          })
-        ) {
-          this.conversationChange.emit(this.conversation);
-        }
-
-        this.conversationItems = [
-          ...conversationItems,
-          ...this.conversationItems,
-        ];
-
-        const lastConversationItem = this.conversationItems[0];
-        if (lastConversationItem && lastConversationItem !== this.lastConversationItem) {
-          this.conversationService.conversationConfig
-            .conversationRead(this.conversation, lastConversationItem)
-            .subscribe();
-        }
-
-        this.lastConversationItem = lastConversationItem;
-        this._cdRef.markForCheck();
-      });
+          // if participants added/removed trigger a conversation reload
+          if (this.conversationItems.length > 0
+            && conversationItems.some((conversationItem) => {
+              return [ConversationItemType.ParticipantAdd, ConversationItemType.ParticipantRemoved]
+                .indexOf(conversationItem.type) !== -1;
+            })
+          ) {
+            this.conversationChange.emit(this.conversation);
+          }
+  
+          this.conversationItems = [
+            ...conversationItems,
+            ...this.conversationItems,
+          ];
+  
+          const lastConversationItem = this.conversationItems[0];
+          if (lastConversationItem && lastConversationItem !== this.lastConversationItem) {
+            this.conversationService.conversationConfig
+              .conversationRead(this.conversation, lastConversationItem)
+              .subscribe();
+          }
+  
+          this.lastConversationItem = lastConversationItem;
+          this._cdRef.markForCheck();
+        }),
+      );
   }
 
   public openReadParticipants(conversationItem) {

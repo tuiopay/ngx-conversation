@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -39,6 +40,9 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges, OnInit {
 
   @ViewChild('messageInput', { read: MatInput })
   public messageInput: MatInput;
+
+  @ViewChild('conversationContainer', { read: ElementRef })
+  public conversationContainerEl: ElementRef;
 
   @Input() public account: Account;
   @Input() public conversation: Conversation;
@@ -214,6 +218,10 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges, OnInit {
         switchMap(() => this.loadConversation$(this.conversation)),
       )
       .subscribe();
+  }
+
+  public conversationInitialLoad() {
+    this.conversationContainerEl.nativeElement.scrollTop = this.conversationContainerEl.nativeElement.scrollHeight;
   }
 
   public conversationReload() {

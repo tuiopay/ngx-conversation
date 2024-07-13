@@ -5,6 +5,10 @@ $messageContainerSideMargin: 34px;
   flex-direction: column-reverse;
   padding: 0 6px;
 
+  &:not(.initialized) {
+    visibility: hidden;
+  }
+
   .item {    
     display: flex;
     flex-direction: column;

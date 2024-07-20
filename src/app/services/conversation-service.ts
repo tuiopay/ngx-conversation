@@ -23,10 +23,10 @@ export class ConversationService {
     afterStart?: (conversation: Conversation) => Observable<Conversation>;
     afterOpen?: (conversation: Conversation) => Observable<Conversation>;
   } = {
-    disabled: false,
-    show: true,
-    tooltip: '',
-  };
+      disabled: false,
+      show: true,
+      tooltip: '',
+    };
 
   public tabs: {
     account?: boolean;
@@ -67,6 +67,10 @@ export class ConversationService {
     
     this._conversationConfig = {
       ...conversationConfig,
+      readConversation: {
+        show: () => of(true),
+        ...conversationConfig.readConversation, 
+      },
       conversationActions: conversationConfig.conversationActions || [],
       conversationSettings: {
         ...conversationSettings,
@@ -74,7 +78,7 @@ export class ConversationService {
           show: true,
           required: false,
           ...(conversationSettings.name || {}),
-        }
+        },
       },
     };
   }

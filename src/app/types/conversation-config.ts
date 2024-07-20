@@ -39,6 +39,10 @@ export interface ConversationConfig {
   leaveConversation?: {
     show?: () => Observable<boolean> | boolean;
   };
+  
+  readConversation?: {
+    show?: () => Observable<boolean>;
+  };
 
   openConversation?: {
     afterOpen?: (conversation: Conversation) => Observable<Conversation>;

@@ -50,6 +50,7 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   public ConversationItemType = ConversationItemType;
   public lastConversationItem: ConversationItem;
   public ConversationItemState = ConversationItemState;
+  public canShowReadParticipants: Observable<boolean>;
   public conversationItems: (ConversationItem & {
     canDelete?: boolean;
     galleryConfig?: FsGalleryConfig;
@@ -64,6 +65,8 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
+    this.canShowReadParticipants = this.conversationService.conversationConfig.readConversation.show();
+
     this.load$()
       .pipe(
         delay(0),

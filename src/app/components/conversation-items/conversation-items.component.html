@@ -23,17 +23,19 @@
       </ng-container>
       <div class="row">
         <fs-date-ago [date]="conversationItem.createDate"></fs-date-ago>
-        <fs-popover
-            [template]="readTemplate"
-            [indication]="false"
-            [autoShow]="false"
-            [data]="conversationItem">
-          <a (click)="openReadParticipants(conversationItem)">
-            <span class="read">
-              <mat-icon>remove_red_eye</mat-icon>
-            </span>
-          </a>
-        </fs-popover>
+        <ng-container *ngIf="canShowReadParticipants | async">
+          <fs-popover
+              [template]="readTemplate"
+              [indication]="false"
+              [autoShow]="false"
+              [data]="conversationItem">
+            <a (click)="openReadParticipants(conversationItem)">
+              <span class="read">
+                <mat-icon>remove_red_eye</mat-icon>
+              </span>
+            </a>
+          </fs-popover>
+        </ng-container>
       </div>
       <ng-container *ngIf="conversationItem.state === ConversationItemState.Active">
         <fs-menu class="item-menu" *ngIf="conversationItem.canDelete">

@@ -4,6 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 
 
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+
 import { FsApiModule } from '@firestitch/api';
 import { FsConversationModule } from '@firestitch/conversation';
 import { FsExampleModule } from '@firestitch/example';
@@ -18,9 +20,7 @@ import { FsStoreModule } from '@firestitch/store';
 import { FsTabsModule } from '@firestitch/tabs';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DragulaModule } from 'ng2-dragula';
 
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { AppComponent } from './app.component';
 import {
   ConversationsComponent,
@@ -43,7 +43,6 @@ const routes: Routes = [
     FsLabelModule,
     FsStoreModule,
     FsConversationModule,
-    DragulaModule.forRoot(),
     FsExampleModule.forRoot(),
     FsFormModule.forRoot(),
     FsApiModule.forRoot(),
@@ -69,7 +68,7 @@ const routes: Routes = [
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline', floatLabel: 'auto' },
     },
-  ]
+  ],
 })
 export class PlaygroundModule {
 }

@@ -201,7 +201,7 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges, OnInit {
   };
 
   public ngOnDestroy(): void {
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 

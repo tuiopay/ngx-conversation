@@ -30,6 +30,7 @@
           fsTabs
           [mobileSticky]="false"
           [selected]="tab"
+          mat-stretch-tabs="false"
           (selectedChange)="tabChange($event)">
         <ng-container *ngIf="conversationService.tabs.account">
           <mat-tab name="account">

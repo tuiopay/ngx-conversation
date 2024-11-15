@@ -146,7 +146,7 @@ export class ConversationsApiService {
   };
 
   //private _url = 'https://cure.firestitch.dev/api/';
-  private _url = 'https://cure.local.firestitch.com/api/';
+  private _url = 'http://cure.local.firestitch.com/api/';
 
   constructor(
     private _api: FsApi,

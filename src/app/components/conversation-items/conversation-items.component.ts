@@ -11,7 +11,8 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 
 import {
-  FsGalleryConfig, FsGalleryItem, GalleryLayout, GalleryThumbnailSize, MimeType, ThumbnailScale,
+  FsGalleryConfig, FsGalleryItem,
+  MimeType, ThumbnailScale
 } from '@firestitch/gallery';
 import { FsPrompt } from '@firestitch/prompt';
 
@@ -145,10 +146,8 @@ export class ConversationItemsComponent implements OnInit, OnDestroy {
                   thumbnail: {
                     heightScale: 0.7,
                     width: 200,
-                    size: GalleryThumbnailSize.Cover,
                     scale: ThumbnailScale.None,
                   },
-                  layout: GalleryLayout.Flow,
                   toolbar: false,
                   zoom: false,
                   fetch: (): Observable<FsGalleryItem[]> => {

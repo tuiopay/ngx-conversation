@@ -1,8 +1,8 @@
 <fs-list 
     [config]="listConfig"
     [ngClass]="{ 'has-tabs': conversationService.tabs.account || conversationService.tabs.open || conversationService.tabs.closed }">
-  <fs-list-column>
-    <ng-template fs-list-cell let-conversation="row" class="col-converstaion">
+  <fs-list-column [class]="['col-converstaion']">
+    <ng-template fs-list-cell let-conversation="row">
       <div 
           class="converstaion-row" 
           [ngClass]="{ selected: selectedConversation?.id === conversation.id }" [attr.data]="'converstaion-row-' + conversation.id"

@@ -1,7 +1,7 @@
 {
   "name": "@firestitch/conversation",
   "title": "Conversation",
-  "version": "18.0.3",
+  "version": "18.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-conversation"
@@ -67,7 +67,7 @@
     "@firestitch/label": "^18.0.1",
     "@firestitch/link": "^18.0.0",
     "@firestitch/lint": "^18.0.17",
-    "@firestitch/list": "^18.0.1",
+    "@firestitch/list": "^18.0.10",
     "@firestitch/mask": "^18.0.0",
     "@firestitch/menu": "^18.0.5",
     "@firestitch/message": "^18.0.0",

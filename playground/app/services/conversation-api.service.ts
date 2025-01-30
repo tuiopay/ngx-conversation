@@ -106,6 +106,7 @@ export class ConversationsApiService {
         index: conversationItemFile.id,
         data: conversationItemFile,
         extension: conversationItemFile.file.extension,
+        guid: String(conversationItemFile.id),
       };
     },
 

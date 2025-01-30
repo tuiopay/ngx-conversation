@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import {
   FsGalleryConfig, FsGalleryItem,
-  MimeType, ThumbnailScale
+  MimeType, ThumbnailScale,
 } from '@firestitch/gallery';
 import { FsPrompt } from '@firestitch/prompt';
 

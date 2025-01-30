@@ -189,7 +189,7 @@ export class ConversationService {
   }
 
   public mapGalleryItem(conversationItem: ConversationItem, conversationItemFile: ConversationItemFile): FsGalleryItem {
-    return this._conversationConfig.mapGalleryItem ? this._conversationConfig.mapGalleryItem(conversationItem, conversationItemFile) : {};
+    return this._conversationConfig.mapGalleryItem ? this._conversationConfig.mapGalleryItem(conversationItem, conversationItemFile) : null;
   }
 
   public onUnreadNotice(accountId: number): Observable<any> {

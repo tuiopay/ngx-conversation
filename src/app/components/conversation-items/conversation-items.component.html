@@ -1,4 +1,6 @@
-<div class="items" [ngClass]="{ initialized: initialized }">
+<div
+    class="items"
+    [ngClass]="{ initialized: initialized }">
   <div
       *ngFor="let conversationItem of conversationItems; let index = index; trackBy: trackByconversationItem"
       [class]="'item item-type-' + conversationItem.type"
@@ -6,7 +8,9 @@
         'active-account': conversationItem.conversationParticipant?.id === sessionConversationParticipant?.id,
         'deleted': conversationItem.state === ConversationItemState.Deleted
       }">
-    <div class="info" *ngIf="conversationItem.type === ConversationItemType.Message">
+    <div
+        class="info"
+        *ngIf="conversationItem.type === ConversationItemType.Message">
       <ng-container *ngIf="conversationItem.conversationParticipant?.id !== sessionConversationParticipant?.id">
         <app-conversation-participant
           [size]="30"
@@ -31,14 +35,18 @@
               [data]="conversationItem">
             <a (click)="openReadParticipants(conversationItem)">
               <span class="read">
-                <mat-icon>remove_red_eye</mat-icon>
+                <mat-icon>
+                  remove_red_eye
+                </mat-icon>
               </span>
             </a>
           </fs-popover>
         </ng-container>
       </div>
       <ng-container *ngIf="conversationItem.state === ConversationItemState.Active">
-        <fs-menu class="item-menu" *ngIf="conversationItem.canDelete">
+        <fs-menu
+            class="item-menu"
+            *ngIf="conversationItem.canDelete">
           <ng-template
               *ngIf="conversationItem.conversationItemFiles.length > 1"
               fs-menu-item
@@ -46,8 +54,8 @@
             Download All
           </ng-template>
           <ng-template
-            fs-menu-item
-            (click)="conversationItemDelete(conversationItem)">
+              fs-menu-item
+              (click)="conversationItemDelete(conversationItem)">
             Delete
           </ng-template>
         </fs-menu>
@@ -62,17 +70,23 @@
                 [matTooltip]="'Deleted'"
                 [matTooltipDisabled]="conversationItem.state === ConversationItemState.Active"
                 *ngIf="conversationItem.message">
-              <span fsLink [openWindow]="true" [innerHTML]="conversationItem.message"></span>
+              <span
+                fsLink
+                [openWindow]="true"
+                [innerHTML]="conversationItem.message">
+              </span>
             </div>
             <fs-gallery
                 [config]="conversationItem.galleryConfig"
                 *ngIf="conversationItem.conversationItemFiles.length">
-              <ng-template fsGalleryThumbnail let-item="item" let-previewTemplate="previewTemplate">
+              <ng-template
+                  fsGalleryThumbnail
+                  let-item="item"
+                  let-template="template">
                 <ng-container
-                  [ngTemplateOutlet]="previewTemplate"
+                  [ngTemplateOutlet]="template"
                   [ngTemplateOutletContext]="{ item: item }">
                 </ng-container>
-
                 <ng-container *ngIf="item.mime.type !== MimeType.Image">
                   <fs-gallery-thumbnail-info
                     [showIcon]="false"
@@ -85,7 +99,9 @@
                     mat-icon-button
                     class="file-menu"
                     (click)="$event.stopPropagation()">
-                  <mat-icon>more_vert</mat-icon>
+                  <mat-icon>
+                    more_vert
+                  </mat-icon>
                 </button>
                 <fs-menu #menu>
                   <ng-template
@@ -112,30 +128,35 @@
       <div class="info">
         <ng-container *ngIf="conversationItem.type === ConversationItemType.ParticipantRemoved">
           <ng-container *ngIf="conversationItem.lastConversationItemParticipantAddRemove?.account && conversationItem.conversationParticipantsRemovedCount === 1; else removed">
-            {{conversationItem.lastConversationItemParticipantAddRemove.account.name}} Removed
+            {{ conversationItem.lastConversationItemParticipantAddRemove.account.name }} Removed
           </ng-container>
           <ng-template #removed>
-            {{conversationItem.conversationParticipantsRemovedCount === 1 ? '1 Participant' : conversationItem.conversationParticipantsRemovedCount + ' Participants'}}  Removed
+            {{ conversationItem.conversationParticipantsRemovedCount === 1 ? '1 Participant' : conversationItem.conversationParticipantsRemovedCount + ' Participants' }}  Removed
           </ng-template>
         </ng-container>
         <ng-container *ngIf="conversationItem.type === ConversationItemType.ParticipantAdd">
           <ng-container *ngIf="conversationItem.lastConversationItemParticipantAddRemove?.account && conversationItem.conversationParticipantsAddedCount === 1; else added">
-            {{conversationItem.lastConversationItemParticipantAddRemove.account.name}} Added
+            {{ conversationItem.lastConversationItemParticipantAddRemove.account.name }} Added
           </ng-container>
           <ng-template #added>
-            {{conversationItem.conversationParticipantsAddedCount === 1 ? '1 Participant' : conversationItem.conversationParticipantsAddedCount + ' Participants'}}  Added
+            {{ conversationItem.conversationParticipantsAddedCount === 1 ? '1 Participant' : conversationItem.conversationParticipantsAddedCount + ' Participants' }}  Added
           </ng-template>
         </ng-container>
         <ng-container *ngIf="conversationItem.type === ConversationItemType.Start">
-            Conversation Started
+          Conversation Started
         </ng-container>
-        <span class="dot">·</span><fs-date-ago [date]="conversationItem.createDate"></fs-date-ago>
+        <span class="dot">
+          ·
+        </span>
+        <fs-date-ago [date]="conversationItem.createDate"></fs-date-ago>
       </div>
     </ng-container>
   </div>
 </div>
-
-<ng-template #readTemplate let-conversationItem="data" let-popover="popover">
+<ng-template
+    #readTemplate
+    let-conversationItem="data"
+    let-popover="popover">
   <app-conversation-read-participants-popover
     [conversationService]="conversationService"
     [popover]="popover"

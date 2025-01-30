@@ -142,6 +142,7 @@ export class ConversationsPaneComponent implements OnInit, OnDestroy {
 
     this.listConfig = {
       loadMore: true,
+      status: false,
       queryParam: false,
       rowClass: (row) => {
         return this.selectedConversation?.id === row.id ? 'selected' : '';

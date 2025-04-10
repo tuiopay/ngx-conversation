@@ -105,12 +105,18 @@ export class ConversationHeaderComponent implements OnDestroy, OnInit {
   public actionClick(action: ConversationAction): void {
     action.click(this.conversation)
       .subscribe((conversation) => {
-        this.conversation = {
+        // CC-T2691 (Conversation participants blinking with wrong data)
+        // Save query return not all required nested objects
+        // Full object reload at the level above so no sense to do it here
+        // this.conversation = {
+        //   ...this.conversation,
+        //   ...conversation,
+        // };
+
+        this.conversationChange.emit({
           ...this.conversation,
           ...conversation,
-        };
-
-        this.conversationChange.emit(this.conversation);
+        });
         this.initConversationActions();
         this._cdRef.markForCheck();
       });

@@ -9,6 +9,7 @@ import {
 
 import { MatDialog } from '@angular/material/dialog';
 
+import { ItemType } from '@firestitch/filter';
 import { FsListActionSelected, FsListComponent, FsListConfig } from '@firestitch/list';
 import { FsPrompt } from '@firestitch/prompt';
 import { SelectionActionType } from '@firestitch/selection';
@@ -16,7 +17,6 @@ import { SelectionActionType } from '@firestitch/selection';
 import { Subject, of } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 
-import { FsMessage } from '@firestitch/message';
 import { ConversationService } from '../../services';
 import { Conversation, ConversationParticipant } from '../../types';
 import { ParticipantsAddComponent } from '../participants-add';
@@ -45,7 +45,6 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
   constructor(
     private _dialog: MatDialog,
     private _prompt: FsPrompt,
-    private _message: FsMessage,
   ) { }
 
   public reload(): void {
@@ -54,7 +53,6 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.listConfig = {
-      paging: false,
       reload: false,
       actions: [
         {
@@ -130,6 +128,13 @@ export class ParticipantsListComponent implements OnInit, OnDestroy {
           },
           remove: true,
           label: 'Remove',
+        },
+      ],
+      filters: [
+        {
+          name: 'keyword',
+          type: ItemType.Keyword,
+          label: 'Search',
         },
       ],
       fetch: (query) => {

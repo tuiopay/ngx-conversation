@@ -1,7 +1,7 @@
 {
   "name": "@tuiopay/conversation",
   "title": "Conversation",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Tuio fork of Firestitch/ngx-conversation",
   "repository": {
     "type": "git",

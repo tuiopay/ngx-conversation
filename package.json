@@ -1,21 +1,22 @@
 {
-  "name": "@firestitch/conversation",
+  "name": "@tuiopay/conversation",
   "title": "Conversation",
-  "version": "18.0.7",
+  "version": "1.0.0",
+  "description": "Tuio fork of Firestitch/ngx-conversation",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Firestitch/ngx-conversation"
+    "url": "https://github.com/tuiopay/ngx-conversation"
   },
   "author": {
-    "name": "Firestitch",
-    "email": "admin@firestitch.com"
+    "name": "Tuio",
+    "email": "engineering@tuiopay.com"
   },
   "keywords": [
     "angular"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Firestitch/ngx-conversation/issues"
+    "url": "https://github.com/tuiopay/ngx-conversation/issues"
   },
   "main": "package/index.js",
   "typings": "package/index.d.ts",
@@ -91,6 +92,6 @@
     "zone.js": "~0.14.10"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=18.0.0"
   }
 }

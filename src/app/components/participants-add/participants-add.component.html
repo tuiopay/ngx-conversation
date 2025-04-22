@@ -7,8 +7,8 @@
             [fetch]="accountsFetch"
             [(ngModel)]="accounts"
             [required]="true"
-            placeholder="Accounts"
-            chipImage="account.avatar.tiny"
+            label="Accounts"
+            chipImage="image.small"
             name="conversationParticipants">
           <ng-template fsAutocompleteObject let-account="object">
             {{account.name}}

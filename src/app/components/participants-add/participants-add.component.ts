@@ -58,9 +58,9 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
           this._conversationService.sendMessageNotice(this.conversation.id);
         }),
       );
-  }
+  };
 
-  public accountsFetch = (keyword) => {
+  public accountsFetch = (keyword: string) => {
     return this._conversationService.conversationConfig.accountsGet(
       this.conversation,
       {
@@ -69,8 +69,8 @@ export class ParticipantsAddComponent implements OnInit, OnDestroy {
         limit: 30,
       })
       .pipe(
-        map((response) => response.accounts)
+        map((response) => response.accounts),
       );
-  }
+  };
 
 }

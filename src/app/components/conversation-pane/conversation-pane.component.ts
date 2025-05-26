@@ -63,11 +63,11 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges, OnInit {
 
   public message = '';
   public ConversationState = ConversationState;
-  public files: FsFile[] = [];
+  public files: { id: string; file: FsFile; default: boolean }[] = [];
   public sessionConversationParticipant;
   public ConversationStates = ConversationStates;
   public conversationStates = list(ConversationStates, 'name', 'value');
-  public joined = false;
+  public joined: boolean = false;
   public inited = false;
   public mobile = false;
   public submitting = false;
@@ -125,10 +125,10 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges, OnInit {
           return forkJoin(
             [
               of(true),
-              ...this.files.map((fsFile: FsFile) => {
+              ...this.files.map((file) => {
                 return this._conversationService.conversationConfig.conversationItemFilePost(
                   conversationItem,
-                  fsFile.file,
+                  file.file.file,
                 );
               }),
             ])
@@ -154,10 +154,10 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges, OnInit {
       );
   }
 
-  public fileSelect(fsFiles: FsFile[]) {
+  public fileSelect(files) {
     this.files = [
       ...this.files,
-      ...fsFiles,
+      ...files,
     ];
 
     this.messageForm.dirty();
@@ -335,6 +335,13 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges, OnInit {
         this._cdRef.markForCheck();
         this.conversationChange.emit();
       });
+  }
+
+  public remove(event: { file: FsFile }) {
+    this.files = this.files
+      .filter((f) => f.file !== event.file);
+    this._cdRef.markForCheck();
+    this._message.success(`Removed ${event.file.name}`);
   }
 
   private _updateTypingState() {

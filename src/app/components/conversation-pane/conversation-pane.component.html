@@ -83,16 +83,19 @@
             </fs-file>
           </div>
         </div>
-
-        <fs-file-previews [previewWidth]="100" [previewHeight]="100" [files]="files">
-          <ng-template
-              fs-file-preview-action
-              placement="top-right"
-              action="remove"
-              tooltip="Remove">
-            <mat-icon>close</mat-icon>
-          </ng-template>
-        </fs-file-previews>
+        <div class="previews fs-row.gap-sm.wrap">
+          @for (file of files; track file.id) {
+            <fs-file-preview [file]="file.file">
+              <ng-template
+                fs-file-preview-action
+                placement="top-right"
+                [tooltip]="'Remove'"
+                (click)="remove(file)"
+                [icon]="'close'">
+              </ng-template>
+            </fs-file-preview>
+          }
+        </div>
       </div>
     </ng-container>
   </ng-container>

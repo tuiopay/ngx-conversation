@@ -1,7 +1,7 @@
 {
   "name": "@tuiopay/conversation",
   "title": "Conversation",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Tuio fork of Firestitch/ngx-conversation",
   "repository": {
     "type": "git",
@@ -58,12 +58,12 @@
     "@firestitch/dialog": "^18.0.17",
     "@firestitch/drawer": "^18.0.1",
     "@firestitch/example": "^18.0.7",
-    "@firestitch/file": "^18.0.4",
+    "@firestitch/file": "^18.0.13",
     "@firestitch/filter": "^18.0.23",
     "@firestitch/form": "^18.0.7",
     "@firestitch/gallery": "^18.0.31",
     "@firestitch/html": "^18.0.0",
-    "@firestitch/html-editor": "^18.0.16",
+    "@firestitch/html-editor": "^18.0.40",
     "@firestitch/iframe": "^18.0.0",
     "@firestitch/label": "^18.0.15",
     "@firestitch/link": "^18.0.0",
@@ -93,5 +93,8 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "froala-editor": "^4.5.2"
   }
 }

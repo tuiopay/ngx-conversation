@@ -13,7 +13,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
 
-import { list } from '@firestitch/common';
+import { list, guid } from '@firestitch/common';
 import { currentDeviceMobile } from '@firestitch/device';
 import { FsFile } from '@firestitch/file';
 import { FsFormDirective } from '@firestitch/form';
@@ -157,7 +157,10 @@ export class ConversationPaneComponent implements OnDestroy, OnChanges, OnInit {
   public fileSelect(files) {
     this.files = [
       ...this.files,
-      ...files,
+      ...files
+        .map((f) => {
+          return { id: guid(), file: f, default: false };
+        }),
     ];
 
     this.messageForm.dirty();
